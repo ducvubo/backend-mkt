@@ -35,6 +35,12 @@ module.exports = {
       quyenId: {
         type: Sequelize.STRING,
       },
+      trangthaiId: {
+        type: Sequelize.STRING,
+      },
+      linkxacnhan: {
+        type: Sequelize.STRING,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

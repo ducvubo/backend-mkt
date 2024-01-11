@@ -111,6 +111,32 @@ let dangNhap = async (req, res) => {
   });
 };
 
+let dangKy = async (req, res) => {
+  try {
+    let infor = await nguoiDungService.dangKy(req.body);
+    return res.status(200).json(infor);
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      maCode: -1,
+      thongDiep: "Lỗi của server...",
+    });
+  }
+};
+
+let xacNhanDangKy = async (req, res) => {
+  try {
+    let infor = await nguoiDungService.xacNhanDangKy(req.body);
+    return res.status(200).json(infor);
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      maCode: -1,
+      thongDiep: "Lỗi của server...",
+    });
+  }
+};
+
 module.exports = {
   getAllCode,
   themNguoiDung,
@@ -119,4 +145,6 @@ module.exports = {
   xoaNguoiDung,
   suaNguoiDung,
   dangNhap,
+  dangKy,
+  xacNhanDangKy
 };

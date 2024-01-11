@@ -12,6 +12,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       User.belongsTo(models.Allcode, {foreignKey: 'gioitinhId', targetKey:'idNoi', as: 'gioitinh'})
       User.belongsTo(models.Allcode, {foreignKey: 'quyenId', targetKey: 'idNoi', as:'quyen'})
+      User.belongsTo(models.Allcode, {foreignKey: 'trangthaiId', targetKey: 'idNoi', as:'trangthai'})
+
     }
   };
   User.init({
@@ -24,6 +26,8 @@ module.exports = (sequelize, DataTypes) => {
     diachicuahang: DataTypes.STRING,
     gioitinhId: DataTypes.STRING,
     quyenId: DataTypes.STRING,
+    trangthaiId:DataTypes.STRING,
+    linkxacnhan:DataTypes.STRING
   }, {
     sequelize,
     modelName: 'User',

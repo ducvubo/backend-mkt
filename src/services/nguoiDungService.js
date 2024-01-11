@@ -1,8 +1,14 @@
 import { reject } from "lodash";
 import db from "../models/index";
 import bcrypt from "bcryptjs";
-
+import emailService from "./emailService";
+import { v4 as uuidv4 } from "uuid";
 const salt = bcrypt.genSaltSync(10);
+
+let buidUrlEmail = (email, linkxacnhan) => {
+  let result = `${process.env.URL_REACT}/xacnhantaikhoan?linkxacnhan=${linkxacnhan}&email=${email}`;
+  return result;
+};
 
 let hashUserPassword = (password) => {
   return new Promise(async (resolve, reject) => {
@@ -16,7 +22,7 @@ let hashUserPassword = (password) => {
 };
 
 let ktEmail = (emailNguoiDung) => {
-  return new Promise(async (resole, reject) => {
+  return new Promise(async (resolve, reject) => {
     try {
       let nguoidung = await db.User.findOne({
         //tim nguoidung
@@ -24,10 +30,30 @@ let ktEmail = (emailNguoiDung) => {
       });
       if (nguoidung) {
         //nguoidung khac undefine thi chay vao day
-        resole(true);
+        resolve(true);
       } else {
         //nguoidung undefine chay vao day
-        resole(false);
+        resolve(false);
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let ktTrangThaiTaiKhoan = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let nguoidung = await db.User.findOne({
+        //tim nguoidung
+        where: { trangthaiId: "S2" },
+      });
+      if (nguoidung) {
+        //nguoidung khac undefine thi chay vao day
+        resolve(true);
+      } else {
+        //nguoidung undefine chay vao day
+        resolve(false);
       }
     } catch (e) {
       reject(e);
@@ -36,11 +62,26 @@ let ktEmail = (emailNguoiDung) => {
 };
 
 let dangNhap = (email, password) => {
-  return new Promise(async (resole, reject) => {
+  return new Promise(async (resolve, reject) => {
     try {
       let datanguoidung = {};
       let ktemail = await ktEmail(email); //lay gia tri true and false
-      if (ktemail) {
+      let ktTrangThai = await ktTrangThaiTaiKhoan();
+      console.log("check email: ", ktemail);
+      console.log("check trang thai: ", ktTrangThai);
+      if (ktemail === false) {
+        //neu tra ve false
+        datanguoidung.maCode = 4;
+        datanguoidung.thongDiep =
+          "Email của bạn không tồn tại trong hệ thống, vui lòng nhập lại email!!!";
+      }
+      else if (ktTrangThai === true) {
+        datanguoidung.maCode = 5;
+        datanguoidung.thongDiep =
+          "Tài khoản của bạn chưa được xác nhận vui lòng kiểm tra hộp thư của email để xác nhận!!!";
+      }
+
+      if (ktemail === true && ktTrangThai === false) {
         //neu tra ve true
         let nguoidung = await db.User.findOne({
           attributes: ["email", "quyenId", "password", "ho", "ten"],
@@ -63,13 +104,9 @@ let dangNhap = (email, password) => {
           datanguoidung.maCode = 2;
           datanguoidung.thongDiep = "Email này chưa được đăng ký!!!";
         }
-      } else {
-        //neu tra ve false
-        datanguoidung.maCode = 4;
-        datanguoidung.thongDiep =
-          "Email của bạn không tồn tại trong hệ thống, vui lòng nhập lại email!!!";
       }
-      resole(datanguoidung);
+
+      resolve(datanguoidung);
     } catch (e) {
       reject(e);
     }
@@ -123,6 +160,8 @@ let themNguoiDung = (data) => {
           diachicuahang: data.diachicuahang,
           quyenId: data.quyen,
           gioitinhId: data.gioitinh,
+          trangthaiId: "S2",
+          linkxacnhan: "",
         });
 
         resolve({
@@ -143,7 +182,6 @@ let tatCaNguoiDung = () => {
         attributes: {
           exclude: ["password"], //khong lay ra password
         },
-        
       });
       resolve(all);
     } catch (e) {
@@ -227,7 +265,8 @@ let suaNguoiDung = (data) => {
         nguoidung.diachicuahang = data.diachicuahang;
         nguoidung.gioitinhId = data.gioitinhId;
         nguoidung.quyenId = data.quyenId;
-
+        nguoidung.trangthaiId = "S2";
+        nguoidung.linkxacnhan = "";
         await nguoidung.save();
 
         resolve({
@@ -246,6 +285,92 @@ let suaNguoiDung = (data) => {
   });
 };
 
+let dangKy = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let check = await ktEmail(data.email);
+      console.log("check: ", check);
+      if (check === true) {
+        resolve({
+          maCode: 1,
+          thongDiep: "Email đã được sử dụng vui lòng dùng email khác!!!",
+          thongDiepen: "Email has been used, please use another email",
+        });
+      } else {
+        let linkxacnhan = uuidv4();
+
+        await emailService.sendSimpleEmail({
+          receiverEmail: data.email,
+          ho: data.ho,
+          ten: data.ten,
+          sodienthoai: data.sodienthoai,
+          diachinha: data.diachinha,
+          redirectLink: buidUrlEmail(data.email, linkxacnhan),
+        });
+
+        let hashPasswordFromBcrypt = await hashUserPassword(data.password);
+        await db.User.create({
+          email: data.email,
+          password: hashPasswordFromBcrypt,
+          ho: data.ho,
+          ten: data.ten,
+          sdt: data.sodienthoai,
+          diachinha: data.diachinha,
+          diachicuahang: "",
+          quyenId: "R4",
+          gioitinhId: data.gioitinh,
+          trangthaiId: "S1",
+          linkxacnhan: linkxacnhan,
+        });
+
+        resolve({
+          maCode: 0,
+          thongDiep: "OK",
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let xacNhanDangKy = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data.linkxacnhan || !data.email) {
+        resolve({
+          maCode: 1,
+          thongDiep: "Thiếu tham số truyền lên server",
+        });
+      } else {
+        let kt = await db.User.findOne({
+          where: {
+            email: data.email,
+            linkxacnhan: data.linkxacnhan,
+            trangthaiId: "S1",
+          },
+          raw: false,
+        });
+        if (kt) {
+          kt.trangthaiId = "S2";
+          await kt.save();
+          resolve({
+            maCode: 0,
+            thongDiep: "Xác nhận tài khoản thành công",
+          });
+        } else {
+          resolve({
+            maCode: 2,
+            thongDiep: "Tài khoản đã được kích hoạt",
+          });
+        }
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   getAllCodeServiec,
   themNguoiDung,
@@ -253,5 +378,7 @@ module.exports = {
   Get1NguoiDung,
   xoaNguoiDung,
   suaNguoiDung,
-  dangNhap
+  dangNhap,
+  dangKy,
+  xacNhanDangKy,
 };
