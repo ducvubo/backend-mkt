@@ -18,17 +18,58 @@ let hashUserPassword = (password) => {
 let ktEmail = (emailNguoiDung) => {
   return new Promise(async (resole, reject) => {
     try {
-      let user = await db.User.findOne({
-        //tim user
+      let nguoidung = await db.User.findOne({
+        //tim nguoidung
         where: { email: emailNguoiDung },
       });
-      if (user) {
-        //user khac undefine thi chay vao day
+      if (nguoidung) {
+        //nguoidung khac undefine thi chay vao day
         resole(true);
       } else {
-        //user undefine chay vao day
+        //nguoidung undefine chay vao day
         resole(false);
       }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let dangNhap = (email, password) => {
+  return new Promise(async (resole, reject) => {
+    try {
+      let datanguoidung = {};
+      let ktemail = await ktEmail(email); //lay gia tri true and false
+      if (ktemail) {
+        //neu tra ve true
+        let nguoidung = await db.User.findOne({
+          attributes: ["email", "quyenId", "password", "ho", "ten"],
+          where: { email: email },
+          raw: true, //chi tra ra dung object nhu trong database
+        });
+        if (nguoidung) {
+          let ktmk = await bcrypt.compareSync(password, nguoidung.password);
+          if (ktmk) {
+            // true
+            datanguoidung.maCode = 0;
+            datanguoidung.thongDiep = "Ok";
+            delete nguoidung.password; //xoa cot password truoc khi gan
+            datanguoidung.nguoidung = nguoidung;
+          } else {
+            datanguoidung.maCode = 3;
+            datanguoidung.thongDiep = "Vui lòng nhập đúng password";
+          }
+        } else {
+          datanguoidung.maCode = 2;
+          datanguoidung.thongDiep = "Email này chưa được đăng ký!!!";
+        }
+      } else {
+        //neu tra ve false
+        datanguoidung.maCode = 4;
+        datanguoidung.thongDiep =
+          "Email của bạn không tồn tại trong hệ thống, vui lòng nhập lại email!!!";
+      }
+      resole(datanguoidung);
     } catch (e) {
       reject(e);
     }
@@ -206,10 +247,11 @@ let suaNguoiDung = (data) => {
 };
 
 module.exports = {
-  getAllCodeServiec: getAllCodeServiec,
-  themNguoiDung: themNguoiDung,
-  tatCaNguoiDung: tatCaNguoiDung,
-  Get1NguoiDung: Get1NguoiDung,
-  xoaNguoiDung: xoaNguoiDung,
-  suaNguoiDung: suaNguoiDung,
+  getAllCodeServiec,
+  themNguoiDung,
+  tatCaNguoiDung,
+  Get1NguoiDung,
+  xoaNguoiDung,
+  suaNguoiDung,
+  dangNhap
 };

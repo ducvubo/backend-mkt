@@ -1,4 +1,5 @@
 import db from "../models/index";
+const { Op } = require('sequelize');
 
 let themHoa = (data) => {
   return new Promise(async (resolve, reject) => {
@@ -10,9 +11,6 @@ let themHoa = (data) => {
         tieudehoaVi: data.tieudehoaVi,
         tieudehoaEn: data.tieudehoaEn,
         anhnoibat: data.anhnoibat,
-        anh2: data.anh2,
-        anh3: data.anh3,
-        anh4: data.anh4,
         soluongcon: data.soluongcon,
         soluongnhap: data.soluongnhap,
         soluongban: data.soluongban,
@@ -26,6 +24,8 @@ let themHoa = (data) => {
         motasphtmlVi: data.motasphtmlVi,
         motasphtmlEn: data.motasphtmlEn,
         donoibat: data.donoibat,
+        ghichuVi:data.ghichuVi,
+        ghichuEn:data.ghichuEn
       });
       resolve({
         maCode: 0,
@@ -52,9 +52,6 @@ let tatCaHoa = () => {
         raw: false,
         nest: true,
       });
-      // if(data && data.anhnoibat){
-      //   data.anhnoibat = new Buffer(data.anhnoibat, "base64").toString("binary");
-      // }
       resolve(data);
     } catch (e) {
       reject(e);
@@ -76,9 +73,6 @@ let suaHoa = (data) => {
         hoadata.tieudehoaVi = data.tieudehoaVi;
         hoadata.tieudehoaEn = data.tieudehoaEn;
         hoadata.anhnoibat = data.anhnoibat;
-        hoadata.anh2 = data.anh2;
-        hoadata.anh3 = data.anh3;
-        hoadata.anh4 = data.anh4;
         hoadata.soluongcon = data.soluongcon;
         hoadata.soluongnhap = data.soluongnhap;
         hoadata.soluongban = data.soluongban;
@@ -92,6 +86,8 @@ let suaHoa = (data) => {
         hoadata.motasphtmlVi = data.motasphtmlVi;
         hoadata.motasphtmlEn = data.motasphtmlEn;
         hoadata.donoibat = data.donoibat;
+        hoadata.ghichuVi = data.ghichuVi;
+        hoadata.ghichuEn = data.ghichuEn;
         await hoadata.save();
 
         resolve({
@@ -131,10 +127,279 @@ let xoaHoa = (id) => {
   });
 };
 
+let hoaGiamGia = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let data = "";
+      data = await db.hoa.findAll({
+        where: {
+          soluongcon: {
+            [Op.gt]: 0
+          }
+        },
+        limit: 4,
+        order: [["phantramgiam", "DESC"]],
+      });
+      resolve(data);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+
+let hoaTet = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let data = "";
+       data = await db.Danhmuchoa.findAll({
+        where: { id: 35 },
+        attributes: {
+          exclude: ["tendanhmucVi",'tendanhmucEn','donoibat','createdAt','updatedAt','id'], 
+        },
+        include: [
+          {
+            model: db.Danhmuchoachitiet,
+            as: "danhmuc",
+            attributes: {
+              exclude: ["iddanhmuchoa",'tendanhmucchitietVi','createdAt','updatedAt','tendanhmucchitietEn'], 
+            },
+            include: [
+              {
+                model: db.hoa,
+                as: "danhmuchoachitiet",
+                where: {
+                  soluongcon: {
+                    [Op.gt]: 0
+                  }
+                },
+                attributes: [
+                  'id',
+                  "tenhoaVi",
+                  "tenhoaEn",
+                  "giathucVND",
+                  "giathucUSD",
+                  "phantramgiam",
+                  "giasaukhigiamVND",
+                  "giasaukhigiamUSD",
+                  'anhnoibat',
+                  'donoibat',
+                  'soluongban'
+                ],
+              },
+            ],
+          },
+        ],
+        raw: false,
+        nest: true,
+      });
+      resolve(data);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let hoaSinhNhat = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let data = "";
+      data = await db.Danhmuchoa.findAll({
+        where: { id: 15 },
+        attributes: {
+          exclude: ["tendanhmucVi",'tendanhmucEn','donoibat','createdAt','updatedAt','id'], 
+        },
+        include: [
+          {
+            model: db.Danhmuchoachitiet,
+            as: "danhmuc",
+            attributes: {
+              exclude: ["iddanhmuchoa",'tendanhmucchitietVi','createdAt','updatedAt','tendanhmucchitietEn'], 
+            },
+            include: [
+              {
+                model: db.hoa,
+                as: "danhmuchoachitiet",
+                where: {
+                  soluongcon: {
+                    [Op.gt]: 0
+                  }
+                },
+                attributes: [
+                  'id',
+                  "tenhoaVi",
+                  "tenhoaEn",
+                  "giathucVND",
+                  "giathucUSD",
+                  "phantramgiam",
+                  "giasaukhigiamVND",
+                  "giasaukhigiamUSD",
+                  'anhnoibat',
+                  'donoibat'
+                ],
+              },
+            ],
+          },
+        ],
+        raw: false,
+        nest: true,
+      });
+      resolve(data);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let hoaKhaiTruong = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let data = "";
+      data = await db.Danhmuchoa.findAll({
+        where: { id: 16 },
+        attributes: {
+          exclude: ["tendanhmucVi",'tendanhmucEn','donoibat','createdAt','updatedAt','id'], 
+        },
+        include: [
+          {
+            model: db.Danhmuchoachitiet,
+            as: "danhmuc",
+            attributes: {
+              exclude: ["iddanhmuchoa",'tendanhmucchitietVi','createdAt','updatedAt','tendanhmucchitietEn'], 
+            },
+            include: [
+              {
+                model: db.hoa,
+                as: "danhmuchoachitiet",
+                where: {
+                  soluongcon: {
+                    [Op.gt]: 0
+                  }
+                },
+                attributes: [
+                  'id',
+                  "tenhoaVi",
+                  "tenhoaEn",
+                  "giathucVND",
+                  "giathucUSD",
+                  "phantramgiam",
+                  "giasaukhigiamVND",
+                  "giasaukhigiamUSD",
+                  'anhnoibat',
+                  'donoibat'
+                ],
+              },
+            ],
+          },
+        ],
+        raw: false,
+        nest: true,
+      });
+      resolve(data);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+// let lanHoDiep = () => {
+//   return new Promise(async (resolve, reject) => {
+//     try {
+//       let data = "";
+//       data = await db.hoa.findAll({
+//         limit: 4,
+//         where: { iddanhmuchoachitiet: 46 },
+//       });
+//       resolve(data);
+//     } catch (e) {
+//       reject(e);
+//     }
+//   });
+// };
+
+let lanHoDiep = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let data = "";
+      data = await db.Danhmuchoa.findAll({
+        where: { id: 17 },
+        attributes: {
+          exclude: ["tendanhmucVi",'tendanhmucEn','donoibat','createdAt','updatedAt','id'], //khong lay ra password
+        },
+        include: [
+          {
+            model: db.Danhmuchoachitiet,
+            as: "danhmuc",
+            attributes: {
+              exclude: ["iddanhmuchoa",'tendanhmucchitietVi','createdAt','updatedAt','tendanhmucchitietEn'], //khong lay ra password
+            },
+            include: [
+              {
+                model: db.hoa,
+                as: "danhmuchoachitiet",
+                where: {
+                  soluongcon: {
+                    [Op.gt]: 0
+                  }
+                },
+                attributes: [
+                  'id',
+                  "tenhoaVi",
+                  "tenhoaEn",
+                  "giathucVND",
+                  "giathucUSD",
+                  "phantramgiam",
+                  "giasaukhigiamVND",
+                  "giasaukhigiamUSD",
+                  'anhnoibat',
+                  'donoibat'
+                ],
+              },
+            ],
+          },
+        ],
+        raw: false,
+        nest: true,
+      });
+
+      resolve(data);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let thongTinHoa = (id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!id) {
+        resolve({
+          maCode: 1,
+          thongDiep: "Thiếu tham số truyền vào",
+        });
+      } else {
+        let thongtinhoa = "";
+        thongtinhoa = await db.hoa.findOne({
+          where: { id: id },
+        });
+
+        resolve(thongtinhoa);
+      }
+    } catch {
+      reject(e);
+    }
+  });
+};
 
 module.exports = {
   themHoa,
   tatCaHoa,
   suaHoa,
-  xoaHoa
+  xoaHoa,
+  hoaGiamGia,
+  hoaTet,
+  hoaKhaiTruong,
+  hoaSinhNhat,
+  lanHoDiep,
+  thongTinHoa
 };

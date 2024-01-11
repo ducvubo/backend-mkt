@@ -68,9 +68,118 @@ let xoaHoa = async (req, res) => {
   }
 };
 
+let hoaGiamGia = async (req, res) => {
+  try {
+    let data = await hoaService.hoaGiamGia();
+    return res.status(200).json({
+      maCode: 0,
+      thongDiep: "OK",
+      data,
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      maCode: -1,
+      thongDiep: "Lỗi của server...",
+    });
+  }
+};
+
+
+
+let hoaTet = async (req, res) => {
+  try {
+    let data = await hoaService.hoaTet();
+    return res.status(200).json({
+      maCode: 0,
+      thongDiep: "OK",
+      data,
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      maCode: -1,
+      thongDiep: "Lỗi của server...",
+    });
+  }
+};
+
+let hoaSinhNhat = async (req, res) => {
+  try {
+    let data = await hoaService.hoaSinhNhat();
+    return res.status(200).json({
+      maCode: 0,
+      thongDiep: "OK",
+      data,
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      maCode: -1,
+      thongDiep: "Lỗi của server...",
+    });
+  }
+};
+
+let hoaKhaiTruong = async (req, res) => {
+  try {
+    let data = await hoaService.hoaKhaiTruong();
+    return res.status(200).json({
+      maCode: 0,
+      thongDiep: "OK",
+      data,
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      maCode: -1,
+      thongDiep: "Lỗi của server...",
+    });
+  }
+};
+
+let lanHoDiep = async (req, res) => {
+  try {
+    let data = await hoaService.lanHoDiep();
+    return res.status(200).json({
+      maCode: 0,
+      thongDiep: "OK",
+      data,
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      maCode: -1,
+      thongDiep: "Lỗi của server...",
+    });
+  }
+};
+
+let thongTinHoa = async (req, res) => {
+  try {
+    let data = await hoaService.thongTinHoa(req.query.id);
+    return res.status(200).json({
+      maCode: 0,
+      thongDiep: "OK",
+      data,
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      maCode: -1,
+      thongDiep: "Lỗi của server...",
+    });
+  }
+};
 module.exports = {
   themHoa,
   tatCaHoa,
   suaHoa,
   xoaHoa,
+  hoaGiamGia,
+  hoaTet,
+  hoaSinhNhat,
+  hoaKhaiTruong,
+  lanHoDiep,
+  thongTinHoa
 };

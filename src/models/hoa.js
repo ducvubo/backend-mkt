@@ -20,9 +20,6 @@ module.exports = (sequelize, DataTypes) => {
       tieudehoaVi: DataTypes.TEXT("long"),
       tieudehoaEn: DataTypes.TEXT("long"),
       anhnoibat: DataTypes.BLOB("long"),
-      anh2: DataTypes.BLOB("long"),
-      anh3: DataTypes.BLOB("long"),
-      anh4: DataTypes.BLOB("long"),
       soluongcon: DataTypes.INTEGER,
       soluongnhap: DataTypes.INTEGER,
       soluongban: DataTypes.INTEGER,
@@ -36,6 +33,8 @@ module.exports = (sequelize, DataTypes) => {
       motasphtmlVi: DataTypes.TEXT("long"),
       motasphtmlEn: DataTypes.TEXT("long"),
       donoibat: DataTypes.INTEGER,
+      ghichuVi: DataTypes.STRING,
+      ghichuEn: DataTypes.STRING,
     },
     {
       sequelize,

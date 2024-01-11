@@ -26,15 +26,6 @@ module.exports = {
       anhnoibat: {
         type: Sequelize.BLOB("long"),
       },
-      anh2: {
-        type: Sequelize.BLOB("long"),
-      },
-      anh3: {
-        type: Sequelize.BLOB("long"),
-      },
-      anh4: {
-        type: Sequelize.BLOB("long"),
-      },
       soluongcon: {
         type: Sequelize.INTEGER,
       },

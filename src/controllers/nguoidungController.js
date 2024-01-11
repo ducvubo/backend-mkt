@@ -1,8 +1,8 @@
-import userService from "../services/userService";
+import nguoiDungService from "../services/nguoiDungService";
 
 let getAllCode = async (req, res) => {
   try {
-    let data = await userService.getAllCodeServiec(req.query.kieu); //param
+    let data = await nguoiDungService.getAllCodeServiec(req.query.kieu); //param
     return res.status(200).json(data);
   } catch (e) {
     console.log("Lấy allcode thất bại: ", e);
@@ -15,7 +15,7 @@ let getAllCode = async (req, res) => {
 
 let themNguoiDung = async (req, res) => {
   try {
-    let infor = await userService.themNguoiDung(req.body);
+    let infor = await nguoiDungService.themNguoiDung(req.body);
     return res.status(200).json(infor);
   } catch (e) {
     console.log(e);
@@ -28,7 +28,7 @@ let themNguoiDung = async (req, res) => {
 
 let tatCaNguoiDung = async (req, res) => {
   try {
-    let data = await userService.tatCaNguoiDung();
+    let data = await nguoiDungService.tatCaNguoiDung();
     return res.status(200).json({
       maCode: 0,
       thongDiep: "OK",
@@ -45,7 +45,7 @@ let tatCaNguoiDung = async (req, res) => {
 
 let Get1NguoiDung = async (req, res) => {
   try {
-    let data = await userService.Get1NguoiDung(req.query.id); //param
+    let data = await nguoiDungService.Get1NguoiDung(req.query.id); //param
     return res.status(200).json(data);
   } catch (e) {
     console.log("Lấy nguoi dung thất bại: ", e);
@@ -64,7 +64,7 @@ let xoaNguoiDung = async (req, res) => {
         thongDiep: "Thiếu tham số truyền lên server",
       });
     }
-    let data = await userService.xoaNguoiDung(req.query.id);
+    let data = await nguoiDungService.xoaNguoiDung(req.query.id);
     return res.status(200).json(data);
   } catch {
     return res.status(200).json({
@@ -83,7 +83,7 @@ let suaNguoiDung = async (req, res) => {
         thongDiep: "Thiếu tham số truyền lên server",
       });
     }
-    let data = await userService.suaNguoiDung(datatruyenle);
+    let data = await nguoiDungService.suaNguoiDung(datatruyenle);
     return res.status(200).json(data);
   } catch (e) {
     console.log("Lấy nguoi dung thất bại: ", e);
@@ -94,11 +94,29 @@ let suaNguoiDung = async (req, res) => {
   }
 };
 
+let dangNhap = async (req, res) => {
+  let email = req.body.email;
+  let password = req.body.password;
+  if (!email || !password) {
+    return res.status(200).json({
+      maCode: 1,
+      thongDiep: "Vui lòng nhập đầy đủ email và mật khẩu!",
+    });
+  }
+  let datanguoidung = await nguoiDungService.dangNhap(email, password);
+  return res.status(200).json({
+    maCode: datanguoidung.maCode,
+    thongDiep: datanguoidung.thongDiep,
+    nguoidung: datanguoidung.nguoidung ? datanguoidung.nguoidung : {},
+  });
+};
+
 module.exports = {
-  getAllCode: getAllCode,
-  themNguoiDung: themNguoiDung,
-  tatCaNguoiDung: tatCaNguoiDung,
-  Get1NguoiDung: Get1NguoiDung,
-  xoaNguoiDung: xoaNguoiDung,
-  suaNguoiDung: suaNguoiDung,
+  getAllCode,
+  themNguoiDung,
+  tatCaNguoiDung,
+  Get1NguoiDung,
+  xoaNguoiDung,
+  suaNguoiDung,
+  dangNhap,
 };
