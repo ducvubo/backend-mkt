@@ -5,8 +5,13 @@ import emailService from "./emailService";
 import { v4 as uuidv4 } from "uuid";
 const salt = bcrypt.genSaltSync(10);
 
-let buidUrlEmail = (email, linkxacnhan) => {
+let buillinkxacnhan = (email, linkxacnhan) => {
   let result = `${process.env.URL_REACT}/xacnhantaikhoan?linkxacnhan=${linkxacnhan}&email=${email}`;
+  return result;
+};
+
+let buillinkdoimk = (email, linkxacnhan) => {
+  let result = `${process.env.URL_REACT}/doimk?linkxacnhan=${linkxacnhan}&email=${email}`;
   return result;
 };
 
@@ -41,12 +46,15 @@ let ktEmail = (emailNguoiDung) => {
   });
 };
 
-let ktTrangThaiTaiKhoan = () => {
+let ktTrangThaiTaiKhoan = (emailNguoiDung) => {
   return new Promise(async (resolve, reject) => {
     try {
       let nguoidung = await db.User.findOne({
         //tim nguoidung
-        where: { trangthaiId: "S2" },
+        where: {
+          email: emailNguoiDung,
+          trangthaiId: "S2",
+        },
       });
       if (nguoidung) {
         //nguoidung khac undefine thi chay vao day
@@ -66,22 +74,18 @@ let dangNhap = (email, password) => {
     try {
       let datanguoidung = {};
       let ktemail = await ktEmail(email); //lay gia tri true and false
-      let ktTrangThai = await ktTrangThaiTaiKhoan();
-      console.log("check email: ", ktemail);
-      console.log("check trang thai: ", ktTrangThai);
+      let ktTrangThai = await ktTrangThaiTaiKhoan(email);
       if (ktemail === false) {
         //neu tra ve false
         datanguoidung.maCode = 4;
         datanguoidung.thongDiep =
           "Email của bạn không tồn tại trong hệ thống, vui lòng nhập lại email!!!";
-      }
-      else if (ktTrangThai === true) {
+      } else if (ktTrangThai === false) {
         datanguoidung.maCode = 5;
         datanguoidung.thongDiep =
           "Tài khoản của bạn chưa được xác nhận vui lòng kiểm tra hộp thư của email để xác nhận!!!";
       }
-
-      if (ktemail === true && ktTrangThai === false) {
+      if (ktemail === true && ktTrangThai === true) {
         //neu tra ve true
         let nguoidung = await db.User.findOne({
           attributes: ["email", "quyenId", "password", "ho", "ten"],
@@ -149,10 +153,10 @@ let themNguoiDung = (data) => {
           thongDiepen: "Email has been used, please use another email",
         });
       } else {
-        let hashPasswordFromBcrypt = await hashUserPassword(data.password);
+        let mahoamk = await hashUserPassword(data.password);
         await db.User.create({
           email: data.email,
-          password: hashPasswordFromBcrypt,
+          password: mahoamk,
           ho: data.ho,
           ten: data.ten,
           sdt: data.sodienthoai,
@@ -289,7 +293,6 @@ let dangKy = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
       let check = await ktEmail(data.email);
-      console.log("check: ", check);
       if (check === true) {
         resolve({
           maCode: 1,
@@ -299,19 +302,19 @@ let dangKy = (data) => {
       } else {
         let linkxacnhan = uuidv4();
 
-        await emailService.sendSimpleEmail({
-          receiverEmail: data.email,
+        await emailService.guiEmailDangKy({
+          emailxacnhan: data.email,
           ho: data.ho,
           ten: data.ten,
           sodienthoai: data.sodienthoai,
           diachinha: data.diachinha,
-          redirectLink: buidUrlEmail(data.email, linkxacnhan),
+          linkxacnhan: buillinkxacnhan(data.email, linkxacnhan),
         });
 
-        let hashPasswordFromBcrypt = await hashUserPassword(data.password);
+        let mahoamk = await hashUserPassword(data.password);
         await db.User.create({
           email: data.email,
-          password: hashPasswordFromBcrypt,
+          password: mahoamk,
           ho: data.ho,
           ten: data.ten,
           sdt: data.sodienthoai,
@@ -371,6 +374,89 @@ let xacNhanDangKy = (data) => {
   });
 };
 
+let quenMK = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let checkemail = await ktEmail(data.email);
+      if (checkemail === false) {
+        resolve({
+          maCode: 1,
+          thongDiep: "Email này chưa đăng ký tài khoản!!!",
+          thongDiepen: "This email has not been registered yet!!!",
+        });
+      } else {
+        let updatelinkmoi = await db.User.findOne({
+          where: { email: data.email },
+          raw: false,
+        });
+
+        let checktrangthai = await ktTrangThaiTaiKhoan(data.email);
+        if (checktrangthai === false) {
+          resolve({
+            maCode: 2,
+            thongDiep:
+              "Tài khoản chưa được kích hoạt vui lòng kích hoạt trước!!!",
+          });
+        } else {
+          let linkxacnhan = uuidv4();
+
+          await emailService.guiEmaiQuenMk({
+            emailxacnhan: data.email,
+            linkxacnhan: buillinkdoimk(data.email, linkxacnhan),
+          });
+          updatelinkmoi.linkxacnhan = linkxacnhan;
+          await updatelinkmoi.save();
+
+          resolve({
+            maCode: 0,
+            thongDiep: "OK",
+          });
+        }
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let doiMK = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data.linkxacnhan || !data.email) {
+        resolve({
+          maCode: 1,
+          thongDiep: "Thiếu tham số truyền lên server",
+        });
+      } else {
+        let kt = await db.User.findOne({
+          where: {
+            email: data.email,
+            linkxacnhan: data.linkxacnhan,
+          },
+          raw: false,
+        });
+
+        if (kt) {
+          let mahoamk = await hashUserPassword(data.password);
+          kt.password = mahoamk;
+          await kt.save();
+          resolve({
+            maCode: 0,
+            thongDiep: "Đổi mật khẩu thành công",
+          });
+        } else {
+          resolve({
+            maCode: 2,
+            thongDiep: "Không tìm thấy email của bạn",
+          });
+        }
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   getAllCodeServiec,
   themNguoiDung,
@@ -381,4 +467,6 @@ module.exports = {
   dangNhap,
   dangKy,
   xacNhanDangKy,
+  quenMK,
+  doiMK,
 };
