@@ -3,37 +3,40 @@ import nguoidungController from "../controllers/nguoidungController";
 import danhMucHoaController from "../controllers/danhMucHoaController";
 import danhMucHoaChiTietController from "../controllers/danhMucHoaChiTietController";
 import hoaController from "../controllers/hoaController";
+import {verifiToken} from '../middleware/verify_token'
+import {checkChuCuaHang,checkNhanVien} from '../middleware/checkQuyen'
 let router = express.Router();
+
 
 let initWebRoute = (app) => {
   router.get("/api/allcode", nguoidungController.getAllCode);
-  router.post("/api/themnguoidung", nguoidungController.themNguoiDung);
-  router.get("/api/allnguoidung", nguoidungController.tatCaNguoiDung);
-  router.get("/api/all1nguoidung", nguoidungController.Get1NguoiDung);
-  router.delete("/api/xoanguoidung", nguoidungController.xoaNguoiDung);
-  router.put("/api/suanguoidung", nguoidungController.suaNguoiDung);
+  router.post("/api/themnguoidung",verifiToken,checkChuCuaHang, nguoidungController.themNguoiDung);
+  router.get("/api/allnguoidung",verifiToken,checkChuCuaHang ,nguoidungController.tatCaNguoiDung);
+  router.get("/api/all1nguoidung",verifiToken,checkChuCuaHang, nguoidungController.Get1NguoiDung);
+  router.delete("/api/xoanguoidung",verifiToken,checkChuCuaHang, nguoidungController.xoaNguoiDung);
+  router.put("/api/suanguoidung",verifiToken,checkChuCuaHang, nguoidungController.suaNguoiDung);
   router.post("/api/dangnhap", nguoidungController.dangNhap);
   router.post("/api/dangky", nguoidungController.dangKy);
   router.post("/api/xacnhandangky", nguoidungController.xacNhanDangKy);
   router.post("/api/quenmk", nguoidungController.quenMK);
   router.post("/api/doimk", nguoidungController.doiMK);
 
-  router.post("/api/themdanhmuc", danhMucHoaController.themDanhMuc);
-  router.get("/api/alldanhmuc", danhMucHoaController.tatCaDanhMuc);
-  router.delete("/api/xoadanhmuc", danhMucHoaController.xoaDanhMuc);
-  router.put("/api/suadanhmuc", danhMucHoaController.suaDanhMuc);
+  router.post("/api/themdanhmuc",verifiToken, checkNhanVien,danhMucHoaController.themDanhMuc);
+  router.get("/api/alldanhmuc",verifiToken, checkNhanVien,danhMucHoaController.tatCaDanhMuc);
+  router.delete("/api/xoadanhmuc",checkNhanVien, danhMucHoaController.xoaDanhMuc);
+  router.put("/api/suadanhmuc", checkNhanVien,danhMucHoaController.suaDanhMuc);
 
-  router.post("/api/themdanhmuchoachitiet",danhMucHoaChiTietController.themDanhMucHoaChiTiet);
-  router.get("/api/alldanhmuchoachitiet",danhMucHoaChiTietController.tatCaDanhMucHoaChiTiet);
-  router.delete("/api/xoadanhmucchitet",danhMucHoaChiTietController.xoaDanhMucHoaChiTiet);
-  router.put("/api/suadanhmuchoachitiet",danhMucHoaChiTietController.suaDanhMucHoaChiTiet);
-  router.get("/api/danhmuchoanoibat", danhMucHoaController.danhMucHoaNoiBat);
+  router.post("/api/themdanhmuchoachitiet",verifiToken,checkNhanVien,danhMucHoaChiTietController.themDanhMucHoaChiTiet);
+  router.get("/api/alldanhmuchoachitiet",verifiToken,checkNhanVien,danhMucHoaChiTietController.tatCaDanhMucHoaChiTiet);
+  router.delete("/api/xoadanhmucchitet",verifiToken,checkNhanVien,danhMucHoaChiTietController.xoaDanhMucHoaChiTiet);
+  router.put("/api/suadanhmuchoachitiet",verifiToken,checkNhanVien,danhMucHoaChiTietController.suaDanhMucHoaChiTiet);
+  router.get("/api/danhmuchoanoibat",danhMucHoaController.danhMucHoaNoiBat);
   router.get("/api/danhmuchoachitiettheodanhmuc",danhMucHoaChiTietController.danhMucHoaChiTietTheoDanhMuc);
 
-  router.post("/api/themhoa", hoaController.themHoa);
-  router.get("/api/tatcahoa", hoaController.tatCaHoa);
-  router.put("/api/suahoa", hoaController.suaHoa);
-  router.delete("/api/xoahoa", hoaController.xoaHoa);
+  router.post("/api/themhoa",verifiToken, checkNhanVien,hoaController.themHoa);
+  router.get("/api/tatcahoa",verifiToken,checkNhanVien, hoaController.tatCaHoa);
+  router.put("/api/suahoa",verifiToken, checkNhanVien,hoaController.suaHoa);
+  router.delete("/api/xoahoa",verifiToken, checkNhanVien,hoaController.xoaHoa);
   router.get("/api/hoagiamgia", hoaController.hoaGiamGia);
   router.get("/api/hoatet", hoaController.hoaTet);
   router.get("/api/hoasinhnhat", hoaController.hoaSinhNhat);

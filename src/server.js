@@ -5,10 +5,15 @@ import initWebRoutes from './route/web';
 import connectDB from './config/connectDB'
 import cors from 'cors'
 import dotenv from 'dotenv';
-
+import cookieParser from 'cookie-parser';
 dotenv.config();
 
 let app = express();
+
+  
+
+
+
 
 app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', process.env.URL_REACT);
@@ -18,9 +23,13 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use(cors());
+//  app.use(cors());
 app.use(bodyParser.json({ limit:'100mb'}));
 app.use(bodyParser.urlencoded({ limit: '100mb', extended:true}))
+
+
+
+app.use(cookieParser())
 
 viewEngine(app);
 initWebRoutes(app);

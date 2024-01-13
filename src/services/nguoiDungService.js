@@ -3,6 +3,7 @@ import db from "../models/index";
 import bcrypt from "bcryptjs";
 import emailService from "./emailService";
 import { v4 as uuidv4 } from "uuid";
+import { createJWT } from "../middleware/JWTAction";
 const salt = bcrypt.genSaltSync(10);
 
 let buillinkxacnhan = (email, linkxacnhan) => {
@@ -96,6 +97,17 @@ let dangNhap = (email, password) => {
           let ktmk = await bcrypt.compareSync(password, nguoidung.password);
           if (ktmk) {
             // true
+
+            let payload = {
+              email: nguoidung.email,
+              quyenId: nguoidung.quyenId,
+              ho: nguoidung.ho,
+              ten: nguoidung.ten,
+            };
+
+            let token = createJWT(payload);
+
+            datanguoidung.access_token = token
             datanguoidung.maCode = 0;
             datanguoidung.thongDiep = "Ok";
             delete nguoidung.password; //xoa cot password truoc khi gan

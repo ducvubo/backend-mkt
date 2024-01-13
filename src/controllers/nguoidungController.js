@@ -1,5 +1,5 @@
 import nguoiDungService from "../services/nguoiDungService";
-
+import { verifyToken } from "../middleware/JWTAction";
 let getAllCode = async (req, res) => {
   try {
     let data = await nguoiDungService.getAllCodeServiec(req.query.kieu); //param
@@ -27,6 +27,9 @@ let themNguoiDung = async (req, res) => {
 };
 
 let tatCaNguoiDung = async (req, res) => {
+  let test = verifyToken(req.cookies.jwt)
+  console.log(test.quyenId)
+
   try {
     let data = await nguoiDungService.tatCaNguoiDung();
     return res.status(200).json({
@@ -103,11 +106,16 @@ let dangNhap = async (req, res) => {
       thongDiep: "Vui lòng nhập đầy đủ email và mật khẩu!",
     });
   }
+  
   let datanguoidung = await nguoiDungService.dangNhap(email, password);
+
+  res.cookie("jwt", datanguoidung.access_token, { httpOnly: true, maxAge: 60*60*1000 });
+
   return res.status(200).json({
     maCode: datanguoidung.maCode,
     thongDiep: datanguoidung.thongDiep,
     nguoidung: datanguoidung.nguoidung ? datanguoidung.nguoidung : {},
+    access_token: datanguoidung.access_token,
   });
 };
 
@@ -172,5 +180,7 @@ module.exports = {
   suaNguoiDung,
   dangNhap,
   dangKy,
-  xacNhanDangKy,quenMK,doiMK
+  xacNhanDangKy,
+  quenMK,
+  doiMK,
 };
