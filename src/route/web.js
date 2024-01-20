@@ -56,16 +56,16 @@ let initWebRoute = (app) => {
   router.post("/api/suagiohang", verifiToken,gioHangController.suaGioHangNguoiDung);
   router.post("/api/themgiohang", verifiToken,gioHangController.themGioHang);
 
-  router.post('/api/themhoadon', nhapHoaController.themHoaDon)
-  router.get('/api/tatcahoadon', nhapHoaController.tatCaHoaDon)
-  router.put('/api/suahoadon', nhapHoaController.suaHoaDon)
-  router.delete("/api/xoahoadon", nhapHoaController.xoaHoaDon)
+  router.post('/api/themhoadon',verifiToken,checkNhanVien, nhapHoaController.themHoaDon)
+  router.get('/api/tatcahoadon',verifiToken,checkNhanVien, nhapHoaController.tatCaHoaDon)
+  router.put('/api/suahoadon',verifiToken,checkNhanVien, nhapHoaController.suaHoaDon)
+  router.delete("/api/xoahoadon", verifiToken,checkNhanVien,nhapHoaController.xoaHoaDon)
 
-  router.post('/api/themhoamoi', nhapHoaChiTietController.themHoaMoi)
-  router.post('/api/capnhathoacu', nhapHoaChiTietController.capNhatHoaCu)
-  router.get('/api/tatcanhaphoachitiet', nhapHoaChiTietController.tatCaNhapHoaChiTiet)
-  router.put('/api/suanhaphoachitiet', nhapHoaChiTietController.suaNhapHoaChiTiet)
-  router.delete('/api/xoanhaphoachitiet', nhapHoaChiTietController.xoaNhapHoaChiTiet)
+  router.post('/api/themhoamoi',verifiToken,checkNhanVien, nhapHoaChiTietController.themHoaMoi)
+  router.post('/api/capnhathoacu',verifiToken,checkNhanVien, nhapHoaChiTietController.capNhatHoaCu)
+  router.get('/api/tatcanhaphoachitiet',verifiToken,checkNhanVien, nhapHoaChiTietController.tatCaNhapHoaChiTiet)
+  router.put('/api/suanhaphoachitiet',verifiToken,checkNhanVien, nhapHoaChiTietController.suaNhapHoaChiTiet)
+  router.delete('/api/xoanhaphoachitiet',verifiToken,checkNhanVien, nhapHoaChiTietController.xoaNhapHoaChiTiet)
 
 
 
