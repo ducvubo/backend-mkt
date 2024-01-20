@@ -1,21 +1,30 @@
-import jwt from "jsonwebtoken";
+import jwt, { TokenExpiredError } from "jsonwebtoken";
 require("dotenv").config();
 
 const verifiToken = (req, res, next) => {
-  const token = req.cookies.jwt
+  const token = req.cookies.access_token
   if (!token)
     return res.status(200).json({
       maCode: 10,
       thongDiep: "Ban chua dang nhap vui long dang nhap",
     });
   jwt.verify(token, process.env.JWT_KEY, (err, nguoidung) => {
-    if (err) {
+    if(err) {
+      const kttoken = err instanceof TokenExpiredError
+    if (!kttoken) {
       return res.status(200).json({
         maCode: 9,
-        thongDiep: "Token đã hết hạn hoặc không hợp lệ",
+        thongDiep: "Token không hợp lệ",
       });
-    } else {
-      console.log("check: ", nguoidung);
+    }
+    if (kttoken) {
+      return res.status(200).json({
+        maCode: 8,
+        thongDiep: "Token đã hết hạn",
+      });
+    } 
+    }
+    else {
 
       req.nguoidung = nguoidung;
 

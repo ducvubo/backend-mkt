@@ -18,6 +18,7 @@ let themDanhMucHoaChiTiet = (data) => {
     }
   });
 };
+
 let tatCaDanhMucHoaChiTiet = () => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -116,10 +117,11 @@ let danhMucHoaChiTietTheoDanhMuc = (iddanhmuchoa) => {
   });
 };
 
+
 module.exports = {
   themDanhMucHoaChiTiet,
   tatCaDanhMucHoaChiTiet,
   xoaDanhMucHoaChiTiet,
   suaDanhMucHoaChiTiet,
-  danhMucHoaChiTietTheoDanhMuc
+  danhMucHoaChiTietTheoDanhMuc,
 };

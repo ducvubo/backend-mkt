@@ -27,9 +27,6 @@ let themNguoiDung = async (req, res) => {
 };
 
 let tatCaNguoiDung = async (req, res) => {
-  let test = verifyToken(req.cookies.jwt)
-  console.log(test.quyenId)
-
   try {
     let data = await nguoiDungService.tatCaNguoiDung();
     return res.status(200).json({
@@ -106,17 +103,73 @@ let dangNhap = async (req, res) => {
       thongDiep: "Vui lòng nhập đầy đủ email và mật khẩu!",
     });
   }
-  
+
   let datanguoidung = await nguoiDungService.dangNhap(email, password);
 
-  res.cookie("jwt", datanguoidung.access_token, { httpOnly: true, maxAge: 60*60*1000 });
+  res.cookie("access_token", datanguoidung.access_token, {
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000,
+  });
+  res.cookie("refresh_token", datanguoidung.refresh_token, {
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000,
+  });
 
   return res.status(200).json({
     maCode: datanguoidung.maCode,
     thongDiep: datanguoidung.thongDiep,
     nguoidung: datanguoidung.nguoidung ? datanguoidung.nguoidung : {},
-    access_token: datanguoidung.access_token,
+    // access_token: datanguoidung.access_token,
+    // refresh_token: datanguoidung.refresh_token,
   });
+};
+
+let dangXuat = async (req, res) => {
+  res.cookie("access_token", "", {
+    httpOnly: true,
+    maxAge: 1,
+  });
+  res.cookie("refresh_token", "", {
+    httpOnly: true,
+    maxAge: 1,
+  });
+
+  return res.status(200).json({
+    maCode: 0,
+    thongDiep: "Bạn đã đăng xuất",
+  });
+};
+
+let reFresh_token = async (req, res) => {
+  try {
+    let refresh_token = req.cookies.refresh_token;
+    if (!refresh_token)
+      return res.status(200).json({
+        maCode: 10,
+        thongDiep: "Ban chua dang nhap vui long dang nhap",
+      });
+    let token = await nguoiDungService.reFresh_token(refresh_token);
+
+    res.cookie("access_token", token.access_token, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+    res.cookie("refresh_token", token.refresh_token, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+
+    return res.status(200).json({
+      maCode: token.maCode,
+      thongDiep: token.thongDiep
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      maCode: -1,
+      thongDiep: "Lỗi của server...",
+    });
+  }
 };
 
 let dangKy = async (req, res) => {
@@ -171,6 +224,23 @@ let doiMK = async (req, res) => {
   }
 };
 
+let layTatCaNhanVien = async (req, res) => {
+  try {
+    let data = await nguoiDungService.layTatCaNhanVien();
+    return res.status(200).json({
+      maCode: 0,
+      thongDiep: "OK",
+      data,
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      maCode: -1,
+      thongDiep: "Lỗi của server...",
+    });
+  }
+};
+
 module.exports = {
   getAllCode,
   themNguoiDung,
@@ -183,4 +253,7 @@ module.exports = {
   xacNhanDangKy,
   quenMK,
   doiMK,
+  dangXuat,
+  reFresh_token,
+  layTatCaNhanVien
 };

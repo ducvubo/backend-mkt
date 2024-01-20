@@ -1,48 +1,39 @@
 "use strict";
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("Users", {
+    await queryInterface.createTable("nhaphoas", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      email: {
+      idnhanvien: {
+        type: Sequelize.INTEGER,
+      },
+      maphieunhap: {
         type: Sequelize.STRING,
       },
-      password: {
+      tennhacungcap: {
         type: Sequelize.STRING,
       },
-      ho: {
+      diachinhacungcap: {
         type: Sequelize.STRING,
       },
-      ten: {
+      sodienthoainhacungcap: {
         type: Sequelize.STRING,
       },
-      sdt: {
+      nguoicungcap: {
         type: Sequelize.STRING,
       },
-      diachinha: {
+      sodienthoainguoicungcap: {
         type: Sequelize.STRING,
       },
-      diachicuahang: {
-        type: Sequelize.STRING,
+      ngaynhap: {
+        type: Sequelize.DATE,
       },
-      gioitinhId: {
-        type: Sequelize.STRING,
-      },
-      quyenId: {
-        type: Sequelize.STRING,
-      },
-      trangthaiId: {
-        type: Sequelize.STRING,
-      },
-      linkxacnhan: {
-        type: Sequelize.STRING,
-      },
-      refresh_token: {
-        type: Sequelize.STRING,
+      tonghoadon: {
+        type: Sequelize.INTEGER,
       },
       createdAt: {
         allowNull: false,
@@ -55,6 +46,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("Users");
+    await queryInterface.dropTable("nhaphoas");
   },
 };

@@ -4,16 +4,19 @@ import bcrypt from "bcryptjs";
 import emailService from "./emailService";
 import { v4 as uuidv4 } from "uuid";
 import { createJWT } from "../middleware/JWTAction";
+import jwt from "jsonwebtoken";
+require("dotenv").config();
+
 const salt = bcrypt.genSaltSync(10);
 
 let buillinkxacnhan = (email, linkxacnhan) => {
-  let result = `${process.env.URL_REACT}/xacnhantaikhoan?linkxacnhan=${linkxacnhan}&email=${email}`;
-  return result;
+  let link = `${process.env.URL_REACT}/xacnhantaikhoan?linkxacnhan=${linkxacnhan}&email=${email}`;
+  return link;
 };
 
 let buillinkdoimk = (email, linkxacnhan) => {
-  let result = `${process.env.URL_REACT}/doimk?linkxacnhan=${linkxacnhan}&email=${email}`;
-  return result;
+  let link = `${process.env.URL_REACT}/doimk?linkxacnhan=${linkxacnhan}&email=${email}`;
+  return link;
 };
 
 let hashUserPassword = (password) => {
@@ -89,7 +92,7 @@ let dangNhap = (email, password) => {
       if (ktemail === true && ktTrangThai === true) {
         //neu tra ve true
         let nguoidung = await db.User.findOne({
-          attributes: ["email", "quyenId", "password", "ho", "ten"],
+          attributes: ["email", "quyenId", "password", "ho", "ten", "id"],
           where: { email: email },
           raw: true, //chi tra ra dung object nhu trong database
         });
@@ -98,16 +101,41 @@ let dangNhap = (email, password) => {
           if (ktmk) {
             // true
 
-            let payload = {
+            let payload_access_token = {
               email: nguoidung.email,
               quyenId: nguoidung.quyenId,
               ho: nguoidung.ho,
               ten: nguoidung.ten,
             };
 
-            let token = createJWT(payload);
+            let payload_refresh_token = {
+              id: nguoidung.id,
+            };
 
-            datanguoidung.access_token = token
+            let access_token = createJWT(
+              payload_access_token,
+              process.env.JWT_KEY,
+              "5s"
+            );
+            let refresh_token = createJWT(
+              payload_refresh_token,
+              process.env.JWT_KEY_REFRESH_TOKEN,
+              "5d"
+            );
+
+            if (refresh_token) {
+              await db.User.update(
+                {
+                  refresh_token: refresh_token,
+                },
+                {
+                  where: { id: nguoidung.id },
+                }
+              );
+            }
+
+            datanguoidung.access_token = access_token;
+            datanguoidung.refresh_token = refresh_token;
             datanguoidung.maCode = 0;
             datanguoidung.thongDiep = "Ok";
             delete nguoidung.password; //xoa cot password truoc khi gan
@@ -123,6 +151,49 @@ let dangNhap = (email, password) => {
       }
 
       resolve(datanguoidung);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let reFresh_token = (refresh_token) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let nguoidung = await db.User.findOne({
+        where: { refresh_token: refresh_token },
+      });
+
+      if (nguoidung) {
+        jwt.verify(refresh_token, process.env.JWT_KEY_REFRESH_TOKEN, (err) => {
+          if (err) {
+            resolve({
+              maCode: 10,
+              thongDiep: "Phiên làm việc đã hết hạn, vui lòng đăng nhập lại",
+              refresh_token: refresh_token,
+            });
+          } else {
+            let payload_access_token = {
+              email: nguoidung.email,
+              quyenId: nguoidung.quyenId,
+              ho: nguoidung.ho,
+              ten: nguoidung.ten,
+            };
+
+            let access_token = createJWT(
+              payload_access_token,
+              process.env.JWT_KEY,
+              "5s"
+            );
+            resolve({
+              maCode: 0,
+              thongDiep: "Ok",
+              access_token: access_token,
+              refresh_token: refresh_token,
+            });
+          }
+        });
+      }
     } catch (e) {
       reject(e);
     }
@@ -190,6 +261,7 @@ let themNguoiDung = (data) => {
     }
   });
 };
+
 let tatCaNguoiDung = () => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -338,6 +410,14 @@ let dangKy = (data) => {
           linkxacnhan: linkxacnhan,
         });
 
+        let timnguoidungmoi = await db.User.findOne({
+          where: { email: data.email },
+        });
+
+        await db.Giohang.create({
+          idnguoidung: timnguoidungmoi.id,
+        });
+
         resolve({
           maCode: 0,
           thongDiep: "OK",
@@ -469,6 +549,23 @@ let doiMK = (data) => {
   });
 };
 
+let layTatCaNhanVien = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let all = "";
+      all = await db.User.findAll({
+        where:{quyenId : 'R3'},
+        attributes: {
+          exclude: ["password",'linkxacnhan','refresh_token'], //khong lay ra password
+        },
+      });
+      resolve(all);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   getAllCodeServiec,
   themNguoiDung,
@@ -481,4 +578,6 @@ module.exports = {
   xacNhanDangKy,
   quenMK,
   doiMK,
+  reFresh_token,
+  layTatCaNhanVien
 };

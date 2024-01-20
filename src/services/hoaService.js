@@ -1,5 +1,5 @@
 import db from "../models/index";
-const { Op } = require('sequelize');
+const { Op } = require("sequelize");
 
 let themHoa = (data) => {
   return new Promise(async (resolve, reject) => {
@@ -24,8 +24,8 @@ let themHoa = (data) => {
         motasphtmlVi: data.motasphtmlVi,
         motasphtmlEn: data.motasphtmlEn,
         donoibat: data.donoibat,
-        ghichuVi:data.ghichuVi,
-        ghichuEn:data.ghichuEn
+        ghichuVi: data.ghichuVi,
+        ghichuEn: data.ghichuEn,
       });
       resolve({
         maCode: 0,
@@ -134,8 +134,8 @@ let hoaGiamGia = () => {
       data = await db.hoa.findAll({
         where: {
           soluongcon: {
-            [Op.gt]: 0
-          }
+            [Op.gt]: 0,
+          },
         },
         limit: 4,
         order: [["phantramgiam", "DESC"]],
@@ -147,22 +147,34 @@ let hoaGiamGia = () => {
   });
 };
 
-
 let hoaTet = () => {
   return new Promise(async (resolve, reject) => {
     try {
       let data = "";
-       data = await db.Danhmuchoa.findAll({
+      data = await db.Danhmuchoa.findAll({
         where: { id: 35 },
         attributes: {
-          exclude: ["tendanhmucVi",'tendanhmucEn','donoibat','createdAt','updatedAt','id'], 
+          exclude: [
+            "tendanhmucVi",
+            "tendanhmucEn",
+            "donoibat",
+            "createdAt",
+            "updatedAt",
+            "id",
+          ],
         },
         include: [
           {
             model: db.Danhmuchoachitiet,
             as: "danhmuc",
             attributes: {
-              exclude: ["iddanhmuchoa",'tendanhmucchitietVi','createdAt','updatedAt','tendanhmucchitietEn'], 
+              exclude: [
+                "iddanhmuchoa",
+                "tendanhmucchitietVi",
+                "createdAt",
+                "updatedAt",
+                "tendanhmucchitietEn",
+              ],
             },
             include: [
               {
@@ -170,11 +182,11 @@ let hoaTet = () => {
                 as: "danhmuchoachitiet",
                 where: {
                   soluongcon: {
-                    [Op.gt]: 0
-                  }
+                    [Op.gt]: 0,
+                  },
                 },
                 attributes: [
-                  'id',
+                  "id",
                   "tenhoaVi",
                   "tenhoaEn",
                   "giathucVND",
@@ -182,9 +194,9 @@ let hoaTet = () => {
                   "phantramgiam",
                   "giasaukhigiamVND",
                   "giasaukhigiamUSD",
-                  'anhnoibat',
-                  'donoibat',
-                  'soluongban'
+                  "anhnoibat",
+                  "donoibat",
+                  "soluongban",
                 ],
               },
             ],
@@ -207,14 +219,27 @@ let hoaSinhNhat = () => {
       data = await db.Danhmuchoa.findAll({
         where: { id: 15 },
         attributes: {
-          exclude: ["tendanhmucVi",'tendanhmucEn','donoibat','createdAt','updatedAt','id'], 
+          exclude: [
+            "tendanhmucVi",
+            "tendanhmucEn",
+            "donoibat",
+            "createdAt",
+            "updatedAt",
+            "id",
+          ],
         },
         include: [
           {
             model: db.Danhmuchoachitiet,
             as: "danhmuc",
             attributes: {
-              exclude: ["iddanhmuchoa",'tendanhmucchitietVi','createdAt','updatedAt','tendanhmucchitietEn'], 
+              exclude: [
+                "iddanhmuchoa",
+                "tendanhmucchitietVi",
+                "createdAt",
+                "updatedAt",
+                "tendanhmucchitietEn",
+              ],
             },
             include: [
               {
@@ -222,11 +247,11 @@ let hoaSinhNhat = () => {
                 as: "danhmuchoachitiet",
                 where: {
                   soluongcon: {
-                    [Op.gt]: 0
-                  }
+                    [Op.gt]: 0,
+                  },
                 },
                 attributes: [
-                  'id',
+                  "id",
                   "tenhoaVi",
                   "tenhoaEn",
                   "giathucVND",
@@ -234,8 +259,8 @@ let hoaSinhNhat = () => {
                   "phantramgiam",
                   "giasaukhigiamVND",
                   "giasaukhigiamUSD",
-                  'anhnoibat',
-                  'donoibat'
+                  "anhnoibat",
+                  "donoibat",
                 ],
               },
             ],
@@ -258,14 +283,27 @@ let hoaKhaiTruong = () => {
       data = await db.Danhmuchoa.findAll({
         where: { id: 16 },
         attributes: {
-          exclude: ["tendanhmucVi",'tendanhmucEn','donoibat','createdAt','updatedAt','id'], 
+          exclude: [
+            "tendanhmucVi",
+            "tendanhmucEn",
+            "donoibat",
+            "createdAt",
+            "updatedAt",
+            "id",
+          ],
         },
         include: [
           {
             model: db.Danhmuchoachitiet,
             as: "danhmuc",
             attributes: {
-              exclude: ["iddanhmuchoa",'tendanhmucchitietVi','createdAt','updatedAt','tendanhmucchitietEn'], 
+              exclude: [
+                "iddanhmuchoa",
+                "tendanhmucchitietVi",
+                "createdAt",
+                "updatedAt",
+                "tendanhmucchitietEn",
+              ],
             },
             include: [
               {
@@ -273,11 +311,11 @@ let hoaKhaiTruong = () => {
                 as: "danhmuchoachitiet",
                 where: {
                   soluongcon: {
-                    [Op.gt]: 0
-                  }
+                    [Op.gt]: 0,
+                  },
                 },
                 attributes: [
-                  'id',
+                  "id",
                   "tenhoaVi",
                   "tenhoaEn",
                   "giathucVND",
@@ -285,8 +323,8 @@ let hoaKhaiTruong = () => {
                   "phantramgiam",
                   "giasaukhigiamVND",
                   "giasaukhigiamUSD",
-                  'anhnoibat',
-                  'donoibat'
+                  "anhnoibat",
+                  "donoibat",
                 ],
               },
             ],
@@ -302,21 +340,6 @@ let hoaKhaiTruong = () => {
   });
 };
 
-// let lanHoDiep = () => {
-//   return new Promise(async (resolve, reject) => {
-//     try {
-//       let data = "";
-//       data = await db.hoa.findAll({
-//         limit: 4,
-//         where: { iddanhmuchoachitiet: 46 },
-//       });
-//       resolve(data);
-//     } catch (e) {
-//       reject(e);
-//     }
-//   });
-// };
-
 let lanHoDiep = () => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -324,14 +347,27 @@ let lanHoDiep = () => {
       data = await db.Danhmuchoa.findAll({
         where: { id: 17 },
         attributes: {
-          exclude: ["tendanhmucVi",'tendanhmucEn','donoibat','createdAt','updatedAt','id'], //khong lay ra password
+          exclude: [
+            "tendanhmucVi",
+            "tendanhmucEn",
+            "donoibat",
+            "createdAt",
+            "updatedAt",
+            "id",
+          ], //khong lay ra password
         },
         include: [
           {
             model: db.Danhmuchoachitiet,
             as: "danhmuc",
             attributes: {
-              exclude: ["iddanhmuchoa",'tendanhmucchitietVi','createdAt','updatedAt','tendanhmucchitietEn'], //khong lay ra password
+              exclude: [
+                "iddanhmuchoa",
+                "tendanhmucchitietVi",
+                "createdAt",
+                "updatedAt",
+                "tendanhmucchitietEn",
+              ], //khong lay ra password
             },
             include: [
               {
@@ -339,11 +375,11 @@ let lanHoDiep = () => {
                 as: "danhmuchoachitiet",
                 where: {
                   soluongcon: {
-                    [Op.gt]: 0
-                  }
+                    [Op.gt]: 0,
+                  },
                 },
                 attributes: [
-                  'id',
+                  "id",
                   "tenhoaVi",
                   "tenhoaEn",
                   "giathucVND",
@@ -351,8 +387,8 @@ let lanHoDiep = () => {
                   "phantramgiam",
                   "giasaukhigiamVND",
                   "giasaukhigiamUSD",
-                  'anhnoibat',
-                  'donoibat'
+                  "anhnoibat",
+                  "donoibat",
                 ],
               },
             ],
@@ -391,6 +427,122 @@ let thongTinHoa = (id) => {
   });
 };
 
+let sanPhamLienQuan = (iddanhmuchoachitiet, id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let data = "";
+      data = await db.hoa.findAll({
+        where: {
+          soluongcon: {
+            [Op.gt]: 0,
+          },
+          iddanhmuchoachitiet: iddanhmuchoachitiet,
+          id: {
+            [Op.ne]: id, // Loại bỏ hoa có ID bằng idHoaCanBoQua
+          },
+        },
+        limit: 4,
+        order: [["phantramgiam", "DESC"]],
+      });
+      resolve({
+        data: data,
+        maCode: 0,
+        thongDiep: "ok ok ok",
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let hoaTheoDanhMucChiTiet = (iddanhmuchoachitiet) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let data = "";
+      data = await db.hoa.findAll({
+        where: {
+          soluongcon: {
+            [Op.gt]: 0,
+          },
+          iddanhmuchoachitiet: iddanhmuchoachitiet,
+        },
+        order: [["phantramgiam", "DESC"]],
+      });
+      resolve({
+        data: data,
+        maCode: 0,
+        thongDiep: "ok ok ok",
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let hoaTheoDanhMuc = (id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let data = "";
+      data = await db.Danhmuchoa.findAll({
+        where: { id: id },
+        attributes: {
+          exclude: [
+            "tendanhmucVi",
+            "tendanhmucEn",
+            "donoibat",
+            "createdAt",
+            "updatedAt",
+            "id",
+          ],
+        },
+        include: [
+          {
+            model: db.Danhmuchoachitiet,
+            as: "danhmuc",
+            attributes: {
+              exclude: [
+                "iddanhmuchoa",
+                "tendanhmucchitietVi",
+                "createdAt",
+                "updatedAt",
+                "tendanhmucchitietEn",
+              ],
+            },
+            include: [
+              {
+                model: db.hoa,
+                as: "danhmuchoachitiet",
+                where: {
+                  soluongcon: {
+                    [Op.gt]: 0,
+                  },
+                },
+                attributes: [
+                  "id",
+                  "tenhoaVi",
+                  "tenhoaEn",
+                  "giathucVND",
+                  "giathucUSD",
+                  "phantramgiam",
+                  "giasaukhigiamVND",
+                  "giasaukhigiamUSD",
+                  "anhnoibat",
+                  "donoibat",
+                ],
+              },
+            ],
+          },
+        ],
+        raw: false,
+        nest: true,
+      });
+      resolve(data);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   themHoa,
   tatCaHoa,
@@ -401,5 +553,8 @@ module.exports = {
   hoaKhaiTruong,
   hoaSinhNhat,
   lanHoDiep,
-  thongTinHoa
+  thongTinHoa,
+  sanPhamLienQuan,
+  hoaTheoDanhMucChiTiet,
+  hoaTheoDanhMuc
 };

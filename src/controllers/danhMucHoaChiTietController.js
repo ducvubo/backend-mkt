@@ -89,10 +89,13 @@ let danhMucHoaChiTietTheoDanhMuc = async (req, res) => {
   }
 };
 
+
+
 module.exports = {
   themDanhMucHoaChiTiet,
   tatCaDanhMucHoaChiTiet,
   xoaDanhMucHoaChiTiet,
   suaDanhMucHoaChiTiet,
   danhMucHoaChiTietTheoDanhMuc,
+  
 };

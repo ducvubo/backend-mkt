@@ -8,8 +8,19 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      hoa.belongsTo(models.Danhmuchoachitiet, {foreignKey: 'iddanhmuchoachitiet', targetKey:'id', as: 'danhmuchoachitiet'})
-
+      hoa.belongsTo(models.Danhmuchoachitiet, {foreignKey: "iddanhmuchoachitiet",targetKey: "id",as: "danhmuchoachitiet",});
+      hoa.belongsToMany(models.Giohang, {
+        through: 'Giohanghoa',
+        foreignKey: 'idhoa',
+        otherKey: 'idgiohang',
+        as: 'giohangs'
+      });
+      hoa.belongsToMany(models.Giohang, {
+        through: 'Nhaphoachitiet',
+        foreignKey: 'idhoa',
+        otherKey: 'idnhaphoa',
+        as: 'nhaphoas'
+      });
     }
   }
   hoa.init(

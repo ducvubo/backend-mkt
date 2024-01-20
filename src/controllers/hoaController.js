@@ -85,8 +85,6 @@ let hoaGiamGia = async (req, res) => {
   }
 };
 
-
-
 let hoaTet = async (req, res) => {
   try {
     let data = await hoaService.hoaTet();
@@ -171,6 +169,50 @@ let thongTinHoa = async (req, res) => {
     });
   }
 };
+
+let sanPhamLienQuan = async (req, res) => {
+  try {
+    let data = await hoaService.sanPhamLienQuan(req.query.iddanhmuchoachitiet,req.query.id); //param
+    return res.status(200).json(data);
+  } catch (e) {
+    console.log("Lấy nguoi dung thất bại: ", e);
+    return res.status(200).json({
+      maCode: -1,
+      thongDiep: "Lỗi của server",
+    });
+  }
+};
+
+let hoaTheoDanhMucChiTiet = async (req, res) => {
+  try {
+    let data = await hoaService.hoaTheoDanhMucChiTiet(req.query.iddanhmuchoachitiet); //param
+    return res.status(200).json(data);
+  } catch (e) {
+    console.log("Lấy nguoi dung thất bại: ", e);
+    return res.status(200).json({
+      maCode: -1,
+      thongDiep: "Lỗi của server",
+    });
+  }
+};
+
+let hoaTheoDanhMuc = async (req, res) => {
+  try {
+    let data = await hoaService.hoaTheoDanhMuc(req.query.iddanhmuchoa); //param
+    return res.status(200).json({
+      maCode: 0,
+      thongDiep: "OK",
+      data,
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      maCode: -1,
+      thongDiep: "Lỗi của server...",
+    });
+  }
+};
+
 module.exports = {
   themHoa,
   tatCaHoa,
@@ -181,5 +223,8 @@ module.exports = {
   hoaSinhNhat,
   hoaKhaiTruong,
   lanHoDiep,
-  thongTinHoa
+  thongTinHoa,
+  sanPhamLienQuan,
+  hoaTheoDanhMucChiTiet,
+  hoaTheoDanhMuc
 };
