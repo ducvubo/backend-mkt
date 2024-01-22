@@ -15,12 +15,23 @@ module.exports = (sequelize, DataTypes) => {
         otherKey: 'idgiohang',
         as: 'giohangs'
       });
-      hoa.belongsToMany(models.Giohang, {
+      hoa.belongsToMany(models.Nhaphoa, {
         through: 'Nhaphoachitiet',
         foreignKey: 'idhoa',
         otherKey: 'idnhaphoa',
         as: 'nhaphoas'
       });
+      hoa.hasMany(models.Nhaphoachitiet, {foreignKey: 'idhoa', as: 'nhaphoa'})
+      hoa.belongsToMany(models.Donhang, {
+        through: 'Donhangchitiet',
+        foreignKey: 'idhoa',
+        otherKey: 'iddonhang',
+        as: 'donhangs'
+      });
+      // hoa.hasMany(models.Donhangchitiet, {
+      //   foreignKey: "idhoa",
+      //   as: "hoa123",
+      // });
     }
   }
   hoa.init(

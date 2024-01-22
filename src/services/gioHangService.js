@@ -1,6 +1,7 @@
 import db, { sequelize } from "../models/index";
 const { Sequelize, DataTypes } = require("sequelize");
 let gioHangNguoiDung = (id) => {
+  console.log(id)
   return new Promise(async (resolve, reject) => {
     try {
       let data = "";

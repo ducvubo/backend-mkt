@@ -8,6 +8,7 @@ import { checkChuCuaHang, checkNhanVien } from "../middleware/checkQuyen";
 import gioHangController from "../controllers/gioHangController";
 import nhapHoaController from '../controllers/nhapHoaController';
 import nhapHoaChiTietController from '../controllers/nhapHoaChiTietController'
+import donHangController from '../controllers/donHangController'
 let router = express.Router();
 
 let initWebRoute = (app) => {
@@ -67,8 +68,11 @@ let initWebRoute = (app) => {
   router.put('/api/suanhaphoachitiet',verifiToken,checkNhanVien, nhapHoaChiTietController.suaNhapHoaChiTiet)
   router.delete('/api/xoanhaphoachitiet',verifiToken,checkNhanVien, nhapHoaChiTietController.xoaNhapHoaChiTiet)
 
-
-
+  router.get("/api/laytatcaphuongthucvanchuyen", donHangController.layTatCaPhuongThucVanChuyen)
+  router.post("/api/dathang", donHangController.datHang)
+  router.get("/api/donhangchuaxacnhan", donHangController.tatCaDonHangChuaXacNhan)
+  router.put("/api/xacnhandonhang",donHangController.xacNhanDonHang)
+  
   return app.use("/", router);
 };
 

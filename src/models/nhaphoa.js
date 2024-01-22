@@ -14,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
         otherKey: "idhoa",
         as: "hoas",
       });
+      Nhaphoa.hasMany(models.Nhaphoachitiet, {
+        foreignKey: "idnhaphoa",
+        as: "hoa123",
+      });
     }
   }
   Nhaphoa.init(

@@ -168,7 +168,7 @@ let reFresh_token = (refresh_token) => {
         jwt.verify(refresh_token, process.env.JWT_KEY_REFRESH_TOKEN, (err) => {
           if (err) {
             resolve({
-              maCode: 10,
+              maCode: 5,
               thongDiep: "Phiên làm việc đã hết hạn, vui lòng đăng nhập lại",
               refresh_token: refresh_token,
             });
