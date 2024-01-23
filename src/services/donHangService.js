@@ -13,6 +13,30 @@ let layTatCaPhuongThucVanChuyen = () => {
   });
 };
 
+let capNhatGioHangKhiDatHang = (id) => {
+  return new Promise(async (resolve, reject) => {
+    let timgiohangchitiet = await db.Giohanghoa.findOne({
+      where: { id: id },
+    });
+    if (!timgiohangchitiet) {
+      resolve({
+        maCode: 1,
+        thongDiep: "Giỏ hàng hoa không tồn tại",
+      });
+    }
+    else{
+        await db.Giohanghoa.destroy({
+            where: { id: id },
+          });
+          resolve({
+            maCode: 0,
+            thongDiep: "Xóa giỏ hàng hoa thành công",
+          });
+    }
+   
+  });
+} 
+
 let datHang = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -23,7 +47,7 @@ let datHang = (data) => {
         data.donhangchitiet.length > 0 &&
         data.donhangchitiet.map((item) => {
           return { ...item, madonhang123: madonhang };
-        });
+        });    
 
       await db.Donhang.create({
         idnguoidung: data.idnguoidung,
@@ -51,7 +75,13 @@ let datHang = (data) => {
         });
 
       await db.Donhangchitiet.bulkCreate(donhangchitiet1);
-
+       
+      data &&
+      data.idgiohangchitietduocchon &&
+      data.idgiohangchitietduocchon.length > 0 &&
+      data.idgiohangchitietduocchon.map((item) => {
+        return capNhatGioHangKhiDatHang(item.id);
+      });
       resolve({
         maCode: 0,
         thongDiep: "OK",
@@ -92,8 +122,6 @@ let tatCaDonHangChuaXacNhan = () => {
                 "donoibat",
                 "anhnoibat",
                 "phantramgiam",
-                "giasaukhigiamVND",
-                "giasaukhigiamUSD",
                 "createdAt",
                 "updatedAt",
               ],

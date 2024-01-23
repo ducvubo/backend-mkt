@@ -1,7 +1,6 @@
 import db, { sequelize } from "../models/index";
 const { Sequelize, DataTypes } = require("sequelize");
 let gioHangNguoiDung = (id) => {
-  console.log(id)
   return new Promise(async (resolve, reject) => {
     try {
       let data = "";
@@ -11,7 +10,7 @@ let gioHangNguoiDung = (id) => {
           {
             model: db.hoa,
             as: "hoas",
-            through: { attributes: ["soluong", "idgiohang"] },
+            through: { attributes: ['id',"soluong", "idgiohang"] },
             attributes: {
               exclude: [
                 "iddanhmuchoachitiet",
