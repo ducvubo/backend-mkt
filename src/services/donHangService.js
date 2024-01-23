@@ -23,19 +23,17 @@ let capNhatGioHangKhiDatHang = (id) => {
         maCode: 1,
         thongDiep: "Giỏ hàng hoa không tồn tại",
       });
+    } else {
+      await db.Giohanghoa.destroy({
+        where: { id: id },
+      });
+      resolve({
+        maCode: 0,
+        thongDiep: "Xóa giỏ hàng hoa thành công",
+      });
     }
-    else{
-        await db.Giohanghoa.destroy({
-            where: { id: id },
-          });
-          resolve({
-            maCode: 0,
-            thongDiep: "Xóa giỏ hàng hoa thành công",
-          });
-    }
-   
   });
-} 
+};
 
 let datHang = (data) => {
   return new Promise(async (resolve, reject) => {
@@ -47,7 +45,7 @@ let datHang = (data) => {
         data.donhangchitiet.length > 0 &&
         data.donhangchitiet.map((item) => {
           return { ...item, madonhang123: madonhang };
-        });    
+        });
 
       await db.Donhang.create({
         idnguoidung: data.idnguoidung,
@@ -75,13 +73,13 @@ let datHang = (data) => {
         });
 
       await db.Donhangchitiet.bulkCreate(donhangchitiet1);
-       
+
       data &&
-      data.idgiohangchitietduocchon &&
-      data.idgiohangchitietduocchon.length > 0 &&
-      data.idgiohangchitietduocchon.map((item) => {
-        return capNhatGioHangKhiDatHang(item.id);
-      });
+        data.idgiohangchitietduocchon &&
+        data.idgiohangchitietduocchon.length > 0 &&
+        data.idgiohangchitietduocchon.map((item) => {
+          return capNhatGioHangKhiDatHang(item.id);
+        });
       resolve({
         maCode: 0,
         thongDiep: "OK",
@@ -92,12 +90,12 @@ let datHang = (data) => {
   });
 };
 
-let tatCaDonHangChuaXacNhan = () => {
+let tatCaDonHang = (trangthaidonhang) => {
   return new Promise(async (resolve, reject) => {
     try {
       let all = "";
       all = await db.Donhang.findAll({
-        where: { trangthaidonhangid: "H1" },
+        where: { trangthaidonhangid: trangthaidonhang },
 
         include: [
           {
@@ -204,6 +202,6 @@ let xacNhanDonHang = (data) => {
 module.exports = {
   layTatCaPhuongThucVanChuyen,
   datHang,
-  tatCaDonHangChuaXacNhan,
+  tatCaDonHang,
   xacNhanDonHang,
 };

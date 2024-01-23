@@ -42,6 +42,9 @@ let tatCaHoa = () => {
     try {
       let data = "";
       data = await db.hoa.findAll({
+        attributes: {
+          exclude: ["anhnoibat"],
+        },
         include: [
           {
             model: db.Danhmuchoachitiet,
@@ -117,9 +120,40 @@ let xoaHoa = (id) => {
         thongDiep: "Hoa không tồn tại",
       });
     }
+   
+
+    let donhangchitietdata = await db.Donhangchitiet.findAll({
+      where: { idhoa: id },
+    });
+    if (donhangchitietdata) {
+      await db.Donhangchitiet.destroy({
+        where: { idhoa: id },
+      });
+    }
+
+    let giohangdata = await db.Giohanghoa.findAll ({
+      where : {idhoa : id}
+    })
+
+    if(giohangdata) {
+      await db.Giohanghoa.destroy({
+        where: { idhoa: id },
+      });
+    }
+   
+    let nhaphoadata = await db.Nhaphoachitiet.findAll({
+      where : {idhoa : id}
+    })
+    if(nhaphoadata){
+      await db.Nhaphoachitiet.destroy({
+        where: { idhoa: id },
+      });
+    }
+    
     await db.hoa.destroy({
       where: { id: id },
     });
+
     resolve({
       maCode: 0,
       thongDiep: "Xóa hoa thành công",
@@ -556,5 +590,5 @@ module.exports = {
   thongTinHoa,
   sanPhamLienQuan,
   hoaTheoDanhMucChiTiet,
-  hoaTheoDanhMuc
+  hoaTheoDanhMuc,
 };

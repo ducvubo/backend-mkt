@@ -30,9 +30,15 @@ let datHang = async (req, res) => {
   }
 };
 
-let tatCaDonHangChuaXacNhan = async (req, res) => {
+let tatCaDonHang = async (req, res) => {
   try {
-    let data = await donHangService.tatCaDonHangChuaXacNhan();
+    if (!req.query.trangthai) {
+      return res.status(200).json({
+        maCode: 2,
+        thongDiep: "Thiếu tham số truyền lên server",
+      });
+    }
+    let data = await donHangService.tatCaDonHang(req.query.trangthai);
     return res.status(200).json({
       maCode: 0,
       thongDiep: "OK",
@@ -56,9 +62,7 @@ let xacNhanDonHang = async (req, res) => {
         thongDiep: "Thiếu tham số truyền lên server",
       });
     }
-    let data = await donHangService.xacNhanDonHang(
-      datatruyenle
-    );
+    let data = await donHangService.xacNhanDonHang(datatruyenle);
     return res.status(200).json(data);
   } catch (e) {
     console.log("Lấy nguoi dung thất bại: ", e);
@@ -72,6 +76,6 @@ let xacNhanDonHang = async (req, res) => {
 module.exports = {
   layTatCaPhuongThucVanChuyen,
   datHang,
-  tatCaDonHangChuaXacNhan,
+  tatCaDonHang,
   xacNhanDonHang,
 };

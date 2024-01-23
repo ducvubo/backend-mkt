@@ -92,17 +92,18 @@ let xoaHoaDon = (id) => {
         maCode: 1,
         thongDiep: "Hóa đơn không tồn tại",
       });
+    } else {
+      await db.Nhaphoa.destroy({
+        where: { id: id },
+      });
+      await db.Nhaphoachitiet.destroy({
+        where: { idnhaphoa: id },
+      });
+      resolve({
+        maCode: 0,
+        thongDiep: "Xóa hóa đơn thành công",
+      });
     }
-    else{
-        await db.Nhaphoa.destroy({
-            where: { id: id },
-          });
-          resolve({
-            maCode: 0,
-            thongDiep: "Xóa hóa đơn thành công",
-          });
-    }
-   
   });
 };
 
@@ -110,5 +111,5 @@ module.exports = {
   themHoaDon,
   tatCaHoaDon,
   suaHoaDon,
-  xoaHoaDon
+  xoaHoaDon,
 };

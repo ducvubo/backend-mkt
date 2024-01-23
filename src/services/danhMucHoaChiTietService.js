@@ -25,14 +25,14 @@ let tatCaDanhMucHoaChiTiet = () => {
       let all = "";
       all = await db.Danhmuchoachitiet.findAll({
         include: [
-            {
-              model: db.Danhmuchoa,
-              as: "danhmuc",
-              attributes: ["tendanhmucEn", "tendanhmucVi"],
-            },
-          ],
-          raw: false,
-          nest: true,
+          {
+            model: db.Danhmuchoa,
+            as: "danhmuc",
+            attributes: ["tendanhmucEn", "tendanhmucVi"],
+          },
+        ],
+        raw: false,
+        nest: true,
       });
       resolve(all);
     } catch (e) {
@@ -51,17 +51,21 @@ let xoaDanhMucHoaChiTiet = (id) => {
         maCode: 1,
         thongDiep: "Danh mục hoa chi tiết không tồn tại",
       });
+    } else {
+      await db.Danhmuchoachitiet.destroy({
+        where: { id: id },
+      });
+      await db.hoa.update(
+        { iddanhmuchoachitiet: 63 },
+        {
+          where: { iddanhmuchoachitiet: id },
+        }
+      );
+      resolve({
+        maCode: 0,
+        thongDiep: "Xóa danh mục hoa chi tiết thành công",
+      });
     }
-    else{
-        await db.Danhmuchoachitiet.destroy({
-            where: { id: id },
-          });
-          resolve({
-            maCode: 0,
-            thongDiep: "Xóa danh mục hoa chi tiết thành công",
-          });
-    }
-   
   });
 };
 
@@ -106,7 +110,6 @@ let danhMucHoaChiTietTheoDanhMuc = (iddanhmuchoa) => {
         let danhmuchoachitiet = "";
         danhmuchoachitiet = await db.Danhmuchoachitiet.findAll({
           where: { iddanhmuchoa: iddanhmuchoa },
-          
         });
 
         resolve(danhmuchoachitiet);
@@ -116,7 +119,6 @@ let danhMucHoaChiTietTheoDanhMuc = (iddanhmuchoa) => {
     }
   });
 };
-
 
 module.exports = {
   themDanhMucHoaChiTiet,

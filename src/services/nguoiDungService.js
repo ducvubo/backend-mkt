@@ -331,6 +331,28 @@ let xoaNguoiDung = (id) => {
     await db.User.destroy({
       where: { id: id },
     });
+
+    await db.Donhang.update(
+      { idnguoidung: 1 },
+      {
+        where: { idnguoidung: id },
+      }
+    );
+
+    await db.Giohang.update(
+      { idnguoidung: 1 },
+      {
+        where: { idnguoidung: id },
+      }
+    );
+
+    await db.Nhaphoa.update(
+      { idnhanvien: 1 },
+      {
+        where: { idnhanvien: id },
+      }
+    );
+
     resolve({
       maCode: 0,
       thongDiep: "Xóa người dùng thành công",
@@ -554,9 +576,9 @@ let layTatCaNhanVien = () => {
     try {
       let all = "";
       all = await db.User.findAll({
-        where:{quyenId : 'R3'},
+        where: { quyenId: "R3" },
         attributes: {
-          exclude: ["password",'linkxacnhan','refresh_token'], //khong lay ra password
+          exclude: ["password", "linkxacnhan", "refresh_token"], //khong lay ra password
         },
       });
       resolve(all);
@@ -579,5 +601,5 @@ module.exports = {
   quenMK,
   doiMK,
   reFresh_token,
-  layTatCaNhanVien
+  layTatCaNhanVien,
 };
