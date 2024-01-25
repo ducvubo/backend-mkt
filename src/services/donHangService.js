@@ -199,9 +199,94 @@ let xacNhanDonHang = (data) => {
   });
 };
 
+let huyDonHang = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let donhang = await db.Donhang.findOne({
+        where: { madonhang: data.madonhang },
+        raw: false,
+      });
+      if (donhang) {
+        donhang.trangthaidonhangid = "H6";
+        donhang.phanhoicuahang = data.phanhoicuahang;
+        await donhang.save();
+
+        resolve({
+          maCode: 0,
+          thongDiep: "Xác nhận đơn hàng thành công",
+        });
+      } else {
+        resolve({
+          maCode: 1,
+          thongDiep: "Không tìm thấy đơn hàng",
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let xacNhanDonHangGiaoDonViVanChuyen = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let donhang = await db.Donhang.findOne({
+        where: { madonhang: data.madonhang },
+        raw: false,
+      });
+      if (donhang) {
+        donhang.trangthaidonhangid = "H3";
+        await donhang.save();
+
+        resolve({
+          maCode: 0,
+          thongDiep: "Xác nhận đơn hàng thành công",
+        });
+      } else {
+        resolve({
+          maCode: 1,
+          thongDiep: "Không tìm thấy đơn hàng",
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let xacNhanDonHangDaGiaoChoKhachHang = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let donhang = await db.Donhang.findOne({
+        where: { madonhang: data.madonhang },
+        raw: false,
+      });
+      if (donhang) {
+        donhang.trangthaidonhangid = "H4";
+        await donhang.save();
+
+        resolve({
+          maCode: 0,
+          thongDiep: "Xác nhận đơn hàng thành công",
+        });
+      } else {
+        resolve({
+          maCode: 1,
+          thongDiep: "Không tìm thấy đơn hàng",
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   layTatCaPhuongThucVanChuyen,
   datHang,
   tatCaDonHang,
   xacNhanDonHang,
+  huyDonHang,
+  xacNhanDonHangGiaoDonViVanChuyen,
+  xacNhanDonHangDaGiaoChoKhachHang,
 };

@@ -110,6 +110,7 @@ let dangNhap = (email, password) => {
 
             let payload_refresh_token = {
               id: nguoidung.id,
+              ten:nguoidung.ten
             };
 
             let access_token = createJWT(

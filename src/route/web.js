@@ -72,7 +72,10 @@ let initWebRoute = (app) => {
   router.post("/api/dathang", donHangController.datHang);
   router.get("/api/donhang", donHangController.tatCaDonHang);
   router.put("/api/xacnhandonhang", donHangController.xacNhanDonHang);
-
+  router.put("/api/huydonhang", donHangController.huyDonHang);
+  router.put("/api/xacnhandondagiaochodonvivanchuyen", donHangController.xacNhanDonHangGiaoDonViVanChuyen)
+  router.put("/api/xacnhandonhangdagiaochokhachhang",donHangController.xacNhanDonHangDaGiaoChoKhachHang)
+  
   return app.use("/", router);
 };
 
