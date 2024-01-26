@@ -44,6 +44,7 @@ const server = app.listen(port, () => {
 });
 
 const wss = new ws.WebSocketServer({ server });
+
 wss.on("connection", (connection, req) => {
   const token = req.headers.cookie;
   const regex = /refresh_token=([^;]+)/;
@@ -53,27 +54,27 @@ wss.on("connection", (connection, req) => {
     refreshToken,
     process.env.JWT_KEY_REFRESH_TOKEN,
     {},
-    (err, userData) => {
+    (err, datanguoidung) => {
       if (err) throw err;
-      const userId = userData.id;
-      const userName = userData.ten;
-      connection.userId = userId;
-      connection.userName = userName;
+      const id = datanguoidung.id;
+      const ten = datanguoidung.ten;
+      connection.id = id;
+      connection.ten = ten;
     }
   );
 
   connection.on("message", (message) => {
-    const messageData = JSON.parse(message.toString());
-    const { recipient, text } = messageData;
-    const sender = connection.userId
-    console.log({ recipient, text,sender });
+    const tinnhandata = JSON.parse(message.toString());
+    const { nguoinhan, noidung } = tinnhandata;
+    const nguoigui = connection.id
+    console.log({ nguoinhan, noidung,nguoigui });
 
-    if (recipient && text) {
+    if (nguoinhan && noidung) {
       [...wss.clients]
-        .filter((item) => +item.userId === +recipient)
+        .filter((item) => +item.id === +nguoinhan)
         .forEach((item) =>
           item.send(
-            JSON.stringify({ text, sender: connection.userId, recipient })
+            JSON.stringify({ noidung, nguoigui: connection.id, nguoinhan })
           )
         );
     }
@@ -83,8 +84,8 @@ wss.on("connection", (connection, req) => {
     clients.send(
       JSON.stringify({
         online: [...wss.clients].map((item) => ({
-          userId: item.userId,
-          userName: item.userName,
+          id: item.id,
+          ten: item.ten,
         })),
       })
     );
