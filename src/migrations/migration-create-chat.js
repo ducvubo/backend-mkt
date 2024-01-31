@@ -1,34 +1,35 @@
 "use strict";
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable(" blogs", {
+    await queryInterface.createTable("chats", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      tieudeVi: {
-        type: Sequelize.TEXT("long"),
+      tennguoigui: {
+        type: Sequelize.STRING,
       },
-      tieudeEn: {
-        type: Sequelize.TEXT("long"),
+      tennguoinhan: {
+        type: Sequelize.STRING,
       },
-      noidungVi: {
-        type: Sequelize.TEXT("long"),
+      nguoigui: {
+        type: Sequelize.STRING,
       },
-      noidunghtmlVi: {
-        type: Sequelize.TEXT("long"),
+      nguoinhan: {
+        type: Sequelize.STRING,
       },
-      noidungEn: {
-        type: Sequelize.TEXT("long"),
+      noidung: {
+        type: Sequelize.STRING,
       },
-      noidunghtmlEn: {
-        type: Sequelize.TEXT("long"),
+      anh: {
+        type: Sequelize.BLOB("long"),
       },
-      donoibat: {
-        type: Sequelize.INTEGER,
+      thoigian: {
+        type: Sequelize.DATE,
       },
+      
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -40,6 +41,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable(" blogs");
+    await queryInterface.dropTable("chats");
   },
 };

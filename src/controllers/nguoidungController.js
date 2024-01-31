@@ -108,11 +108,11 @@ let dangNhap = async (req, res) => {
 
   res.cookie("access_token", datanguoidung.access_token, {
     httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000,
+    maxAge:5 * 24 * 60 * 60 * 1000,
   });
   res.cookie("refresh_token", datanguoidung.refresh_token, {
     httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000,
+    maxAge: 5 * 24 * 60 * 60 * 1000,
   });
 
   return res.status(200).json({

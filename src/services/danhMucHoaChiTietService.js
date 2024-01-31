@@ -8,7 +8,6 @@ let themDanhMucHoaChiTiet = (data) => {
         tendanhmucchitietVi: data.tendanhmucchitietVi,
         tendanhmucchitietEn: data.tendanhmucchitietEn,
       });
-
       resolve({
         maCode: 0,
         thongDiep: "OK",
@@ -34,6 +33,7 @@ let tatCaDanhMucHoaChiTiet = () => {
         raw: false,
         nest: true,
       });
+      all = all.filter(item => item.id !== 63);
       resolve(all);
     } catch (e) {
       reject(e);

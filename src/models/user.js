@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     trangthaiId:DataTypes.STRING,
     linkxacnhan:DataTypes.STRING,
     refresh_token: DataTypes.STRING,
+    idchat:DataTypes.STRING
   }, {
     sequelize,
     modelName: 'User',

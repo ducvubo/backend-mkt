@@ -137,6 +137,111 @@ let xacNhanDonHangDaGiaoChoKhachHang = async (req, res) => {
   }
 };
 
+let layDonHangNguoiDung = async (req, res) => {
+  try {
+    if (!req.query.idnguoidung) {
+      return res.status(200).json({
+        maCode: 2,
+        thongDiep: "Thiếu tham số truyền lên server",
+      });
+    }
+    let data = await donHangService.layDonHangNguoiDung(req.query.idnguoidung);
+    return res.status(200).json({
+      maCode: 0,
+      thongDiep: "OK",
+      data,
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      maCode: -1,
+      thongDiep: "Lỗi của server...",
+    });
+  }
+};
+
+let xacNhanDaNhanDuocHang = async (req, res) => {
+  let datatruyenle = req.body;
+  try {
+    if (!datatruyenle.madonhang) {
+      return res.status(200).json({
+        maCode: -2,
+        thongDiep: "Thiếu tham số truyền lên server",
+      });
+    }
+    let data = await donHangService.xacNhanDaNhanDuocHang(datatruyenle);
+    return res.status(200).json(data);
+  } catch (e) {
+    console.log("Lấy nguoi dung thất bại: ", e);
+    return res.status(200).json({
+      maCode: -1,
+      thongDiep: "Lỗi cuả server",
+    });
+  }
+};
+
+let huyDonHangNguoiDung = async (req, res) => {
+  let datatruyenle = req.body;
+  try {
+    if (!datatruyenle.madonhang) {
+      return res.status(200).json({
+        maCode: -2,
+        thongDiep: "Thiếu tham số truyền lên server",
+      });
+    }
+    let data = await donHangService.huyDonHangNguoiDung(datatruyenle);
+    return res.status(200).json(data);
+  } catch (e) {
+    console.log("Lấy nguoi dung thất bại: ", e);
+    return res.status(200).json({
+      maCode: -1,
+      thongDiep: "Lỗi cuả server",
+    });
+  }
+};
+
+let yeuCauHoanHangHoanTien = async (req, res) => {
+  let datatruyenle = req.body;
+  try {
+    if (!datatruyenle.madonhang) {
+      return res.status(200).json({
+        maCode: -2,
+        thongDiep: "Thiếu tham số truyền lên server",
+      });
+    }
+    let data = await donHangService.yeuCauHoanHangHoanTien(datatruyenle);
+    return res.status(200).json(data);
+  } catch (e) {
+    console.log("Lấy nguoi dung thất bại: ", e);
+    return res.status(200).json({
+      maCode: -1,
+      thongDiep: "Lỗi cuả server",
+    });
+  }
+};
+
+let xacNhanDaXuLyYeuCauHoanHangHoanTien = async (req, res) => {
+  let datatruyenle = req.body;
+  try {
+    if (!datatruyenle.madonhang) {
+      return res.status(200).json({
+        maCode: -2,
+        thongDiep: "Thiếu tham số truyền lên server",
+      });
+    }
+    let data = await donHangService.xacNhanDaXuLyYeuCauHoanHangHoanTien(
+      datatruyenle
+    );
+    return res.status(200).json(data);
+  } catch (e) {
+    console.log("Lấy nguoi dung thất bại: ", e);
+    return res.status(200).json({
+      maCode: -1,
+      thongDiep: "Lỗi cuả server",
+    });
+  }
+};
+
 module.exports = {
   layTatCaPhuongThucVanChuyen,
   datHang,
@@ -145,4 +250,9 @@ module.exports = {
   huyDonHang,
   xacNhanDonHangGiaoDonViVanChuyen,
   xacNhanDonHangDaGiaoChoKhachHang,
+  layDonHangNguoiDung,
+  xacNhanDaNhanDuocHang,
+  huyDonHangNguoiDung,
+  yeuCauHoanHangHoanTien,
+  xacNhanDaXuLyYeuCauHoanHangHoanTien
 };

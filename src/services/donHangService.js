@@ -208,7 +208,9 @@ let huyDonHang = (data) => {
       });
       if (donhang) {
         donhang.trangthaidonhangid = "H6";
-        donhang.phanhoicuahang = data.phanhoicuahang;
+        donhang.phanhoicuahang = data.phanhoicuahang
+          ? data.phanhoicuahang
+          : null;
         await donhang.save();
 
         resolve({
@@ -281,6 +283,171 @@ let xacNhanDonHangDaGiaoChoKhachHang = (data) => {
   });
 };
 
+let layDonHangNguoiDung = (id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let all = "";
+      all = await db.Donhang.findAll({
+        where: { idnguoidung: id },
+
+        include: [
+          {
+            model: db.hoa,
+            as: "hoas",
+            through: {
+              attributes: ["idhoa", "soluongmua", "tongtien", "madonhang123"],
+            },
+            attributes: {
+              exclude: [
+                "iddanhmuchoachitiet",
+                "tieudehoaVi",
+                "tieudehoaEn",
+                "soluongnhap",
+                "soluongban",
+                "motaspVi",
+                "motaspEn",
+                "motasphtmlVi",
+                "motasphtmlEn",
+                "ghichuVi",
+                "ghichuEn",
+                "donoibat",
+                "anhnoibat",
+                "phantramgiam",
+                "createdAt",
+                "updatedAt",
+              ],
+            },
+          },
+          {
+            model: db.Allcode,
+            as: "trangthaidonhang",
+            attributes: ["tiengViet", "tiengAnh"],
+          },
+        ],
+        raw: false,
+        nest: true,
+      });
+      resolve(all);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let xacNhanDaNhanDuocHang = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let donhang = await db.Donhang.findOne({
+        where: { madonhang: data.madonhang },
+        raw: false,
+      });
+      if (donhang) {
+        donhang.trangthaidonhangid = "H5";
+        await donhang.save();
+
+        resolve({
+          maCode: 0,
+          thongDiep: "Xác nhận đơn hàng thành công",
+        });
+      } else {
+        resolve({
+          maCode: 1,
+          thongDiep: "Không tìm thấy đơn hàng",
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let huyDonHangNguoiDung = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let donhang = await db.Donhang.findOne({
+        where: { madonhang: data.madonhang },
+        raw: false,
+      });
+      if (donhang) {
+        donhang.trangthaidonhangid = "H6";
+        donhang.phanhoikhachhang = data.phanhoikhachhang
+          ? data.phanhoikhachhang
+          : null;
+        await donhang.save();
+
+        resolve({
+          maCode: 0,
+          thongDiep: "Xác nhận đơn hàng thành công",
+        });
+      } else {
+        resolve({
+          maCode: 1,
+          thongDiep: "Không tìm thấy đơn hàng",
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let yeuCauHoanHangHoanTien = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let donhang = await db.Donhang.findOne({
+        where: { madonhang: data.madonhang },
+        raw: false,
+      });
+      if (donhang) {
+        donhang.trangthaidonhangid = "H7";
+        donhang.phanhoikhachhang = data.phanhoikhachhang
+          ? data.phanhoikhachhang
+          : null;
+        await donhang.save();
+
+        resolve({
+          maCode: 0,
+          thongDiep: "Yêu cầu hoàn hàng, hoàn tiền thành công",
+        });
+      } else {
+        resolve({
+          maCode: 1,
+          thongDiep: "Không tìm thấy đơn hàng",
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let xacNhanDaXuLyYeuCauHoanHangHoanTien = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let donhang = await db.Donhang.findOne({
+        where: { madonhang: data.madonhang },
+        raw: false,
+      });
+      if (donhang) {
+        donhang.trangthaidonhangid = "H8";
+        await donhang.save();
+
+        resolve({
+          maCode: 0,
+          thongDiep: "Xác nhận đơn hàng thành công",
+        });
+      } else {
+        resolve({
+          maCode: 1,
+          thongDiep: "Không tìm thấy đơn hàng",
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   layTatCaPhuongThucVanChuyen,
   datHang,
@@ -289,4 +456,8 @@ module.exports = {
   huyDonHang,
   xacNhanDonHangGiaoDonViVanChuyen,
   xacNhanDonHangDaGiaoChoKhachHang,
+  layDonHangNguoiDung,
+  xacNhanDaNhanDuocHang,
+  huyDonHangNguoiDung,
+  yeuCauHoanHangHoanTien,xacNhanDaXuLyYeuCauHoanHangHoanTien
 };

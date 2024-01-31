@@ -9,6 +9,7 @@ import gioHangController from "../controllers/gioHangController";
 import nhapHoaController from "../controllers/nhapHoaController";
 import nhapHoaChiTietController from "../controllers/nhapHoaChiTietController";
 import donHangController from "../controllers/donHangController";
+import chatController from '../controllers/chatController'
 let router = express.Router();
 
 let initWebRoute = (app) => {
@@ -75,7 +76,16 @@ let initWebRoute = (app) => {
   router.put("/api/huydonhang", donHangController.huyDonHang);
   router.put("/api/xacnhandondagiaochodonvivanchuyen", donHangController.xacNhanDonHangGiaoDonViVanChuyen)
   router.put("/api/xacnhandonhangdagiaochokhachhang",donHangController.xacNhanDonHangDaGiaoChoKhachHang)
-  
+  router.put("/api/xacnhandaxulyyeucauhoanhanghoantien",donHangController.xacNhanDaXuLyYeuCauHoanHangHoanTien)
+  router.get("/api/donhangnguoidung",verifiToken,donHangController.layDonHangNguoiDung)
+  router.put("/api/huydonhangnguoidung", donHangController.huyDonHangNguoiDung);
+  router.put("/api/xacnhandanhanduochang", donHangController.xacNhanDaNhanDuocHang)
+  router.put("/api/yeucauhoanhanghoantien", donHangController.yeuCauHoanHangHoanTien)
+
+  router.get("/api/tatcacuoctrochuyen", chatController.tatCaCuocTroChuyen)
+  router.get("/api/tatcakhachhang",chatController.tatCaKhachHang)
+  router.get("/api/doanchatkhachhang", chatController.doanChatKhachHang)
+
   return app.use("/", router);
 };
 

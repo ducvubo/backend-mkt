@@ -7,7 +7,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import ws from "ws";
-import jwt, { TokenExpiredError } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
+import db from "./models/index";
 dotenv.config();
 
 let app = express();
@@ -58,23 +59,57 @@ wss.on("connection", (connection, req) => {
       if (err) throw err;
       const id = datanguoidung.id;
       const ten = datanguoidung.ten;
+      const idchat = datanguoidung.idchat;
       connection.id = id;
       connection.ten = ten;
+      connection.idchat = idchat;
     }
   );
 
-  connection.on("message", (message) => {
+  connection.on("message", async (message) => {
     const tinnhandata = JSON.parse(message.toString());
-    const { nguoinhan, noidung } = tinnhandata;
-    const nguoigui = connection.id
-    console.log({ nguoinhan, noidung,nguoigui });
-
-    if (nguoinhan && noidung) {
+    const { nguoinhan, noidung, thoigian, tennguoigui, tennguoinhan, anh } =
+      tinnhandata;
+    const nguoigui = connection.idchat;
+    if ((nguoinhan && noidung) || anh) {
       [...wss.clients]
-        .filter((item) => +item.id === +nguoinhan)
+        .filter((item) => item.idchat === nguoinhan)
         .forEach((item) =>
           item.send(
-            JSON.stringify({ noidung, nguoigui: connection.id, nguoinhan })
+            JSON.stringify({
+              noidung: noidung ? noidung : null,
+              nguoigui: connection.idchat,
+              nguoinhan,
+              thoigian,
+              tennguoigui,
+              tennguoinhan,
+              anh: anh ? anh : null,
+            })
+          )
+        );
+      await db.Chat.create({
+        nguoigui: nguoigui,
+        nguoinhan: nguoinhan,
+        noidung: noidung ? noidung : null,
+        thoigian: thoigian,
+        tennguoigui: tennguoigui,
+        tennguoinhan: tennguoinhan,
+        anh: anh ? anh : null,
+      });
+    }
+
+    if ((nguoigui === "nhanvien" && noidung) || anh) {
+      [...wss.clients]
+        .filter((item) => item.idchat === "nhanvien")
+        .forEach((item) =>
+          item.send(
+            JSON.stringify({
+              noidung: noidung ? noidung : null,
+              nguoigui: connection.idchat,
+              nguoinhan,
+              thoigian,
+              anh: anh ? anh : null,
+            })
           )
         );
     }
@@ -86,6 +121,7 @@ wss.on("connection", (connection, req) => {
         online: [...wss.clients].map((item) => ({
           id: item.id,
           ten: item.ten,
+          idchat: item.idchat,
         })),
       })
     );

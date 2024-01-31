@@ -44,6 +44,9 @@ module.exports = {
       refresh_token: {
         type: Sequelize.STRING,
       },
+      idchat: {
+        type: Sequelize.STRING,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

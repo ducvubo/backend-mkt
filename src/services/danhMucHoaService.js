@@ -24,6 +24,7 @@ let tatCaDanhMuc = () => {
     try {
       let all = "";
       all = await db.Danhmuchoa.findAll();
+      all = all.filter(item => item.id !== 40);
       resolve(all);
     } catch (e) {
       reject(e);

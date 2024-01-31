@@ -92,7 +92,7 @@ let dangNhap = (email, password) => {
       if (ktemail === true && ktTrangThai === true) {
         //neu tra ve true
         let nguoidung = await db.User.findOne({
-          attributes: ["email", "quyenId", "password", "ho", "ten", "id"],
+          attributes: ["email", "quyenId", "password", "ho", "ten", "id","idchat"],
           where: { email: email },
           raw: true, //chi tra ra dung object nhu trong database
         });
@@ -110,7 +110,8 @@ let dangNhap = (email, password) => {
 
             let payload_refresh_token = {
               id: nguoidung.id,
-              ten:nguoidung.ten
+              ten:nguoidung.ten,
+              idchat:nguoidung.idchat
             };
 
             let access_token = createJWT(
@@ -408,7 +409,7 @@ let dangKy = (data) => {
         });
       } else {
         let linkxacnhan = uuidv4();
-
+        let idchat = uuidv4();
         await emailService.guiEmailDangKy({
           emailxacnhan: data.email,
           ho: data.ho,
@@ -416,6 +417,7 @@ let dangKy = (data) => {
           sodienthoai: data.sodienthoai,
           diachinha: data.diachinha,
           linkxacnhan: buillinkxacnhan(data.email, linkxacnhan),
+          ngonngu:data.ngonngu
         });
 
         let mahoamk = await hashUserPassword(data.password);
@@ -431,6 +433,7 @@ let dangKy = (data) => {
           gioitinhId: data.gioitinh,
           trangthaiId: "S1",
           linkxacnhan: linkxacnhan,
+          idchat:idchat
         });
 
         let timnguoidungmoi = await db.User.findOne({
@@ -518,6 +521,7 @@ let quenMK = (data) => {
           await emailService.guiEmaiQuenMk({
             emailxacnhan: data.email,
             linkxacnhan: buillinkdoimk(data.email, linkxacnhan),
+            ngonngu:data.ngonngu
           });
           updatelinkmoi.linkxacnhan = linkxacnhan;
           await updatelinkmoi.save();
