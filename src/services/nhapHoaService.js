@@ -1,4 +1,5 @@
 import db from "../models/index";
+const { sequelize, Op } = require("sequelize");
 
 let themHoaDon = (data) => {
   return new Promise(async (resolve, reject) => {
@@ -36,7 +37,26 @@ let tatCaHoaDon = () => {
             as: "nhanvien",
             attributes: ["ho", "ten"],
           },
+          {
+            model: db.Nhaphoachitiet,
+            as: "hoa123",
+            attributes: ["idhoa","soluongnhapthucte","gianhap","giatong"],
+            include: [
+              {
+                model: db.hoa,
+                as: "hoa123",
+                attributes: ["tenhoavi"],
+              },
+            ],
+          },
         ],
+        // include: [
+        //   {
+        //     model: db.User,
+        //     as: "nhanvien",
+        //     attributes: ["ho", "ten"],
+        //   },
+        // ],
         raw: false,
         nest: true,
       });
@@ -107,9 +127,49 @@ let xoaHoaDon = (id) => {
   });
 };
 
+let thongKeNhapHoa = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let all = "";
+      all = await db.Nhaphoa.findAll({
+        where: {
+          ngaynhap: {
+            [Op.between]: [data.tungay, data.denngay],
+          },
+        },
+        include: [
+          {
+            model: db.User,
+            as: "nhanvien",
+            attributes: ["ho", "ten"],
+          },
+          {
+            model: db.Nhaphoachitiet,
+            as: "hoa123",
+            attributes: ["idhoa","soluongnhapthucte","gianhap","giatong"],
+            include: [
+              {
+                model: db.hoa,
+                as: "hoa123",
+                attributes: ["tenhoavi"],
+              },
+            ],
+          },
+        ],
+        raw: false,
+        nest: true,
+      });
+      resolve(all);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   themHoaDon,
   tatCaHoaDon,
   suaHoaDon,
   xoaHoaDon,
+  thongKeNhapHoa,
 };

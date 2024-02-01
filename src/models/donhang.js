@@ -12,10 +12,10 @@ module.exports = (sequelize, DataTypes) => {
             otherKey: "idhoa",
             as: "hoas",
           });
-        // Donhang.hasMany(models.Donhangchitiet, {
-        //     foreignKey: "madonhang123",
-        //     as: "donhang123",
-        //   });
+        Donhang.hasMany(models.Donhangchitiet, {
+            foreignKey: "madonhang123",
+            as: "donhang123",
+          });
     }
   }
   Donhang.init(

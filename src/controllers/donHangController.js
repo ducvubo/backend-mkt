@@ -30,7 +30,7 @@ let datHang = async (req, res) => {
   }
 };
 
-let tatCaDonHang = async (req, res) => {
+let tatCaDonHangTheoTrangThai = async (req, res) => {
   try {
     if (!req.query.trangthai) {
       return res.status(200).json({
@@ -38,7 +38,9 @@ let tatCaDonHang = async (req, res) => {
         thongDiep: "Thiếu tham số truyền lên server",
       });
     }
-    let data = await donHangService.tatCaDonHang(req.query.trangthai);
+    let data = await donHangService.tatCaDonHangTheoTrangThai(
+      req.query.trangthai
+    );
     return res.status(200).json({
       maCode: 0,
       thongDiep: "OK",
@@ -242,10 +244,46 @@ let xacNhanDaXuLyYeuCauHoanHangHoanTien = async (req, res) => {
   }
 };
 
+let thongKeBanHoa = async (req, res) => {
+  try {
+    let data = await donHangService.thongKeBanHoa(req.body);
+    return res.status(200).json({
+      maCode: 0,
+      thongDiep: "OK",
+      data,
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      maCode: -1,
+      thongDiep: "Lỗi của server...",
+    });
+  }
+};
+
+let tatCaDonHang = async (req, res) => {
+  try {
+    let data = await donHangService.tatCaDonHang(
+      req.query.trangthai
+    );
+    return res.status(200).json({
+      maCode: 0,
+      thongDiep: "OK",
+      data,
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      maCode: -1,
+      thongDiep: "Lỗi của server...",
+    });
+  }
+};
+
 module.exports = {
   layTatCaPhuongThucVanChuyen,
   datHang,
-  tatCaDonHang,
+  tatCaDonHangTheoTrangThai,
   xacNhanDonHang,
   huyDonHang,
   xacNhanDonHangGiaoDonViVanChuyen,
@@ -254,5 +292,6 @@ module.exports = {
   xacNhanDaNhanDuocHang,
   huyDonHangNguoiDung,
   yeuCauHoanHangHoanTien,
-  xacNhanDaXuLyYeuCauHoanHangHoanTien
+  xacNhanDaXuLyYeuCauHoanHangHoanTien,
+  thongKeBanHoa,tatCaDonHang
 };

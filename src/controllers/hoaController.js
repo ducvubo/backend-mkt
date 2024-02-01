@@ -213,6 +213,24 @@ let hoaTheoDanhMuc = async (req, res) => {
   }
 };
 
+let timHoaNguoiDung = async (req, res) => {
+  let tenhoa = req.body
+  try {
+    let data = await hoaService.timHoaNguoiDung(tenhoa);
+    return res.status(200).json({
+      maCode: 0,
+      thongDiep: "OK",
+      data,
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      maCode: -1,
+      thongDiep: "Lỗi của server...",
+    });
+  }
+};
+
 module.exports = {
   themHoa,
   tatCaHoa,
@@ -226,5 +244,5 @@ module.exports = {
   thongTinHoa,
   sanPhamLienQuan,
   hoaTheoDanhMucChiTiet,
-  hoaTheoDanhMuc
+  hoaTheoDanhMuc,timHoaNguoiDung
 };

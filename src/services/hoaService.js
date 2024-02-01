@@ -1,5 +1,5 @@
 import db from "../models/index";
-const { Op } = require("sequelize");
+const { sequelize,Op } = require("sequelize");
 
 let themHoa = (data) => {
   return new Promise(async (resolve, reject) => {
@@ -42,9 +42,6 @@ let tatCaHoa = () => {
     try {
       let data = "";
       data = await db.hoa.findAll({
-        attributes: {
-          exclude: ["anhnoibat"],
-        },
         include: [
           {
             model: db.Danhmuchoachitiet,
@@ -577,6 +574,57 @@ let hoaTheoDanhMuc = (id) => {
   });
 };
 
+let timHoaNguoiDung = (tenhoa) => {
+  console.log(tenhoa)
+  return new Promise(async (resolve, reject) => {
+    try {
+      let data = "";
+      (tenhoa.ngonngu === 'vi' ? data = await db.hoa.findAll({
+        where: {
+          tenhoaVi: {
+          [Op.like]: `%${tenhoa.tenhoa}%`
+          }
+        },
+        attributes: {
+          exclude: ["anhnoibat"],
+        },
+        include: [
+          {
+            model: db.Danhmuchoachitiet,
+            as: "danhmuchoachitiet",
+            attributes: ["tendanhmucchitietVi", "tendanhmucchitietEn", "id"],
+          },
+        ],
+        raw: false,
+        nest: true,
+      }): data = await db.hoa.findAll({
+        where: {
+          tenhoaEn: {
+          [Op.like]: `%${tenhoa.tenhoa}%`
+          }
+        },
+
+        attributes: {
+          exclude: ["anhnoibat"],
+        },
+        include: [
+          {
+            model: db.Danhmuchoachitiet,
+            as: "danhmuchoachitiet",
+            attributes: ["tendanhmucchitietVi", "tendanhmucchitietEn", "id"],
+          },
+        ],
+        raw: false,
+        nest: true,
+      }))
+      
+      resolve(data);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   themHoa,
   tatCaHoa,
@@ -590,5 +638,5 @@ module.exports = {
   thongTinHoa,
   sanPhamLienQuan,
   hoaTheoDanhMucChiTiet,
-  hoaTheoDanhMuc,
+  hoaTheoDanhMuc,timHoaNguoiDung
 };

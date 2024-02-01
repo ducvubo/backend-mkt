@@ -28,10 +28,10 @@ module.exports = (sequelize, DataTypes) => {
         otherKey: 'iddonhang',
         as: 'donhangs'
       });
-      // hoa.hasMany(models.Donhangchitiet, {
-      //   foreignKey: "idhoa",
-      //   as: "hoa123",
-      // });
+      hoa.hasMany(models.Donhangchitiet, {
+        foreignKey: "idhoa",
+        as: "hoa123",
+      });
     }
   }
   hoa.init(

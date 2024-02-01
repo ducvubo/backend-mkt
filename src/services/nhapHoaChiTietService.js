@@ -45,7 +45,6 @@ let themHoaMoi = (data) => {
 };
 
 let capNhatHoaCu = (data) => {
-  console.log(data);
   return new Promise(async (resolve, reject) => {
     try {
       let hoa = await db.hoa.findOne({

@@ -53,6 +53,7 @@ let initWebRoute = (app) => {
   router.get("/api/sanphamlienquan", hoaController.sanPhamLienQuan);
   router.get("/api/hoatheodanhmucchitiet", hoaController.hoaTheoDanhMucChiTiet);
   router.get("/api/hoatheodanhmuc", hoaController.hoaTheoDanhMuc);
+  router.get("/api/timhoanguoidung", hoaController.timHoaNguoiDung)
 
   router.get("/api/giohang", verifiToken, gioHangController.gioHangNguoiDung);
   router.post("/api/suagiohang",verifiToken,gioHangController.suaGioHangNguoiDung);
@@ -62,6 +63,7 @@ let initWebRoute = (app) => {
   router.get("/api/tatcahoadon",verifiToken,checkNhanVien,nhapHoaController.tatCaHoaDon);
   router.put("/api/suahoadon",verifiToken,checkNhanVien,nhapHoaController.suaHoaDon);
   router.delete("/api/xoahoadon",verifiToken,checkNhanVien,nhapHoaController.xoaHoaDon);
+  router.put("/api/thongkenhaphoa",verifiToken,checkNhanVien, nhapHoaController.thongKeNhapHoa)
 
   router.post("/api/themhoamoi",verifiToken,checkNhanVien,nhapHoaChiTietController.themHoaMoi);
   router.post("/api/capnhathoacu",verifiToken,checkNhanVien,nhapHoaChiTietController.capNhatHoaCu);
@@ -70,17 +72,20 @@ let initWebRoute = (app) => {
   router.delete("/api/xoanhaphoachitiet",verifiToken,checkNhanVien,nhapHoaChiTietController.xoaNhapHoaChiTiet);
 
   router.get("/api/laytatcaphuongthucvanchuyen",donHangController.layTatCaPhuongThucVanChuyen);
-  router.post("/api/dathang", donHangController.datHang);
-  router.get("/api/donhang", donHangController.tatCaDonHang);
-  router.put("/api/xacnhandonhang", donHangController.xacNhanDonHang);
-  router.put("/api/huydonhang", donHangController.huyDonHang);
-  router.put("/api/xacnhandondagiaochodonvivanchuyen", donHangController.xacNhanDonHangGiaoDonViVanChuyen)
-  router.put("/api/xacnhandonhangdagiaochokhachhang",donHangController.xacNhanDonHangDaGiaoChoKhachHang)
-  router.put("/api/xacnhandaxulyyeucauhoanhanghoantien",donHangController.xacNhanDaXuLyYeuCauHoanHangHoanTien)
+  router.post("/api/dathang", verifiToken,donHangController.datHang);
+  router.get("/api/donhang",verifiToken,checkNhanVien, donHangController.tatCaDonHangTheoTrangThai);
+  router.put("/api/xacnhandonhang",verifiToken,checkNhanVien, donHangController.xacNhanDonHang);
+  router.put("/api/huydonhang",verifiToken,checkNhanVien, donHangController.huyDonHang);
+  router.put("/api/xacnhandondagiaochodonvivanchuyen",verifiToken,checkNhanVien, donHangController.xacNhanDonHangGiaoDonViVanChuyen)
+  router.put("/api/xacnhandonhangdagiaochokhachhang", verifiToken,checkNhanVien,donHangController.xacNhanDonHangDaGiaoChoKhachHang)
+  router.put("/api/xacnhandaxulyyeucauhoanhanghoantien", verifiToken,checkNhanVien,donHangController.xacNhanDaXuLyYeuCauHoanHangHoanTien)
+  router.put("/api/thongkebanhoa",verifiToken,checkNhanVien, donHangController.thongKeBanHoa);
+  router.get("/api/tatcadonhang",verifiToken,checkNhanVien, donHangController.tatCaDonHang);
   router.get("/api/donhangnguoidung",verifiToken,donHangController.layDonHangNguoiDung)
-  router.put("/api/huydonhangnguoidung", donHangController.huyDonHangNguoiDung);
-  router.put("/api/xacnhandanhanduochang", donHangController.xacNhanDaNhanDuocHang)
-  router.put("/api/yeucauhoanhanghoantien", donHangController.yeuCauHoanHangHoanTien)
+  router.put("/api/huydonhangnguoidung",verifiToken, donHangController.huyDonHangNguoiDung);
+  router.put("/api/xacnhandanhanduochang",verifiToken, donHangController.xacNhanDaNhanDuocHang)
+  router.put("/api/yeucauhoanhanghoantien",verifiToken, donHangController.yeuCauHoanHangHoanTien)
+
 
   router.get("/api/tatcacuoctrochuyen", chatController.tatCaCuocTroChuyen)
   router.get("/api/tatcakhachhang",chatController.tatCaKhachHang)

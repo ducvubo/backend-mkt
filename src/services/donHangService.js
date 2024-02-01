@@ -1,5 +1,6 @@
 import db, { sequelize } from "../models/index";
 import { v4 as uuidv4 } from "uuid";
+import { Op } from "sequelize";
 
 let layTatCaPhuongThucVanChuyen = () => {
   return new Promise(async (resolve, reject) => {
@@ -90,7 +91,7 @@ let datHang = (data) => {
   });
 };
 
-let tatCaDonHang = (trangthaidonhang) => {
+let tatCaDonHangTheoTrangThai = (trangthaidonhang) => {
   return new Promise(async (resolve, reject) => {
     try {
       let all = "";
@@ -448,10 +449,112 @@ let xacNhanDaXuLyYeuCauHoanHangHoanTien = (data) => {
   });
 };
 
+let thongKeBanHoa = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let all = "";
+      all = await db.Donhang.findAll({
+        where: {
+          createdAt: {
+            [Op.between]: [data.tungay, data.denngay],
+          },
+        },
+
+        include: [
+          {
+            model: db.hoa,
+            as: "hoas",
+            through: {
+              attributes: ["idhoa", "soluongmua", "tongtien", "madonhang123"],
+            },
+            attributes: {
+              exclude: [
+                "iddanhmuchoachitiet",
+                "tieudehoaVi",
+                "tieudehoaEn",
+                "soluongnhap",
+                "soluongban",
+                "motaspVi",
+                "motaspEn",
+                "motasphtmlVi",
+                "motasphtmlEn",
+                "ghichuVi",
+                "ghichuEn",
+                "donoibat",
+                "anhnoibat",
+                "phantramgiam",
+                "updatedAt",
+              ],
+            },
+          },
+          {
+            model: db.Allcode,
+            as: "trangthaidonhang",
+            attributes: ["tiengViet", "tiengAnh"],
+          },
+        ],
+        raw: false,
+        nest: true,
+      });
+      resolve(all);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let tatCaDonHang = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let all = "";
+      all = await db.Donhang.findAll({
+        include: [
+          {
+            model: db.hoa,
+            as: "hoas",
+            through: {
+              attributes: ["idhoa", "soluongmua", "tongtien", "madonhang123"],
+            },
+            attributes: {
+              exclude: [
+                "iddanhmuchoachitiet",
+                "tieudehoaVi",
+                "tieudehoaEn",
+                "soluongnhap",
+                "soluongban",
+                "motaspVi",
+                "motaspEn",
+                "motasphtmlVi",
+                "motasphtmlEn",
+                "ghichuVi",
+                "ghichuEn",
+                "donoibat",
+                "anhnoibat",
+                "phantramgiam",
+                "updatedAt",
+              ],
+            },
+          },
+          {
+            model: db.Allcode,
+            as: "trangthaidonhang",
+            attributes: ["tiengViet", "tiengAnh"],
+          },
+        ],
+        raw: false,
+        nest: true,
+      });
+      resolve(all);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   layTatCaPhuongThucVanChuyen,
   datHang,
-  tatCaDonHang,
+  tatCaDonHangTheoTrangThai,
   xacNhanDonHang,
   huyDonHang,
   xacNhanDonHangGiaoDonViVanChuyen,
@@ -459,5 +562,8 @@ module.exports = {
   layDonHangNguoiDung,
   xacNhanDaNhanDuocHang,
   huyDonHangNguoiDung,
-  yeuCauHoanHangHoanTien,xacNhanDaXuLyYeuCauHoanHangHoanTien
+  yeuCauHoanHangHoanTien,
+  xacNhanDaXuLyYeuCauHoanHangHoanTien,
+  thongKeBanHoa,
+  tatCaDonHang,
 };
