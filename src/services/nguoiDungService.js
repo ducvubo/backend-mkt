@@ -5,6 +5,8 @@ import emailService from "./emailService";
 import { v4 as uuidv4 } from "uuid";
 import { createJWT } from "../middleware/JWTAction";
 import jwt from "jsonwebtoken";
+const { sequelize, Op } = require("sequelize");
+
 require("dotenv").config();
 
 const salt = bcrypt.genSaltSync(10);
@@ -92,7 +94,15 @@ let dangNhap = (email, password) => {
       if (ktemail === true && ktTrangThai === true) {
         //neu tra ve true
         let nguoidung = await db.User.findOne({
-          attributes: ["email", "quyenId", "password", "ho", "ten", "id","idchat"],
+          attributes: [
+            "email",
+            "quyenId",
+            "password",
+            "ho",
+            "ten",
+            "id",
+            "idchat",
+          ],
           where: { email: email },
           raw: true, //chi tra ra dung object nhu trong database
         });
@@ -110,8 +120,8 @@ let dangNhap = (email, password) => {
 
             let payload_refresh_token = {
               id: nguoidung.id,
-              ten:nguoidung.ten,
-              idchat:nguoidung.idchat
+              ten: nguoidung.ten,
+              idchat: nguoidung.idchat,
             };
 
             let access_token = createJWT(
@@ -334,6 +344,17 @@ let xoaNguoiDung = (id) => {
       where: { id: id },
     });
 
+    if (nguoidung.idchat !== "nhanvien") {
+      await db.Chat.destroy({
+        where: {
+          [Op.or]: [
+            { nguoigui: nguoidung.idchat },
+            { nguoinhan: nguoidung.idchat },
+          ],
+        },
+      });
+    }
+
     await db.Donhang.update(
       { idnguoidung: 1 },
       {
@@ -417,7 +438,7 @@ let dangKy = (data) => {
           sodienthoai: data.sodienthoai,
           diachinha: data.diachinha,
           linkxacnhan: buillinkxacnhan(data.email, linkxacnhan),
-          ngonngu:data.ngonngu
+          ngonngu: data.ngonngu,
         });
 
         let mahoamk = await hashUserPassword(data.password);
@@ -433,7 +454,7 @@ let dangKy = (data) => {
           gioitinhId: data.gioitinh,
           trangthaiId: "S1",
           linkxacnhan: linkxacnhan,
-          idchat:idchat
+          idchat: idchat,
         });
 
         let timnguoidungmoi = await db.User.findOne({
@@ -521,7 +542,7 @@ let quenMK = (data) => {
           await emailService.guiEmaiQuenMk({
             emailxacnhan: data.email,
             linkxacnhan: buillinkdoimk(data.email, linkxacnhan),
-            ngonngu:data.ngonngu
+            ngonngu: data.ngonngu,
           });
           updatelinkmoi.linkxacnhan = linkxacnhan;
           await updatelinkmoi.save();

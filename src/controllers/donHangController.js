@@ -280,6 +280,19 @@ let tatCaDonHang = async (req, res) => {
   }
 };
 
+let datHangTrangChu = async (req, res) => {
+  try {
+    let data = await donHangService.datHangTrangChu(req.body);
+    return res.status(200).json(data);
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      maCode: -1,
+      thongDiep: "Lỗi của server...",
+    });
+  }
+};
+
 module.exports = {
   layTatCaPhuongThucVanChuyen,
   datHang,
@@ -293,5 +306,5 @@ module.exports = {
   huyDonHangNguoiDung,
   yeuCauHoanHangHoanTien,
   xacNhanDaXuLyYeuCauHoanHangHoanTien,
-  thongKeBanHoa,tatCaDonHang
+  thongKeBanHoa,tatCaDonHang,datHangTrangChu
 };

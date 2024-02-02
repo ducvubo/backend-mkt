@@ -91,6 +91,47 @@ let datHang = (data) => {
   });
 };
 
+let datHangTrangChu = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let madonhang = uuidv4();
+
+      await db.Donhang.create({
+        idnguoidung: data.idnguoidung,
+        madonhang: madonhang,
+        tennguoinhan: data.tennguoinhan,
+        email: data.email,
+        sodienthoai: data.sodienthoai,
+        diachi: data.diachi,
+        ghichu: data.ghichu,
+        trangthaidonhangid: "H1",
+        phuongthucvanchuyenid: data.phuongthucvanchuyenid,
+        tongtien: data.tongtien,
+        ngonngu: data.ngonngu,
+      });
+
+      let donhang = await db.Donhang.findOne({
+        where: { madonhang: madonhang },
+      });
+
+      await db.Donhangchitiet.create({
+        iddonhang:donhang.id,
+        madonhang123:madonhang,
+        idhoa:data.idhoa,
+        soluongmua:data.soluongmua,
+        tongtien:data.tongtienhang,
+      });
+
+      resolve({
+        maCode: 0,
+        thongDiep: "OK",
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 let tatCaDonHangTheoTrangThai = (trangthaidonhang) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -566,4 +607,5 @@ module.exports = {
   xacNhanDaXuLyYeuCauHoanHangHoanTien,
   thongKeBanHoa,
   tatCaDonHang,
+  datHangTrangChu
 };

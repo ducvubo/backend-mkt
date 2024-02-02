@@ -60,6 +60,7 @@ let tatCaHoa = () => {
 };
 
 let suaHoa = (data) => {
+  console.log(data.anhnoibat)
   return new Promise(async (resolve, reject) => {
     try {
       let hoadata = await db.hoa.findOne({
@@ -585,9 +586,6 @@ let timHoaNguoiDung = (tenhoa) => {
           [Op.like]: `%${tenhoa.tenhoa}%`
           }
         },
-        attributes: {
-          exclude: ["anhnoibat"],
-        },
         include: [
           {
             model: db.Danhmuchoachitiet,
@@ -603,10 +601,7 @@ let timHoaNguoiDung = (tenhoa) => {
           [Op.like]: `%${tenhoa.tenhoa}%`
           }
         },
-
-        attributes: {
-          exclude: ["anhnoibat"],
-        },
+     
         include: [
           {
             model: db.Danhmuchoachitiet,
