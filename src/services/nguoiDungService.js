@@ -240,6 +240,8 @@ let getAllCodeServiec = (kieu) => {
 let themNguoiDung = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
+      let idchat = uuidv4();
+
       let check = await ktEmail(data.email);
       if (check === true) {
         resolve({
@@ -260,8 +262,31 @@ let themNguoiDung = (data) => {
           quyenId: data.quyen,
           gioitinhId: data.gioitinh,
           trangthaiId: "S2",
-          linkxacnhan: "",
+          idchat: data.quyen === "R4" ? idchat : "nhanvien",
         });
+
+        let timnguoidungmoi = await db.User.findOne({
+          where: { email: data.email },
+        });
+
+        await db.Giohang.create({
+          idnguoidung: timnguoidungmoi.id,
+        });
+
+        if (data.quyen === "R4") {
+          await db.Chat.create({
+            tennguoigui: "Bo",
+            tennguoinhan: data.ten,
+            nguoigui: "nhanvien",
+            nguoinhan: idchat,
+            noidung:
+              data.ngonngu === "vi"
+                ? `Chào ${data.ten}!, Chúng tôi có thể giúp gì cho bạn!!!`
+                : `Hello ${data.ten}!, How can we help you!!!`,
+            anh: null,
+            thoigian: Date.now(),
+          });
+        }
 
         resolve({
           maCode: 0,
@@ -282,6 +307,14 @@ let tatCaNguoiDung = () => {
         attributes: {
           exclude: ["password"], //khong lay ra password
         },
+        include: [
+          {
+            model: db.Allcode,
+            as: "quyen",
+          },
+        ],
+        raw: false,
+        nest: true,
       });
       resolve(all);
     } catch (e) {
@@ -362,12 +395,9 @@ let xoaNguoiDung = (id) => {
       }
     );
 
-    await db.Giohang.update(
-      { idnguoidung: 1 },
-      {
-        where: { idnguoidung: id },
-      }
-    );
+    await db.Giohang.destroy({
+      where: { idnguoidung: id },
+    });
 
     await db.Nhaphoa.update(
       { idnhanvien: 1 },
@@ -384,13 +414,28 @@ let xoaNguoiDung = (id) => {
 };
 
 let suaNguoiDung = (data) => {
+  console.log(data);
   return new Promise(async (resolve, reject) => {
     try {
+      let idchatmoi = uuidv4();
+
       let nguoidung = await db.User.findOne({
         where: { id: data.id },
         raw: false,
       });
       if (nguoidung) {
+        if (
+          nguoidung.quyenId === "R4" &&
+          (data.quyenId === "R3" || data.quyenId === "R1")
+        ) {
+          nguoidung.idchat = "nhanvien";
+        }
+        if (
+          data.quyenId === "R4" &&
+          (nguoidung.quyenId === "R1" || nguoidung.quyenId === "R3")
+        ) {
+          nguoidung.idchat = idchatmoi;
+        }
         nguoidung.ho = data.ho;
         nguoidung.ten = data.ten;
         nguoidung.sdt = data.sodienthoai;
@@ -398,8 +443,7 @@ let suaNguoiDung = (data) => {
         nguoidung.diachicuahang = data.diachicuahang;
         nguoidung.gioitinhId = data.gioitinhId;
         nguoidung.quyenId = data.quyenId;
-        nguoidung.trangthaiId = "S2";
-        nguoidung.linkxacnhan = "";
+
         await nguoidung.save();
 
         resolve({
@@ -463,6 +507,18 @@ let dangKy = (data) => {
 
         await db.Giohang.create({
           idnguoidung: timnguoidungmoi.id,
+        });
+        await db.Chat.create({
+          tennguoigui: "Bo",
+          tennguoinhan: data.ten,
+          nguoigui: "nhanvien",
+          nguoinhan: idchat,
+          noidung:
+            data.ngonngu === "vi"
+              ? `Chào ${data.ten}!, Chúng tôi có thể giúp gì cho bạn!!!`
+              : `Hello ${data.ten}!, How can we help you!!!`,
+          anh: null,
+          thoigian: Date.now(),
         });
 
         resolve({
