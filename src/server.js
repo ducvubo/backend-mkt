@@ -9,10 +9,18 @@ import cookieParser from "cookie-parser";
 import ws from "ws";
 import jwt from "jsonwebtoken";
 import db from "./models/index";
+var fs = require("fs");
+var morgan = require("morgan");
+var path = require("path");
 dotenv.config();
 
 let app = express();
+var accessLogStream = fs.createWriteStream(path.join(__dirname, "lichsu.log"), {
+  flags: "a",
+});
 
+// setup the logger
+app.use(morgan("combined", { stream: accessLogStream }));
 app.use(function (req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", process.env.URL_REACT);
   res.setHeader(
@@ -48,23 +56,25 @@ const wss = new ws.WebSocketServer({ server });
 
 wss.on("connection", (connection, req) => {
   const token = req.headers.cookie;
-  const regex = /refresh_token=([^;]+)/;
-  const match = token.match(regex);
-  const refreshToken = match && match[1];
-  jwt.verify(
-    refreshToken,
-    process.env.JWT_KEY_REFRESH_TOKEN,
-    {},
-    (err, datanguoidung) => {
-      if (err) throw err;
-      const id = datanguoidung.id;
-      const ten = datanguoidung.ten;
-      const idchat = datanguoidung.idchat;
-      connection.id = id;
-      connection.ten = ten;
-      connection.idchat = idchat;
-    }
-  );
+  if (token) {
+    const regex = /refresh_token=([^;]+)/;
+    const match = token.match(regex);
+    const refreshToken = match && match[1];
+    jwt.verify(
+      refreshToken,
+      process.env.JWT_KEY_REFRESH_TOKEN,
+      {},
+      (err, datanguoidung) => {
+        if (err) throw err;
+        const id = datanguoidung.id;
+        const ten = datanguoidung.ten;
+        const idchat = datanguoidung.idchat;
+        connection.id = id;
+        connection.ten = ten;
+        connection.idchat = idchat;
+      }
+    );
+  }
 
   connection.on("message", async (message) => {
     const tinnhandata = JSON.parse(message.toString());

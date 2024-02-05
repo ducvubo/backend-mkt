@@ -414,7 +414,6 @@ let xoaNguoiDung = (id) => {
 };
 
 let suaNguoiDung = (data) => {
-  console.log(data);
   return new Promise(async (resolve, reject) => {
     try {
       let idchatmoi = uuidv4();
@@ -435,6 +434,19 @@ let suaNguoiDung = (data) => {
           (nguoidung.quyenId === "R1" || nguoidung.quyenId === "R3")
         ) {
           nguoidung.idchat = idchatmoi;
+
+          await db.Chat.create({
+            tennguoigui: "Bo",
+            tennguoinhan: data.ten,
+            nguoigui: "nhanvien",
+            nguoinhan: idchatmoi,
+            noidung:
+              data.ngonngu === "vi"
+                ? `Chào ${data.ten}!, Chúng tôi có thể giúp gì cho bạn!!!`
+                : `Hello ${data.ten}!, How can we help you!!!`,
+            anh: null,
+            thoigian: Date.now(),
+          });
         }
         nguoidung.ho = data.ho;
         nguoidung.ten = data.ten;

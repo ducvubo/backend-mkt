@@ -26,9 +26,6 @@ module.exports = {
       diachinha: {
         type: Sequelize.STRING,
       },
-      diachicuahang: {
-        type: Sequelize.STRING,
-      },
       gioitinhId: {
         type: Sequelize.STRING,
       },

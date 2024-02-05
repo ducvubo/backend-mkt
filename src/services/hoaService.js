@@ -1,5 +1,5 @@
 import db from "../models/index";
-const { sequelize,Op } = require("sequelize");
+const { sequelize, Op } = require("sequelize");
 
 let themHoa = (data) => {
   return new Promise(async (resolve, reject) => {
@@ -60,7 +60,6 @@ let tatCaHoa = () => {
 };
 
 let suaHoa = (data) => {
-  console.log(data.anhnoibat)
   return new Promise(async (resolve, reject) => {
     try {
       let hoadata = await db.hoa.findOne({
@@ -118,7 +117,6 @@ let xoaHoa = (id) => {
         thongDiep: "Hoa không tồn tại",
       });
     }
-   
 
     let donhangchitietdata = await db.Donhangchitiet.findAll({
       where: { idhoa: id },
@@ -129,25 +127,25 @@ let xoaHoa = (id) => {
       });
     }
 
-    let giohangdata = await db.Giohanghoa.findAll ({
-      where : {idhoa : id}
-    })
+    let giohangdata = await db.Giohanghoa.findAll({
+      where: { idhoa: id },
+    });
 
-    if(giohangdata) {
+    if (giohangdata) {
       await db.Giohanghoa.destroy({
         where: { idhoa: id },
       });
     }
-   
+
     let nhaphoadata = await db.Nhaphoachitiet.findAll({
-      where : {idhoa : id}
-    })
-    if(nhaphoadata){
+      where: { idhoa: id },
+    });
+    if (nhaphoadata) {
       await db.Nhaphoachitiet.destroy({
         where: { idhoa: id },
       });
     }
-    
+
     await db.hoa.destroy({
       where: { id: id },
     });
@@ -576,43 +574,53 @@ let hoaTheoDanhMuc = (id) => {
 };
 
 let timHoaNguoiDung = (tenhoa) => {
-  console.log(tenhoa)
+  console.log(tenhoa);
   return new Promise(async (resolve, reject) => {
     try {
       let data = "";
-      (tenhoa.ngonngu === 'vi' ? data = await db.hoa.findAll({
-        where: {
-          tenhoaVi: {
-          [Op.like]: `%${tenhoa.tenhoa}%`
-          }
-        },
-        include: [
-          {
-            model: db.Danhmuchoachitiet,
-            as: "danhmuchoachitiet",
-            attributes: ["tendanhmucchitietVi", "tendanhmucchitietEn", "id"],
-          },
-        ],
-        raw: false,
-        nest: true,
-      }): data = await db.hoa.findAll({
-        where: {
-          tenhoaEn: {
-          [Op.like]: `%${tenhoa.tenhoa}%`
-          }
-        },
-     
-        include: [
-          {
-            model: db.Danhmuchoachitiet,
-            as: "danhmuchoachitiet",
-            attributes: ["tendanhmucchitietVi", "tendanhmucchitietEn", "id"],
-          },
-        ],
-        raw: false,
-        nest: true,
-      }))
-      
+      tenhoa.ngonngu === "vi"
+        ? (data = await db.hoa.findAll({
+            where: {
+              tenhoaVi: {
+                [Op.like]: `%${tenhoa.tenhoa}%`,
+              },
+            },
+            include: [
+              {
+                model: db.Danhmuchoachitiet,
+                as: "danhmuchoachitiet",
+                attributes: [
+                  "tendanhmucchitietVi",
+                  "tendanhmucchitietEn",
+                  "id",
+                ],
+              },
+            ],
+            raw: false,
+            nest: true,
+          }))
+        : (data = await db.hoa.findAll({
+            where: {
+              tenhoaEn: {
+                [Op.like]: `%${tenhoa.tenhoa}%`,
+              },
+            },
+
+            include: [
+              {
+                model: db.Danhmuchoachitiet,
+                as: "danhmuchoachitiet",
+                attributes: [
+                  "tendanhmucchitietVi",
+                  "tendanhmucchitietEn",
+                  "id",
+                ],
+              },
+            ],
+            raw: false,
+            nest: true,
+          }));
+
       resolve(data);
     } catch (e) {
       reject(e);
@@ -633,5 +641,6 @@ module.exports = {
   thongTinHoa,
   sanPhamLienQuan,
   hoaTheoDanhMucChiTiet,
-  hoaTheoDanhMuc,timHoaNguoiDung
+  hoaTheoDanhMuc,
+  timHoaNguoiDung,
 };
