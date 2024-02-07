@@ -10,6 +10,7 @@ import nhapHoaController from "../controllers/nhapHoaController";
 import nhapHoaChiTietController from "../controllers/nhapHoaChiTietController";
 import donHangController from "../controllers/donHangController";
 import chatController from '../controllers/chatController'
+import danhGiaController from '../controllers/danhGiaController'
 let router = express.Router();
 
 let initWebRoute = (app) => {
@@ -90,6 +91,12 @@ let initWebRoute = (app) => {
   router.get("/api/tatcacuoctrochuyen", chatController.tatCaCuocTroChuyen)
   router.get("/api/tatcakhachhang",chatController.tatCaKhachHang)
   router.get("/api/doanchatkhachhang", chatController.doanChatKhachHang)
+
+  router.post("/api/themdanhgia",verifiToken, danhGiaController.themDanhGia)
+  router.get("/api/laybinhluantheohoa", danhGiaController.binhLuanTheoHoa)
+  router.post("/api/themtraloibinhluan",verifiToken, danhGiaController.themTraLoiBinhLuan)
+  router.get("/api/laytatcabinhluan",verifiToken,checkNhanVien, danhGiaController.layTatCaBinhLuan)
+  router.post("/api/duyethuyduyetdanhgia",verifiToken,checkNhanVien, danhGiaController.duyetHuyDuyetDanhGia)
 
   return app.use("/", router);
 };

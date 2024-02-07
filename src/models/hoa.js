@@ -32,7 +32,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "idhoa",
         as: "hoa123",
       });
-    }
+    hoa.hasMany(models.Binhluan, {foreignKey: 'idhoa', as: 'hoabinhluan'})
+
+    };
+
   }
   hoa.init(
     {

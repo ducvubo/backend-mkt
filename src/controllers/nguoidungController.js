@@ -145,7 +145,7 @@ let reFresh_token = async (req, res) => {
     let refresh_token = req.cookies.refresh_token;
     if (!refresh_token)
       return res.status(200).json({
-        maCode:  n,
+        maCode:  10,
         thongDiep: "Ban chua dang nhap vui long dang nhap",
       });
     let token = await nguoiDungService.reFresh_token(refresh_token);
