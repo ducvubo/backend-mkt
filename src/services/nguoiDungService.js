@@ -386,7 +386,18 @@ let xoaNguoiDung = (id) => {
           ],
         },
       });
+      await db.Binhluan.destroy({
+        where : {
+          idnguoidung:id
+        }
+      })
+      await db.Traloibinhluan.destroy({
+        where : {
+          idnguoidung:id
+        }
+      })
     }
+
 
     await db.Donhang.update(
       { idnguoidung: 1 },
@@ -405,6 +416,19 @@ let xoaNguoiDung = (id) => {
         where: { idnhanvien: id },
       }
     );
+    await db.Binhluan.update(
+      { idnhanvien: 1 },
+      {
+        where: { idnguoidung: id },
+      }
+    );
+    await db.Traloibinhluan.update(
+      { idnhanvien: 1 },
+      {
+        where: { idnguoidung: id },
+      }
+    );
+
 
     resolve({
       maCode: 0,

@@ -97,6 +97,7 @@ let initWebRoute = (app) => {
   router.post("/api/themtraloibinhluan",verifiToken, danhGiaController.themTraLoiBinhLuan)
   router.get("/api/laytatcabinhluan",verifiToken,checkNhanVien, danhGiaController.layTatCaBinhLuan)
   router.post("/api/duyethuyduyetdanhgia",verifiToken,checkNhanVien, danhGiaController.duyetHuyDuyetDanhGia)
+  router.delete("/api/xoadanhgiaortraloikh" ,verifiToken,danhGiaController.xoaDanhGiaTraLoiDanhGiaKH)
 
   return app.use("/", router);
 };

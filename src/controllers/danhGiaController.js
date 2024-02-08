@@ -29,7 +29,7 @@ let themTraLoiBinhLuan = async (req, res) => {
 let binhLuanTheoHoa = async (req, res) => {
   try {
     let data = await danhGiaService.binhLuanTheoHoa(req.query.idhoa);
-    
+
     return res.status(200).json({
       maCode: 0,
       thongDiep: "OK",
@@ -47,7 +47,7 @@ let binhLuanTheoHoa = async (req, res) => {
 let layTatCaBinhLuan = async (req, res) => {
   try {
     let data = await danhGiaService.layTatCaBinhLuan();
-    
+
     return res.status(200).json({
       maCode: 0,
       thongDiep: "OK",
@@ -64,8 +64,28 @@ let layTatCaBinhLuan = async (req, res) => {
 
 let duyetHuyDuyetDanhGia = async (req, res) => {
   try {
-    let data = await danhGiaService.duyetHuyDuyetDanhGia(req.query.id, req.query.bang, req.query.trangthai);
+    let data = await danhGiaService.duyetHuyDuyetDanhGia(
+      req.query.id,
+      req.query.bang,
+      req.query.trangthai
+    );
     return res.status(200).json(data);
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      maCode: -1,
+      thongDiep: "Lỗi của server...",
+    });
+  }
+};
+
+let xoaDanhGiaTraLoiDanhGiaKH = async (req, res) => {
+  try {
+    let data = await danhGiaService.xoaDanhGiaTraLoiDanhGiaKH(req.query.id,req.query.bang);
+
+    return res.status(200).json({
+      data,
+    });
   } catch (e) {
     console.log(e);
     return res.status(200).json({
@@ -80,5 +100,6 @@ module.exports = {
   binhLuanTheoHoa,
   themTraLoiBinhLuan,
   layTatCaBinhLuan,
-  duyetHuyDuyetDanhGia
+  duyetHuyDuyetDanhGia,
+  xoaDanhGiaTraLoiDanhGiaKH,
 };

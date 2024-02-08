@@ -50,13 +50,6 @@ let tatCaHoaDon = () => {
             ],
           },
         ],
-        // include: [
-        //   {
-        //     model: db.User,
-        //     as: "nhanvien",
-        //     attributes: ["ho", "ten"],
-        //   },
-        // ],
         raw: false,
         nest: true,
       });

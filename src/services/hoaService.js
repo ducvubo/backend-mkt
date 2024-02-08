@@ -106,6 +106,29 @@ let suaHoa = (data) => {
   });
 };
 
+let xoaTraLoiDanhGiaKhiXoaHoa = (id) => {
+  return new Promise(async (resolve, reject) => {
+    let traloidanhgia = await db.Traloibinhluan.findAll({
+      where: { idbinhluan: id },
+    });
+    if (!traloidanhgia) {
+      resolve({
+        maCode: 1,
+        thongDiep: "Đánh giá không tồn tại",
+      });
+    }
+
+    await db.Traloibinhluan.destroy({
+      where: { idbinhluan: id },
+    });
+
+    resolve({
+      maCode: 0,
+      thongDiep: "Xóa trả lơì đánh giá thành công",
+    });
+  });
+};
+
 let xoaHoa = (id) => {
   return new Promise(async (resolve, reject) => {
     let hoadata = await db.hoa.findOne({
@@ -145,6 +168,20 @@ let xoaHoa = (id) => {
         where: { idhoa: id },
       });
     }
+
+    let danhgia = await db.Binhluan.findAll({
+      where: { idhoa: id },
+    });
+
+    danhgia &&
+      danhgia.length > 0 &&
+      danhgia.map((item) => {
+        return xoaTraLoiDanhGiaKhiXoaHoa(item.id);
+      });
+
+      await db.Binhluan.destroy({
+        where:{idhoa: id}
+      })
 
     await db.hoa.destroy({
       where: { id: id },

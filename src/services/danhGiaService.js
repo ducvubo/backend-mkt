@@ -164,7 +164,7 @@ let layTatCaBinhLuan = (idhoa) => {
                 "giathucVND",
                 "phantramgiam",
                 "giasaukhigiamUSD",
-                "giasaukhigiamVND"
+                "giasaukhigiamVND",
               ],
             },
           },
@@ -180,10 +180,10 @@ let layTatCaBinhLuan = (idhoa) => {
   });
 };
 
-let duyetHuyDuyetDanhGia = (id,bang,trangthai) => {
+let duyetHuyDuyetDanhGia = (id, bang, trangthai) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if(bang === 'danhgia' && trangthai === 'duyet'){
+      if (bang === "danhgia" && trangthai === "duyet") {
         await db.Binhluan.update(
           { trangthaidanhgiaid: "BL2" },
           {
@@ -191,8 +191,7 @@ let duyetHuyDuyetDanhGia = (id,bang,trangthai) => {
           }
         );
       }
-      if(bang === 'danhgia' && trangthai === 'huyduyet'){
-
+      if (bang === "danhgia" && trangthai === "huyduyet") {
         await db.Binhluan.update(
           { trangthaidanhgiaid: "BL1" },
           {
@@ -200,9 +199,7 @@ let duyetHuyDuyetDanhGia = (id,bang,trangthai) => {
           }
         );
       }
-      if(bang === 'traloi' && trangthai === 'duyet'){
-      
-
+      if (bang === "traloi" && trangthai === "duyet") {
         await db.Traloibinhluan.update(
           { trangthaitraloidanhgiaid: "BL2" },
           {
@@ -210,8 +207,7 @@ let duyetHuyDuyetDanhGia = (id,bang,trangthai) => {
           }
         );
       }
-      if(bang === 'traloi' && trangthai === 'huyduyet'){
-
+      if (bang === "traloi" && trangthai === "huyduyet") {
         await db.Traloibinhluan.update(
           { trangthaitraloidanhgiaid: "BL1" },
           {
@@ -229,9 +225,35 @@ let duyetHuyDuyetDanhGia = (id,bang,trangthai) => {
   });
 };
 
+let xoaDanhGiaTraLoiDanhGiaKH = (id, bang) => {
+  return new Promise(async (resolve, reject) => {
+    if (bang === "danhgia") {
+      await db.Binhluan.destroy({
+        where: { id: id },
+      });
+      await db.Traloibinhluan.destroy({
+        where: { idbinhluan: id },
+      });
+    }
+
+    if (bang === "traloi") {
+      await db.Traloibinhluan.destroy({
+        where: { id: id },
+      });
+    }
+
+    resolve({
+      maCode: 0,
+      thongDiep: "Xóa đánh giá thành công",
+    });
+  });
+};
+
 module.exports = {
   themDanhGia,
   binhLuanTheoHoa,
   themTraLoiBinhLuan,
-  layTatCaBinhLuan,duyetHuyDuyetDanhGia
+  layTatCaBinhLuan,
+  duyetHuyDuyetDanhGia,
+  xoaDanhGiaTraLoiDanhGiaKH,
 };
