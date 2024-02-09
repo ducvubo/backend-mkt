@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      hoa.belongsTo(models.Danhmuchoachitiet, {foreignKey: "iddanhmuchoachitiet",targetKey: "id",as: "danhmuchoachitiet",onDelete: 'CASCADE'});
+      hoa.belongsTo(models.Danhmuchoachitiet, {foreignKey: "iddanhmuchoachitiet",targetKey: "id",as: "danhmuchoachitiet"});
       hoa.belongsToMany(models.Giohang, {
         through: 'Giohanghoa',
         foreignKey: 'idhoa',

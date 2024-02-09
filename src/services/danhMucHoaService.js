@@ -1,4 +1,5 @@
 import db from "../models/index";
+const { Sequelize, Op } = require("sequelize");
 require("dotenv").config();
 
 let themDanhMuc = (data) => {
@@ -23,7 +24,9 @@ let tatCaDanhMuc = () => {
   return new Promise(async (resolve, reject) => {
     try {
       let all = "";
-      all = await db.Danhmuchoa.findAll();
+      all = await db.Danhmuchoa.findAll({
+        order: [[Sequelize.literal("donoibat"), "DESC"]],
+      });
       all = all.filter(item => item.id !== 40);
       resolve(all);
     } catch (e) {
