@@ -29,7 +29,9 @@ module.exports = {
       thoigian: {
         type: Sequelize.DATE,
       },
-      
+      trangthaixem: {
+        type: Sequelize.STRING,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

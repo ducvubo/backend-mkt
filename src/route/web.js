@@ -89,6 +89,7 @@ let initWebRoute = (app) => {
   router.get("/api/tatcacuoctrochuyen", chatController.tatCaCuocTroChuyen)
   router.get("/api/tatcakhachhang",chatController.tatCaKhachHang)
   router.get("/api/doanchatkhachhang", chatController.doanChatKhachHang)
+  router.post("/api/doitrangthaixem",chatController.doiTrangThaiXem)
 
   router.post("/api/themdanhgia",verifiToken, danhGiaController.themDanhGia)
   router.get("/api/laybinhluantheohoa", danhGiaController.binhLuanTheoHoa)

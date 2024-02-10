@@ -6,7 +6,7 @@ let tatCaCuocTroChuyen = () => {
       let all = "";
       all = await db.Chat.findAll({
         attributes: {
-          exclude: ["thoigian"],
+          exclude: ["thoigian", "anh", "createdAt", "updatedAt"],
         },
       });
       resolve(all);
@@ -57,10 +57,31 @@ let doanChatKhachHang = (idchat) => {
           [Op.or]: [{ nguoinhan: idchat }, { nguoigui: idchat }],
         },
         attributes: {
-          exclude: ["thoigian"],
+          exclude: ["thoigian", "anh", "createdAt", "updatedAt"],
         },
       });
       resolve(all);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let doiTrangThaiXem = (idchat) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await db.Chat.update(
+        {
+          trangthaixem: "daxem",
+        },
+        {
+          where: { nguoigui: idchat },
+        }
+      );
+      resolve({
+        maCode: 0,
+        thongDiep: "OK",
+      });
     } catch (e) {
       reject(e);
     }
@@ -71,4 +92,5 @@ module.exports = {
   tatCaCuocTroChuyen,
   tatCaKhachHang,
   doanChatKhachHang,
+  doiTrangThaiXem,
 };

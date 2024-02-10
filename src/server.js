@@ -93,6 +93,7 @@ wss.on("connection", (connection, req) => {
               tennguoigui,
               tennguoinhan,
               anh: anh ? anh : null,
+              trangthaixem:  "chuaxem",
             })
           )
         );
@@ -104,6 +105,7 @@ wss.on("connection", (connection, req) => {
         tennguoigui: tennguoigui,
         tennguoinhan: tennguoinhan,
         anh: anh ? anh : null,
+        trangthaixem: "chuaxem",
       });
     }
 
@@ -118,6 +120,7 @@ wss.on("connection", (connection, req) => {
               nguoinhan,
               thoigian,
               anh: anh ? anh : null,
+              trangthaixem:"chuaxem"
             })
           )
         );

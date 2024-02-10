@@ -49,9 +49,26 @@ let doanChatKhachHang = async (req, res) => {
       thongDiep: "Lỗi của server...",
     });
   }
+}; 
+
+
+let doiTrangThaiXem = async (req, res) => {
+  try {
+    let data = await chatService.doiTrangThaiXem(req.query.idchat);
+    return res.status(200).json({
+ 
+      data,
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      maCode: -1,
+      thongDiep: "Lỗi của server...",
+    });
+  }
 };
 
 module.exports = {
-  tatCaCuocTroChuyen,tatCaKhachHang,doanChatKhachHang
+  tatCaCuocTroChuyen,tatCaKhachHang,doanChatKhachHang,doiTrangThaiXem
   
 };

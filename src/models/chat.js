@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       noidung: DataTypes.STRING,
       anh:DataTypes.BLOB("long"),
       thoigian: DataTypes.DATE,
+      trangthaixem: DataTypes.STRING,
     },
     {
       sequelize,
