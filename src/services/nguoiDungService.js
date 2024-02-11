@@ -312,6 +312,10 @@ let tatCaNguoiDung = () => {
             model: db.Allcode,
             as: "quyen",
           },
+          {
+            model: db.Allcode,
+            as: "gioitinh",
+          },
         ],
         raw: false,
         nest: true,
@@ -387,17 +391,16 @@ let xoaNguoiDung = (id) => {
         },
       });
       await db.Binhluan.destroy({
-        where : {
-          idnguoidung:id
-        }
-      })
+        where: {
+          idnguoidung: id,
+        },
+      });
       await db.Traloibinhluan.destroy({
-        where : {
-          idnguoidung:id
-        }
-      })
+        where: {
+          idnguoidung: id,
+        },
+      });
     }
-
 
     await db.Donhang.update(
       { idnguoidung: 1 },
@@ -428,7 +431,6 @@ let xoaNguoiDung = (id) => {
         where: { idnguoidung: id },
       }
     );
-
 
     resolve({
       maCode: 0,

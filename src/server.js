@@ -64,7 +64,7 @@ wss.on("connection", (connection, req) => {
       process.env.JWT_KEY_REFRESH_TOKEN,
       {},
       (err, datanguoidung) => {
-        if (err) throw err;
+        if (err) return err;
         const id = datanguoidung.id;
         const ten = datanguoidung.ten;
         const idchat = datanguoidung.idchat;
@@ -93,7 +93,7 @@ wss.on("connection", (connection, req) => {
               tennguoigui,
               tennguoinhan,
               anh: anh ? anh : null,
-              trangthaixem:  "chuaxem",
+              trangthaixem: "chuaxem",
             })
           )
         );
@@ -120,7 +120,7 @@ wss.on("connection", (connection, req) => {
               nguoinhan,
               thoigian,
               anh: anh ? anh : null,
-              trangthaixem:"chuaxem"
+              trangthaixem: "chuaxem",
             })
           )
         );
@@ -139,3 +139,4 @@ wss.on("connection", (connection, req) => {
     );
   });
 });
+ 

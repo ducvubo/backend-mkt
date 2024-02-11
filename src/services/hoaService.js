@@ -418,7 +418,7 @@ let hoaTheoDanhMucNoiBat = () => {
     try {
       let data = "";
       data = await db.Danhmuchoa.findAll({
-        limit:5,
+        limit: 5,
         order: [[Sequelize.literal("donoibat"), "DESC"]],
         attributes: {
           exclude: [
@@ -478,6 +478,20 @@ let hoaTheoDanhMucNoiBat = () => {
   });
 };
 
+let tatCaHoaNguoiDung = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let data = "";
+      data = await db.hoa.findAll({
+        order: [[Sequelize.literal("donoibat"), "DESC"]],
+      });
+      resolve(data);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   themHoa,
   tatCaHoa,
@@ -489,5 +503,6 @@ module.exports = {
   hoaTheoDanhMucChiTiet,
   hoaTheoDanhMuc,
   timHoaNguoiDung,
-  hoaTheoDanhMucNoiBat
+  hoaTheoDanhMucNoiBat,
+  tatCaHoaNguoiDung,
 };

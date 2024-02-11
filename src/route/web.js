@@ -52,6 +52,7 @@ let initWebRoute = (app) => {
   router.get("/api/hoatheodanhmuc", hoaController.hoaTheoDanhMuc);
   router.put("/api/timhoanguoidung", hoaController.timHoaNguoiDung);
   router.get("/api/hoatheodanhmucnoibat", hoaController.hoaTheoDanhMucNoiBat);
+  router.get("/api/tatcahoanguoidung", hoaController.tatCaHoaNguoiDung)
 
 
   router.get("/api/giohang", verifiToken, gioHangController.gioHangNguoiDung);
@@ -86,10 +87,10 @@ let initWebRoute = (app) => {
   router.put("/api/xacnhandanhanduochang",verifiToken, donHangController.xacNhanDaNhanDuocHang)
   router.put("/api/yeucauhoanhanghoantien",verifiToken, donHangController.yeuCauHoanHangHoanTien)
 
-  router.get("/api/tatcacuoctrochuyen", chatController.tatCaCuocTroChuyen)
-  router.get("/api/tatcakhachhang",chatController.tatCaKhachHang)
-  router.get("/api/doanchatkhachhang", chatController.doanChatKhachHang)
-  router.post("/api/doitrangthaixem",chatController.doiTrangThaiXem)
+  router.get("/api/tatcacuoctrochuyen",verifiToken,checkNhanVien, chatController.tatCaCuocTroChuyen)
+  router.get("/api/tatcakhachhang",verifiToken,checkNhanVien,chatController.tatCaKhachHang)
+  router.get("/api/doanchatkhachhang",verifiToken , chatController.doanChatKhachHang)
+  router.post("/api/doitrangthaixem",verifiToken,checkNhanVien,chatController.doiTrangThaiXem)
 
   router.post("/api/themdanhgia",verifiToken, danhGiaController.themDanhGia)
   router.get("/api/laybinhluantheohoa", danhGiaController.binhLuanTheoHoa)
