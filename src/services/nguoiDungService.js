@@ -102,6 +102,7 @@ let dangNhap = (email, password) => {
             "ten",
             "id",
             "idchat",
+            "anhdaidien"
           ],
           where: { email: email },
           raw: true, //chi tra ra dung object nhu trong database
@@ -258,7 +259,6 @@ let themNguoiDung = (data) => {
           ten: data.ten,
           sdt: data.sodienthoai,
           diachinha: data.diachinha,
-          diachicuahang: data.diachicuahang,
           quyenId: data.quyen,
           gioitinhId: data.gioitinh,
           trangthaiId: "S2",
@@ -478,7 +478,6 @@ let suaNguoiDung = (data) => {
         nguoidung.ten = data.ten;
         nguoidung.sdt = data.sodienthoai;
         nguoidung.diachinha = data.diachinha;
-        nguoidung.diachicuahang = data.diachicuahang;
         nguoidung.gioitinhId = data.gioitinhId;
         nguoidung.quyenId = data.quyenId;
 
@@ -531,7 +530,6 @@ let dangKy = (data) => {
           ten: data.ten,
           sdt: data.sodienthoai,
           diachinha: data.diachinha,
-          diachicuahang: "",
           quyenId: "R4",
           gioitinhId: data.gioitinh,
           trangthaiId: "S1",
@@ -708,6 +706,80 @@ let layTatCaNhanVien = () => {
   });
 };
 
+let thongTinNguoiDung = (id, email) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!id || !email) {
+        resolve({
+          maCode: 1,
+          thongDiep: "Thiếu tham số truyền vào",
+        });
+      } else {
+        let thongtinnguoidung = "";
+        thongtinnguoidung = await db.User.findOne({
+          where: { id: id, email: email },
+          attributes: {
+            exclude: ["password", "refresh_token", "linkxacnhan", "idchat"],
+          },
+          include: [
+            {
+              model: db.Allcode,
+              as: "gioitinh",
+              attributes: ["tiengViet", "tiengAnh"],
+            },
+            {
+              model: db.Allcode,
+              as: "quyen",
+              attributes: ["tiengViet", "tiengAnh"],
+            },
+          ],
+          raw: false,
+          nest: true,
+        });
+        resolve({
+          maCode: 0,
+          thongDiep: "Ok ok ok",
+          thongtinnguoidung,
+        });
+      }
+    } catch {
+      reject(e);
+    }
+  });
+};
+
+let capNhapThongTinNguoiDung = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let nguoidung = await db.User.findOne({
+        where: { id: data.id, email: data.email },
+        raw: false,
+      });
+      if (nguoidung) {
+        nguoidung.ho = data.ho;
+        nguoidung.ten = data.ten;
+        nguoidung.sdt = data.sodienthoai;
+        nguoidung.diachinha = data.diachinha;
+        nguoidung.gioitinhId = data.gioitinhId;
+        nguoidung.anhdaidien = data.anhdaidien;
+        await nguoidung.save();
+
+        resolve({
+          maCode: 0,
+          thongDiep: "Sửa thông tin thành công",
+        });
+      } else {
+        resolve({
+          maCode: 1,
+          thongDiep: "Không tìm thấy người dùng",
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   getAllCodeServiec,
   themNguoiDung,
@@ -722,4 +794,6 @@ module.exports = {
   doiMK,
   reFresh_token,
   layTatCaNhanVien,
+  thongTinNguoiDung,
+  capNhapThongTinNguoiDung,
 };

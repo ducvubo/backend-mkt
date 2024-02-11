@@ -51,6 +51,7 @@ module.exports = (sequelize, DataTypes) => {
       linkxacnhan: DataTypes.STRING,
       refresh_token: DataTypes.STRING,
       idchat: DataTypes.STRING,
+      anhdaidien:DataTypes.BLOB("long")
     },
     {
       sequelize,

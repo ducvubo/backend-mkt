@@ -241,6 +241,39 @@ let layTatCaNhanVien = async (req, res) => {
   }
 };
 
+let thongTinNguoiDung = async (req, res) => {
+  try {
+    let data = await nguoiDungService.thongTinNguoiDung(req.query.id,req.query.email); //param
+    return res.status(200).json(data);
+  } catch (e) {
+    console.log("Lấy nguoi dung thất bại: ", e);
+    return res.status(200).json({
+      maCode: -1,
+      thongDiep: "Lỗi của server",
+    });
+  }
+};
+
+let capNhapThongTinNguoiDung = async (req, res) => {
+  let datatruyenle = req.body;
+  try {
+    if (!datatruyenle.id) {
+      return res.status(200).json({
+        maCode: -2,
+        thongDiep: "Thiếu tham số truyền lên server",
+      });
+    }
+    let data = await nguoiDungService.capNhapThongTinNguoiDung(datatruyenle);
+    return res.status(200).json(data);
+  } catch (e) {
+    console.log("Lấy nguoi dung thất bại: ", e);
+    return res.status(200).json({
+      maCode: -1,
+      thongDiep: "Lỗi cuả server",
+    });
+  }
+};
+
 module.exports = {
   getAllCode,
   themNguoiDung,
@@ -255,5 +288,5 @@ module.exports = {
   doiMK,
   dangXuat,
   reFresh_token,
-  layTatCaNhanVien
+  layTatCaNhanVien,thongTinNguoiDung,capNhapThongTinNguoiDung
 };

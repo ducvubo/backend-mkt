@@ -40,7 +40,7 @@ let tatCaKhachHang = () => {
             "updatedAt",
           ],
         },
-      });
+      }); 
       resolve(all);
     } catch (e) {
       reject(e);

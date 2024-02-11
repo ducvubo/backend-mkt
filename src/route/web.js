@@ -28,6 +28,8 @@ let initWebRoute = (app) => {
   router.post("/api/doimk", nguoidungController.doiMK);
   router.post("/api/refresh-token", nguoidungController.reFresh_token);
   router.get("/api/laytatcanhanvien", nguoidungController.layTatCaNhanVien);
+  router.get("/api/thongtinnguoidung", nguoidungController.thongTinNguoiDung);
+  router.put("/api/capnhapthongtinnguoidung", nguoidungController.capNhapThongTinNguoiDung)
 
   router.post("/api/themdanhmuc",verifiToken,checkNhanVien,danhMucHoaController.themDanhMuc);
   router.get("/api/alldanhmuc",verifiToken,checkNhanVien,danhMucHoaController.tatCaDanhMuc);
