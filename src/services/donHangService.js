@@ -115,11 +115,11 @@ let datHangTrangChu = (data) => {
       });
 
       await db.Donhangchitiet.create({
-        iddonhang:donhang.id,
-        madonhang123:madonhang,
-        idhoa:data.idhoa,
-        soluongmua:data.soluongmua,
-        tongtien:data.tongtienhang,
+        iddonhang: donhang.id,
+        madonhang123: madonhang,
+        idhoa: data.idhoa,
+        soluongmua: data.soluongmua,
+        tongtien: data.tongtienhang,
       });
 
       resolve({
@@ -365,6 +365,10 @@ let layDonHangNguoiDung = (id) => {
             as: "trangthaidonhang",
             attributes: ["tiengViet", "tiengAnh"],
           },
+          {
+            model: db.Phuongthucvanchuyen,
+            as: "vanchuyen",
+          },
         ],
         raw: false,
         nest: true,
@@ -607,5 +611,5 @@ module.exports = {
   xacNhanDaXuLyYeuCauHoanHangHoanTien,
   thongKeBanHoa,
   tatCaDonHang,
-  datHangTrangChu
+  datHangTrangChu,
 };

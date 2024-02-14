@@ -102,7 +102,7 @@ let dangNhap = (email, password) => {
             "ten",
             "id",
             "idchat",
-            "anhdaidien"
+            "anhdaidien",
           ],
           where: { email: email },
           raw: true, //chi tra ra dung object nhu trong database
@@ -671,6 +671,7 @@ let doiMK = (data) => {
         if (kt) {
           let mahoamk = await hashUserPassword(data.password);
           kt.password = mahoamk;
+          kt.linkxacnhan = null;
           await kt.save();
           resolve({
             maCode: 0,
