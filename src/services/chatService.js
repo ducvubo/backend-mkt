@@ -6,7 +6,7 @@ let tatCaCuocTroChuyen = () => {
       let all = "";
       all = await db.Chat.findAll({
         attributes: {
-          exclude: ["thoigian", "anh", "createdAt", "updatedAt"],
+          exclude: ["thoigian", "createdAt", "updatedAt"],
         },
       });
       resolve(all);
@@ -57,7 +57,7 @@ let doanChatKhachHang = (idchat) => {
           [Op.or]: [{ nguoinhan: idchat }, { nguoigui: idchat }],
         },
         attributes: {
-          exclude: ["thoigian", "anh", "createdAt", "updatedAt"],
+          exclude: ["thoigian", "createdAt", "updatedAt"],
         },
       });
       resolve(all);

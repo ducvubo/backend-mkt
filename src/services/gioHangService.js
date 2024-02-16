@@ -10,7 +10,7 @@ let gioHangNguoiDung = (id) => {
           {
             model: db.hoa,
             as: "hoas",
-            through: { attributes: ['id',"soluong", "idgiohang"] },
+            through: { attributes: ["id", "soluong", "idgiohang"] },
             attributes: {
               exclude: [
                 "iddanhmuchoachitiet",
@@ -32,12 +32,18 @@ let gioHangNguoiDung = (id) => {
         raw: false,
         nest: true,
       });
-
-      resolve({
-        maCode: 0,
-        thongDiep: "ok ok ok",
-        data,
-      });
+      if (!data) {
+        resolve({
+          maCode: 2,
+          thongDiep: "Bạn chưa có giỏ hàng",
+        });
+      } else {
+        resolve({
+          maCode: 0,
+          thongDiep: "ok ok ok",
+          data,
+        });
+      }
     } catch (e) {
       reject(e);
     }
