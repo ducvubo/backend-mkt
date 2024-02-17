@@ -15,10 +15,10 @@ var path = require("path");
 dotenv.config();
 
 let app = express();
-let accessLogStream = fs.createWriteStream(path.join(__dirname, "lichsu.log"), {
-  flags: "a",
-});
-app.use(morgan("combined", { stream: accessLogStream }));
+// let accessLogStream = fs.createWriteStream(path.join(__dirname, "lichsu.log"), {
+//   flags: "a",
+// });
+// app.use(morgan("combined", { stream: accessLogStream }));
 
 app.use(function (req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", process.env.URL_REACT);
