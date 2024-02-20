@@ -102,7 +102,7 @@ let tatCaNhapHoaChiTiet = () => {
           {
             model: db.hoa,
             as: "hoa123",
-            attributes: ["id", "tenhoaVi",'tenhoaEn'], // Chọn các trường cần lấy từ bảng Nhaphoa
+            attributes: ["id", "tenhoaVi", "tenhoaEn"], // Chọn các trường cần lấy từ bảng Nhaphoa
           },
         ],
         attributes: [
@@ -228,9 +228,16 @@ let xoaNhapHoaChiTiet = (id) => {
           hoa.soluongcon = +hoa.soluongcon - +hoadonchitiet.soluongnhapthucte;
           await hoa.save();
         } else {
-          await db.hoa.destroy({
-            where: { id: hoadonchitiet.idhoa },
-          });
+          if (hoa.soluongnhap === hoadonchitiet.soluongnhapthucte) {
+            await db.hoa.destroy({
+              where: { id: hoadonchitiet.idhoa },
+            });
+          } else {
+            hoa.soluongnhap =
+              +hoa.soluongnhap - +hoadonchitiet.soluongnhapthucte;
+            hoa.soluongcon = +hoa.soluongcon - +hoadonchitiet.soluongnhapthucte;
+            await hoa.save();
+          }
         }
       }
 

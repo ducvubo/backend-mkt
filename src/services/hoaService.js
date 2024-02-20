@@ -483,6 +483,7 @@ let tatCaHoaNguoiDung = () => {
     try {
       let data = "";
       data = await db.hoa.findAll({
+        where: { iddanhmuchoachitiet: { [Sequelize.Op.ne]: null }},
         order: [[Sequelize.literal("donoibat"), "DESC"]],
       });
       resolve(data);
@@ -491,6 +492,30 @@ let tatCaHoaNguoiDung = () => {
     }
   });
 };
+
+// let tatCaHoaNguoiDung = (page, limit) => {
+//   return new Promise(async (resolve, reject) => {
+//     try {
+//       let offset = (page - 1) * limit;
+
+//       let { count, rows } = await db.hoa.findAndCountAll({
+//         offset: +offset,
+//         limit: +limit,
+//       });
+//       console.log(count);
+//       console.log(limit);
+//       let totalPages = Math.ceil(+count / +limit);
+//       console.log(totalPages);
+//       resolve({
+//         totalRows: count,
+//         totalPages: totalPages,
+//         data: rows,
+//       });
+//     } catch (e) {
+//       reject(e);
+//     }
+//   });
+// };
 
 module.exports = {
   themHoa,

@@ -27,7 +27,7 @@ let tatCaDanhMuc = () => {
       all = await db.Danhmuchoa.findAll({
         order: [[Sequelize.literal("donoibat"), "DESC"]],
       });
-      all = all.filter(item => item.id !== 40);
+      all = all.filter((item) => item.id !== 40);
       resolve(all);
     } catch (e) {
       reject(e);
@@ -100,7 +100,7 @@ let danhMucHoaNoiBat = () => {
     try {
       let all = "";
       all = await db.Danhmuchoa.findAll({
-        limit: 6,
+        limit: 7,
         order: [["donoibat", "DESC"]],
 
         include: [

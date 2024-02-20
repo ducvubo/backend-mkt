@@ -104,7 +104,10 @@ let thongTinHoa = async (req, res) => {
 
 let sanPhamLienQuan = async (req, res) => {
   try {
-    let data = await hoaService.sanPhamLienQuan(req.query.iddanhmuchoachitiet,req.query.id); //param
+    let data = await hoaService.sanPhamLienQuan(
+      req.query.iddanhmuchoachitiet,
+      req.query.id
+    ); //param
     return res.status(200).json(data);
   } catch (e) {
     console.log("Lấy nguoi dung thất bại: ", e);
@@ -117,7 +120,9 @@ let sanPhamLienQuan = async (req, res) => {
 
 let hoaTheoDanhMucChiTiet = async (req, res) => {
   try {
-    let data = await hoaService.hoaTheoDanhMucChiTiet(req.query.iddanhmuchoachitiet); //param
+    let data = await hoaService.hoaTheoDanhMucChiTiet(
+      req.query.iddanhmuchoachitiet
+    ); //param
     return res.status(200).json(data);
   } catch (e) {
     console.log("Lấy nguoi dung thất bại: ", e);
@@ -163,7 +168,7 @@ let hoaTheoDanhMucNoiBat = async (req, res) => {
 };
 
 let timHoaNguoiDung = async (req, res) => {
-  let tenhoa = req.body
+  let tenhoa = req.body;
   try {
     let data = await hoaService.timHoaNguoiDung(tenhoa);
     return res.status(200).json({
@@ -179,6 +184,33 @@ let timHoaNguoiDung = async (req, res) => {
     });
   }
 };
+
+// let tatCaHoaNguoiDung = async (req, res) => {
+//   try {
+//     if(req.query.page && req.query.limit){
+//       let data = await hoaService.tatCaHoaNguoiDung(req.query.page,req.query.limit);
+//       return res.status(200).json({
+//         maCode: 0,
+//         thongDiep: "OK",
+//         data,
+//       });
+//     }else{
+//       let data = await hoaService.tatCaHoaNguoiDung();
+//       return res.status(200).json({
+//         maCode: 0,
+//         thongDiep: "OK",
+//         data,
+//       });
+//     }
+
+//   } catch (e) {
+//     console.log(e);
+//     return res.status(200).json({
+//       maCode: -1,
+//       thongDiep: "Lỗi của server...",
+//     });
+//   }
+// };  
 
 let tatCaHoaNguoiDung = async (req, res) => {
   try {
@@ -206,5 +238,8 @@ module.exports = {
   thongTinHoa,
   sanPhamLienQuan,
   hoaTheoDanhMucChiTiet,
-  hoaTheoDanhMuc,timHoaNguoiDung,hoaTheoDanhMucNoiBat,tatCaHoaNguoiDung
+  hoaTheoDanhMuc,
+  timHoaNguoiDung,
+  hoaTheoDanhMucNoiBat,
+  tatCaHoaNguoiDung,
 };
