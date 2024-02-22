@@ -244,7 +244,7 @@ let xoaNhapHoaChiTiet = (id) => {
       let hoadon = await db.Nhaphoa.findOne({
         where: { id: hoadonchitiet.idnhaphoa },
         raw: false,
-      });
+      }); 
 
       if (hoadon) {
         hoadon.tonghoadon = +hoadon.tonghoadon - +hoadonchitiet.giatong;

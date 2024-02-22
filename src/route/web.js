@@ -58,7 +58,7 @@ let initWebRoute = (app) => {
 
 
   router.get("/api/giohang", verifiToken, gioHangController.gioHangNguoiDung);
-  router.post("/api/suagiohang",verifiToken,gioHangController.suaGioHangNguoiDung);
+  router.post("/api/suagiohang",gioHangController.suaGioHangNguoiDung);
   router.post("/api/themgiohang", verifiToken, gioHangController.themGioHang);
 
   router.post("/api/themhoadon",verifiToken,checkNhanVien,nhapHoaController.themHoaDon);
