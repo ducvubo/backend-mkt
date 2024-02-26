@@ -48,6 +48,7 @@ let initWebRoute = (app) => {
   router.put("/api/suahoa", verifiToken, checkNhanVien, hoaController.suaHoa);
   router.delete("/api/xoahoa",verifiToken,checkChuCuaHang,hoaController.xoaHoa);
   router.get("/api/hoagiamgia", hoaController.hoaGiamGia);
+  router.get("/api/hoabannhieunhat", hoaController.hoaBanNhieuNhat);
   router.get("/api/thongtinhoa", hoaController.thongTinHoa);
   router.get("/api/sanphamlienquan", hoaController.sanPhamLienQuan);
   router.get("/api/hoatheodanhmucchitiet", hoaController.hoaTheoDanhMucChiTiet);
@@ -55,7 +56,6 @@ let initWebRoute = (app) => {
   router.put("/api/timhoanguoidung", hoaController.timHoaNguoiDung);
   router.get("/api/hoatheodanhmucnoibat", hoaController.hoaTheoDanhMucNoiBat);
   router.get("/api/tatcahoanguoidung", hoaController.tatCaHoaNguoiDung)
-
 
   router.get("/api/giohang", verifiToken, gioHangController.gioHangNguoiDung);
   router.post("/api/suagiohang",gioHangController.suaGioHangNguoiDung);

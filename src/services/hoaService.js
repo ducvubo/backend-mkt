@@ -204,8 +204,48 @@ let hoaGiamGia = () => {
             [Op.gt]: 0,
           },
         },
-        limit: 4,
+        limit: 8,
         order: [["phantramgiam", "DESC"]],
+        include: [
+          {
+            model: db.Binhluan,
+            as: "hoabinhluan",
+            where: { trangthaidanhgiaid: "BL2" },
+            required: false,
+          },
+        ],
+        raw: false,
+        nest: true,
+      });
+      resolve(data);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let hoaBanNhieuNhat = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let data = "";
+      data = await db.hoa.findAll({
+        where: {
+          soluongcon: {
+            [Op.gt]: 0,
+          },
+        },
+        limit: 8,
+        order: [["soluongban", "DESC"]],
+        include: [
+          {
+            model: db.Binhluan,
+            as: "hoabinhluan",
+            where: { trangthaidanhgiaid: "BL2" },
+            required: false,
+          },
+        ],
+        raw: false,
+        nest: true,
       });
       resolve(data);
     } catch (e) {
@@ -252,6 +292,14 @@ let sanPhamLienQuan = (iddanhmuchoachitiet, id) => {
         },
         limit: 4,
         order: [["phantramgiam", "DESC"]],
+        include: {
+          model: db.Binhluan,
+          where: { trangthaidanhgiaid: "BL2" },
+          required: false,
+          as: "hoabinhluan",
+        },
+        raw: false,
+        nest: true,
       });
       resolve({
         data: data,
@@ -276,12 +324,17 @@ let hoaTheoDanhMucChiTiet = (iddanhmuchoachitiet) => {
           iddanhmuchoachitiet: iddanhmuchoachitiet,
         },
         order: [["phantramgiam", "DESC"]],
-        // include: {
-        //   model : db.Danhmuchoachitiet,
-        //   as:"danhmuchoachitiet"
-        // },
-        // raw: false,
-        // nest: true,
+
+        include: [
+          {
+            model: db.Binhluan,
+            as: "hoabinhluan",
+            where: { trangthaidanhgiaid: "BL2" },
+            required: false,
+          },
+        ],
+        raw: false,
+        nest: true,
       });
       resolve({
         data: data,
@@ -343,6 +396,14 @@ let hoaTheoDanhMuc = (id) => {
                   "giasaukhigiamUSD",
                   "anhnoibat",
                   "donoibat",
+                ],
+                include: [
+                  {
+                    model: db.Binhluan,
+                    as: "hoabinhluan",
+                    where: { trangthaidanhgiaid: "BL2" },
+                    required: false,
+                  },
                 ],
               },
             ],
@@ -418,13 +479,13 @@ let hoaTheoDanhMucNoiBat = () => {
     try {
       let data = "";
       data = await db.Danhmuchoa.findAll({
-        limit: 5,
-        order: [[Sequelize.literal("donoibat"), "DESC"]],
+        limit: 6,
+        order: [["donoibat", "ASC"]],
         attributes: {
           exclude: [
             // "tendanhmucVi",
             // "tendanhmucEn",
-            "donoibat",
+            // "donoibat",
             "createdAt",
             "updatedAt",
             "id",
@@ -464,6 +525,12 @@ let hoaTheoDanhMucNoiBat = () => {
                   "anhnoibat",
                   "donoibat",
                 ],
+                include: {
+                  model: db.Binhluan,
+                  where: { trangthaidanhgiaid: "BL2" },
+                  required: false,
+                  as: "hoabinhluan",
+                },
               },
             ],
           },
@@ -483,8 +550,16 @@ let tatCaHoaNguoiDung = () => {
     try {
       let data = "";
       data = await db.hoa.findAll({
-        where: { iddanhmuchoachitiet: { [Sequelize.Op.ne]: null }},
+        where: { iddanhmuchoachitiet: { [Sequelize.Op.ne]: null } },
         order: [[Sequelize.literal("donoibat"), "DESC"]],
+        include: {
+          model: db.Binhluan,
+          where: { trangthaidanhgiaid: "BL2" },
+          required: false,
+          as: "hoabinhluan",
+        },
+        raw: false,
+        nest: true,
       });
       resolve(data);
     } catch (e) {
@@ -530,4 +605,5 @@ module.exports = {
   timHoaNguoiDung,
   hoaTheoDanhMucNoiBat,
   tatCaHoaNguoiDung,
+  hoaBanNhieuNhat,
 };

@@ -15,6 +15,7 @@ let layTatCaPhuongThucVanChuyen = () => {
 };
 
 let capNhatGioHangKhiDatHang = (id) => {
+  console.log(id);
   return new Promise(async (resolve, reject) => {
     let timgiohangchitiet = await db.Giohanghoa.findOne({
       where: { id: id },
@@ -27,7 +28,7 @@ let capNhatGioHangKhiDatHang = (id) => {
     } else {
       await db.Giohanghoa.destroy({
         where: { id: id },
-      }); 
+      });
       resolve({
         maCode: 0,
         thongDiep: "Xóa giỏ hàng hoa thành công",

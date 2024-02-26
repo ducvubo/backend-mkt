@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       Allcode.hasMany(models.Traloibinhluan, {foreignKey: 'trangthaitraloidanhgiaid', as: 'trangthaitraloidanhgia'})
 
     }
-  };
+  }; 
   Allcode.init({
     idNoi: DataTypes.STRING,
     kieu: DataTypes.STRING,

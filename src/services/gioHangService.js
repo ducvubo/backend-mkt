@@ -53,9 +53,9 @@ let gioHangNguoiDung = (id) => {
 let suaGioHangNguoiDung = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      await db.Giohanghoa.destroy({
-        where: { idgiohang: data.idgiohang },
-      });
+        await db.Giohanghoa.destroy({
+          where: { idgiohang: data.idgiohang },
+        });
       await db.Giohanghoa.bulkCreate(data.Giohanghoa);
       resolve({
         maCode: 0,

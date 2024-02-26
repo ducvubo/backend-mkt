@@ -102,7 +102,6 @@ let danhMucHoaNoiBat = () => {
       all = await db.Danhmuchoa.findAll({
         limit: 7,
         order: [["donoibat", "DESC"]],
-
         include: [
           {
             model: db.Danhmuchoachitiet,
