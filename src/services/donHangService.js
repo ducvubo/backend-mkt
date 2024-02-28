@@ -148,7 +148,7 @@ let datHangTrangChu = (data) => {
       let madonhang = uuidv4();
 
       await db.Donhang.create({
-        idnguoidung: data.idnguoidung,
+        idnguoidung: data.idnguoidung ? data.idnguoidung : null,
         madonhang: madonhang,
         tennguoinhan: data.tennguoinhan,
         email: data.email,
@@ -174,6 +174,7 @@ let datHangTrangChu = (data) => {
       });
 
       resolve({
+        madonhang:madonhang,
         maCode: 0,
         thongDiep: "OK",
       });
