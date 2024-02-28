@@ -92,6 +92,56 @@ let datHang = (data) => {
   });
 };
 
+let datHangChuaDangNhap = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let madonhang = uuidv4();
+      let donhangchitiet =
+        data &&
+        data.donhangchitiet &&
+        data.donhangchitiet.length > 0 &&
+        data.donhangchitiet.map((item) => {
+          return { ...item, madonhang123: madonhang };
+        });
+
+      await db.Donhang.create({
+        idnguoidung: data.idnguoidung ? data.idnguoidung : null,
+        madonhang: madonhang,
+        tennguoinhan: data.tennguoinhan,
+        email: data.email,
+        sodienthoai: data.sodienthoai,
+        diachi: data.diachi,
+        ghichu: data.ghichu,
+        trangthaidonhangid: "H1",
+        phuongthucvanchuyenid: data.phuongthucvanchuyenid,
+        tongtien: data.tongtien,
+        ngonngu: data.ngonngu,
+      });
+
+      let iddonhang = await db.Donhang.findOne({
+        where: { madonhang: madonhang },
+      });
+
+      let donhangchitiet1 =
+        donhangchitiet &&
+        donhangchitiet.length > 0 &&
+        donhangchitiet.map((item) => {
+          return { ...item, iddonhang: iddonhang.id };
+        });
+
+      await db.Donhangchitiet.bulkCreate(donhangchitiet1);
+
+      resolve({
+        maCode: 0,
+        thongDiep: "OK",
+        madonhang,
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 let datHangTrangChu = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -549,7 +599,7 @@ let thongKeBanHoa = (data) => {
   });
 };
 
-let tatCaDonHang = (data) => {
+let tatCaDonHang = () => {
   return new Promise(async (resolve, reject) => {
     try {
       let all = "";
@@ -597,6 +647,89 @@ let tatCaDonHang = (data) => {
   });
 };
 
+let layDonHangTheoMaDonHang = (madonhang) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let all = "";
+      all = await db.Donhang.findAll({
+        where: { madonhang: madonhang },
+
+        include: [
+          {
+            model: db.hoa,
+            as: "hoas",
+            through: {
+              attributes: ["idhoa", "soluongmua", "tongtien", "madonhang123"],
+            },
+            attributes: {
+              exclude: [
+                "iddanhmuchoachitiet",
+                "tieudehoaVi",
+                "tieudehoaEn",
+                "soluongnhap",
+                "soluongban",
+                "motaspVi",
+                "motaspEn",
+                "motasphtmlVi",
+                "motasphtmlEn",
+                "ghichuVi",
+                "ghichuEn",
+                "donoibat",
+                "anhnoibat",
+                "phantramgiam",
+                "createdAt",
+                "updatedAt",
+              ],
+            },
+          },
+          {
+            model: db.Allcode,
+            as: "trangthaidonhang",
+            attributes: ["tiengViet", "tiengAnh"],
+          },
+          {
+            model: db.Phuongthucvanchuyen,
+            as: "vanchuyen",
+          },
+        ],
+        raw: false,
+        nest: true,
+      });
+      resolve(all);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let layDonHangChuaDN = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data) {
+        resolve({
+          maCode: 1,
+          thongDiep: "Chua co don hang",
+        });
+      } else {
+        let donhangchuaDN = [];
+        if (data && data.length > 0) {
+         donhangchuaDN = await Promise.all(
+            data.map(async (item) => {
+              let obj = {}
+              let arr = await layDonHangTheoMaDonHang(item);
+              obj = arr[0];
+              return obj
+            })
+          );
+        }
+        resolve(donhangchuaDN);
+      }
+    } catch {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   layTatCaPhuongThucVanChuyen,
   datHang,
@@ -613,4 +746,6 @@ module.exports = {
   thongKeBanHoa,
   tatCaDonHang,
   datHangTrangChu,
+  datHangChuaDangNhap,
+  layDonHangChuaDN
 };

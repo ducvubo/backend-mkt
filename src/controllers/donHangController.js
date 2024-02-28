@@ -263,9 +263,7 @@ let thongKeBanHoa = async (req, res) => {
 
 let tatCaDonHang = async (req, res) => {
   try {
-    let data = await donHangService.tatCaDonHang(
-      req.query.trangthai
-    );
+    let data = await donHangService.tatCaDonHang();
     return res.status(200).json({
       maCode: 0,
       thongDiep: "OK",
@@ -293,6 +291,43 @@ let datHangTrangChu = async (req, res) => {
   }
 };
 
+let datHangChuaDangNhap = async (req, res) => {
+  try {
+    let data = await donHangService.datHangChuaDangNhap(req.body);
+    return res.status(200).json(data);
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      maCode: -1,
+      thongDiep: "Lỗi của server...",
+    });
+  }
+};
+
+let layDonHangChuaDN = async (req, res) => {
+  try {
+    if (!req.body) {
+      return res.status(200).json({
+        maCode: 2,
+        thongDiep: "Thiếu tham số truyền lên server",
+      });
+    }
+    let data = await donHangService.layDonHangChuaDN(req.body);
+    return res.status(200).json({
+      data,
+      maCode : 0,
+      thongDiep:"Ok ok ok"
+    
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      maCode: -1,
+      thongDiep: "Lỗi của server...",
+    });
+  }
+};
+
 module.exports = {
   layTatCaPhuongThucVanChuyen,
   datHang,
@@ -306,5 +341,9 @@ module.exports = {
   huyDonHangNguoiDung,
   yeuCauHoanHangHoanTien,
   xacNhanDaXuLyYeuCauHoanHangHoanTien,
-  thongKeBanHoa,tatCaDonHang,datHangTrangChu
+  thongKeBanHoa,
+  tatCaDonHang,
+  datHangTrangChu,
+  datHangChuaDangNhap,
+  layDonHangChuaDN,
 };

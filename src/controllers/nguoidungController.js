@@ -104,11 +104,16 @@ let dangNhap = async (req, res) => {
     });
   }
 
-  let datanguoidung = await nguoiDungService.dangNhap(email, password);
+  let datanguoidung = await nguoiDungService.dangNhap(
+    email,
+    password,
+    req.body.thongtingiohangchuadangnhap,
+    req.body.thongtindonhangchuadangnhap
+  );
 
   res.cookie("access_token", datanguoidung.access_token, {
     httpOnly: true,
-    maxAge:5 * 24 * 60 * 60 * 1000,
+    maxAge: 5 * 24 * 60 * 60 * 1000,
   });
   res.cookie("refresh_token", datanguoidung.refresh_token, {
     httpOnly: true,
@@ -145,7 +150,7 @@ let reFresh_token = async (req, res) => {
     let refresh_token = req.cookies.refresh_token;
     if (!refresh_token)
       return res.status(200).json({
-        maCode:  10,
+        maCode: 10,
         thongDiep: "Ban chua dang nhap vui long dang nhap",
       });
     let token = await nguoiDungService.reFresh_token(refresh_token);
@@ -161,7 +166,7 @@ let reFresh_token = async (req, res) => {
 
     return res.status(200).json({
       maCode: token.maCode,
-      thongDiep: token.thongDiep
+      thongDiep: token.thongDiep,
     });
   } catch (e) {
     console.log(e);
@@ -243,7 +248,10 @@ let layTatCaNhanVien = async (req, res) => {
 
 let thongTinNguoiDung = async (req, res) => {
   try {
-    let data = await nguoiDungService.thongTinNguoiDung(req.query.id,req.query.email); //param
+    let data = await nguoiDungService.thongTinNguoiDung(
+      req.query.id,
+      req.query.email
+    ); //param
     return res.status(200).json(data);
   } catch (e) {
     console.log("Lấy nguoi dung thất bại: ", e);
@@ -288,5 +296,7 @@ module.exports = {
   doiMK,
   dangXuat,
   reFresh_token,
-  layTatCaNhanVien,thongTinNguoiDung,capNhapThongTinNguoiDung
+  layTatCaNhanVien,
+  thongTinNguoiDung,
+  capNhapThongTinNguoiDung,
 };

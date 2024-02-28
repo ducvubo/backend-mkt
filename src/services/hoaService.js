@@ -336,8 +336,12 @@ let hoaTheoDanhMucChiTiet = (iddanhmuchoachitiet) => {
         raw: false,
         nest: true,
       });
+      let datadanhmucchitiet = await db.Danhmuchoachitiet.findOne({
+        where: {id:iddanhmuchoachitiet}
+      })
       resolve({
         data: data,
+        datadanhmucchitiet:datadanhmucchitiet,
         maCode: 0,
         thongDiep: "ok ok ok",
       });

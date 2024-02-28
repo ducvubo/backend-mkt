@@ -60,6 +60,7 @@ let initWebRoute = (app) => {
   router.get("/api/giohang", verifiToken, gioHangController.gioHangNguoiDung);
   router.post("/api/suagiohang",gioHangController.suaGioHangNguoiDung);
   router.post("/api/themgiohang", verifiToken, gioHangController.themGioHang);
+  router.post("/api/giohangchuadangnhap", gioHangController.gioHangChuaDangNhap);
 
   router.post("/api/themhoadon",verifiToken,checkNhanVien,nhapHoaController.themHoaDon);
   router.get("/api/tatcahoadon",verifiToken,checkNhanVien,nhapHoaController.tatCaHoaDon);
@@ -75,6 +76,7 @@ let initWebRoute = (app) => {
 
   router.get("/api/laytatcaphuongthucvanchuyen",donHangController.layTatCaPhuongThucVanChuyen);
   router.post("/api/dathang", verifiToken,donHangController.datHang);
+  router.post("/api/dathangchuadangnhap",donHangController.datHangChuaDangNhap);
   router.post("/api/dathangtrangchu", verifiToken,donHangController.datHangTrangChu);
   router.get("/api/donhang",verifiToken,checkNhanVien, donHangController.tatCaDonHangTheoTrangThai);
   router.put("/api/xacnhandonhang",verifiToken,checkNhanVien, donHangController.xacNhanDonHang);
@@ -84,10 +86,11 @@ let initWebRoute = (app) => {
   router.put("/api/xacnhandaxulyyeucauhoanhanghoantien", verifiToken,checkNhanVien,donHangController.xacNhanDaXuLyYeuCauHoanHangHoanTien)
   router.put("/api/thongkebanhoa",verifiToken,checkNhanVien, donHangController.thongKeBanHoa);
   router.get("/api/tatcadonhang",verifiToken,checkNhanVien, donHangController.tatCaDonHang);
-  router.get("/api/donhangnguoidung",verifiToken,donHangController.layDonHangNguoiDung)
-  router.put("/api/huydonhangnguoidung",verifiToken, donHangController.huyDonHangNguoiDung);
-  router.put("/api/xacnhandanhanduochang",verifiToken, donHangController.xacNhanDaNhanDuocHang)
-  router.put("/api/yeucauhoanhanghoantien",verifiToken, donHangController.yeuCauHoanHangHoanTien)
+  router.get("/api/donhangnguoidung",verifiToken,donHangController.layDonHangNguoiDung);
+  router.post("/api/donhangchuaDN",donHangController.layDonHangChuaDN);
+  router.put("/api/huydonhangnguoidung", donHangController.huyDonHangNguoiDung);
+  router.put("/api/xacnhandanhanduochang", donHangController.xacNhanDaNhanDuocHang)
+  router.put("/api/yeucauhoanhanghoantien", donHangController.yeuCauHoanHangHoanTien)
 
   router.get("/api/tatcacuoctrochuyen",verifiToken,checkNhanVien, chatController.tatCaCuocTroChuyen)
   router.get("/api/tatcakhachhang",verifiToken,checkNhanVien,chatController.tatCaKhachHang)

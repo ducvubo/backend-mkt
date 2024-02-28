@@ -75,7 +75,77 @@ let ktTrangThaiTaiKhoan = (emailNguoiDung) => {
   });
 };
 
-let dangNhap = (email, password) => {
+let capNhatDonHangChuaDNKhiDN = (madonhang, idnguoidung) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!madonhang) {
+        resolve({
+          maCode: 1,
+          thongDiep: "Thieu tham so truyen vao",
+        });
+      } else {
+        let donhang = await db.Donhang.findOne({
+          where: { madonhang: madonhang },
+          raw: false,
+        });
+        if (donhang) {
+          donhang.idnguoidung = idnguoidung;
+          await donhang.save();
+
+          resolve({
+            maCode: 0,
+            thongDiep: "Cập nhật hoa thành công",
+          });
+        }
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let capNhatGioHangChuaDNKhiDN = (idgiohang, idhoa, soluong) => {
+  console.log({ idgiohang, idhoa, soluong });
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!idgiohang || !idhoa || !soluong) {
+        resolve({
+          maCode: 1,
+          thongDiep: "Thieu tham so truyen vao",
+        });
+      } else {
+        let giohanghoa = await db.Giohanghoa.findOne({
+          where: {
+            [Op.and]: [{ idgiohang: idgiohang }, { idhoa: idhoa }],
+          },
+          raw: false,
+        });
+        if (giohanghoa) {
+          console.log(giohanghoa.idhoa);
+          giohanghoa.soluong = giohanghoa.soluong + soluong;
+          await giohanghoa.save();
+          resolve();
+        } else {
+          await db.Giohanghoa.create({
+            idgiohang: idgiohang,
+            idhoa: idhoa,
+            soluong: soluong,
+          });
+          resolve();
+        }
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let dangNhap = (
+  email,
+  password,
+  thongtingiohangchuadangnhap,
+  thongtindonhangchuadangnhap
+) => {
   return new Promise(async (resolve, reject) => {
     try {
       let datanguoidung = {};
@@ -111,7 +181,6 @@ let dangNhap = (email, password) => {
           let ktmk = await bcrypt.compareSync(password, nguoidung.password);
           if (ktmk) {
             // true
-
             let payload_access_token = {
               email: nguoidung.email,
               quyenId: nguoidung.quyenId,
@@ -153,6 +222,42 @@ let dangNhap = (email, password) => {
             datanguoidung.thongDiep = "Ok";
             delete nguoidung.password; //xoa cot password truoc khi gan
             datanguoidung.nguoidung = nguoidung;
+
+            let giohang = await db.Giohang.findOne({
+              where: { idnguoidung: nguoidung.id },
+            });
+            thongtingiohangchuadangnhap &&
+              thongtingiohangchuadangnhap.length > 0 &&
+              thongtingiohangchuadangnhap.map((item) => {
+                item.idgiohang = giohang.id;
+              });
+
+            if (
+              thongtingiohangchuadangnhap &&
+              thongtingiohangchuadangnhap.length > 0
+            ) {
+              await Promise.all(
+                thongtingiohangchuadangnhap.map(async (item) => {
+                  // console.log(item)
+                  await capNhatGioHangChuaDNKhiDN(
+                    item.idgiohang,
+                    item.idhoa,
+                    item.soluong
+                  );
+                })
+              );
+            }
+
+            if (
+              thongtindonhangchuadangnhap &&
+              thongtindonhangchuadangnhap.length > 0
+            ) {
+              await Promise.all(
+                thongtindonhangchuadangnhap.map(async (item) => {
+                  await capNhatDonHangChuaDNKhiDN(item, nguoidung.id);
+                })
+              );
+            }
           } else {
             datanguoidung.maCode = 3;
             datanguoidung.thongDiep = "Vui lòng nhập đúng password";

@@ -53,9 +53,9 @@ let gioHangNguoiDung = (id) => {
 let suaGioHangNguoiDung = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-        await db.Giohanghoa.destroy({
-          where: { idgiohang: data.idgiohang },
-        });
+      await db.Giohanghoa.destroy({
+        where: { idgiohang: data.idgiohang },
+      });
       await db.Giohanghoa.bulkCreate(data.Giohanghoa);
       resolve({
         maCode: 0,
@@ -101,8 +101,69 @@ let themGioHang = (data) => {
   });
 };
 
+let thongTinHoa = (id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!id) {
+        resolve({
+          maCode: 1,
+          thongDiep: "Thiếu tham số truyền vào",
+        });
+      } else {
+        let thongtinhoa = "";
+        thongtinhoa = await db.hoa.findOne({
+          where: { id: id },
+          attributes: [
+            "id",
+            "tenhoaVi",
+            "tenhoaEn",
+            // "anhnoibat",
+            "soluongcon",
+            "phantramgiam",
+            "giasaukhigiamVND",
+            "giasaukhigiamUSD",
+            "giathucVND",
+            "giathucUSD",
+          ],
+        });
+        resolve(thongtinhoa);
+      }
+    } catch {
+      reject(e);
+    }
+  });
+};
+
+let gioHangChuaDangNhap = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data) {
+        resolve({
+          maCode: 1,
+          thongDiep: "Chưa có hoa trong giỏ hàng",
+        });
+      } else {
+        let thongtinhoagiohang = [];
+        if (data && data.length > 0) {
+          // Sử dụng Promise.all để đợi tất cả các promise được giải quyết
+          await Promise.all(
+            data.map(async (item) => {
+              let arr = await thongTinHoa(item.idhoa);
+              thongtinhoagiohang.push(arr);
+            })
+          );
+        }
+        resolve(thongtinhoagiohang);
+      }
+    } catch {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   gioHangNguoiDung,
   suaGioHangNguoiDung,
   themGioHang,
+  gioHangChuaDangNhap,
 };
