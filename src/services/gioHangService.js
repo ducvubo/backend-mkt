@@ -117,7 +117,7 @@ let thongTinHoa = (id) => {
             "id",
             "tenhoaVi",
             "tenhoaEn",
-            // "anhnoibat",
+            "anhnoibat",
             "soluongcon",
             "phantramgiam",
             "giasaukhigiamVND",

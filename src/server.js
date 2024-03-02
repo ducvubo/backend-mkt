@@ -133,6 +133,7 @@ wss.on("connection", (connection, req) => {
         online: [...wss.clients].map((item) => ({
           id: item.id,
           ten: item.ten,
+          ho:item.ho,
           idchat: item.idchat,
         })),
       })

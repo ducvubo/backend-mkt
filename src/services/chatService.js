@@ -27,7 +27,6 @@ let tatCaKhachHang = () => {
             "email",
             "id",
             "password",
-            "ho",
             "sdt",
             "diachinha",
             "diachicuahang",

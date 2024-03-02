@@ -424,7 +424,6 @@ let hoaTheoDanhMuc = (id) => {
 };
 
 let timHoaNguoiDung = (tenhoa) => {
-  console.log(tenhoa);
   return new Promise(async (resolve, reject) => {
     try {
       let data = "";
@@ -561,6 +560,9 @@ let tatCaHoaNguoiDung = () => {
           where: { trangthaidanhgiaid: "BL2" },
           required: false,
           as: "hoabinhluan",
+        },
+        attributes: {
+          exclude: ["anhnoibat"], //khong lay ra password
         },
         raw: false,
         nest: true,

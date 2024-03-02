@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
       });
       User.hasMany(models.Traloibinhluan, {
         foreignKey: "idnguoidung",
-        as: "nguoidungtraloibinhluan",
+        as: "nguoidungtraloibinhluan", 
       });
     }
   }
@@ -51,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
       linkxacnhan: DataTypes.STRING,
       refresh_token: DataTypes.STRING,
       idchat: DataTypes.STRING,
-      anhdaidien:DataTypes.BLOB("long")
+      anhdaidien: DataTypes.BLOB("long"),
     },
     {
       sequelize,

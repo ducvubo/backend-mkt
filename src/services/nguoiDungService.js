@@ -105,7 +105,6 @@ let capNhatDonHangChuaDNKhiDN = (madonhang, idnguoidung) => {
 };
 
 let capNhatGioHangChuaDNKhiDN = (idgiohang, idhoa, soluong) => {
-  console.log({ idgiohang, idhoa, soluong });
   return new Promise(async (resolve, reject) => {
     try {
       if (!idgiohang || !idhoa || !soluong) {
@@ -121,7 +120,6 @@ let capNhatGioHangChuaDNKhiDN = (idgiohang, idhoa, soluong) => {
           raw: false,
         });
         if (giohanghoa) {
-          console.log(giohanghoa.idhoa);
           giohanghoa.soluong = giohanghoa.soluong + soluong;
           await giohanghoa.save();
           resolve();
@@ -139,7 +137,7 @@ let capNhatGioHangChuaDNKhiDN = (idgiohang, idhoa, soluong) => {
     }
   });
 };
-
+ 
 let dangNhap = (
   email,
   password,
@@ -165,7 +163,7 @@ let dangNhap = (
         //neu tra ve true
         let nguoidung = await db.User.findOne({
           attributes: [
-            "email",
+            "email", 
             "quyenId",
             "password",
             "ho",
@@ -191,6 +189,7 @@ let dangNhap = (
             let payload_refresh_token = {
               id: nguoidung.id,
               ten: nguoidung.ten,
+              ho:nguoidung.ho,
               idchat: nguoidung.idchat,
             };
 
@@ -223,42 +222,47 @@ let dangNhap = (
             delete nguoidung.password; //xoa cot password truoc khi gan
             datanguoidung.nguoidung = nguoidung;
 
-            let giohang = await db.Giohang.findOne({
-              where: { idnguoidung: nguoidung.id },
-            });
-            thongtingiohangchuadangnhap &&
-              thongtingiohangchuadangnhap.length > 0 &&
-              thongtingiohangchuadangnhap.map((item) => {
-                item.idgiohang = giohang.id;
+            // if(nguoidung.quyenId === "R4"){
+              
+              let giohang = await db.Giohang.findOne({
+                where: { idnguoidung: nguoidung.id },
               });
-
-            if (
               thongtingiohangchuadangnhap &&
-              thongtingiohangchuadangnhap.length > 0
-            ) {
-              await Promise.all(
-                thongtingiohangchuadangnhap.map(async (item) => {
-                  // console.log(item)
-                  await capNhatGioHangChuaDNKhiDN(
-                    item.idgiohang,
-                    item.idhoa,
-                    item.soluong
-                  );
-                })
-              );
-            }
-
-            if (
-              thongtindonhangchuadangnhap &&
-              thongtindonhangchuadangnhap.length > 0
-            ) {
-              await Promise.all(
-                thongtindonhangchuadangnhap.map(async (item) => {
-                  await capNhatDonHangChuaDNKhiDN(item, nguoidung.id);
-                })
-              );
-            }
-          } else {
+                thongtingiohangchuadangnhap.length >
+                thongtingiohangchuadangnhap.map((item) => {
+                  item.idgiohang = giohang.id;
+                });
+  
+              if (
+                thongtingiohangchuadangnhap &&
+                thongtingiohangchuadangnhap.length > 0
+              ) {
+                await Promise.all(
+                  thongtingiohangchuadangnhap.map(async (item) => {
+                    await capNhatGioHangChuaDNKhiDN(
+                      item.idgiohang,
+                      item.idhoa,
+                      item.soluong
+                    );
+                  })
+                );
+              }
+            // }
+          
+            // if(nguoidung.quyenId === "R4"){
+              if (
+                thongtindonhangchuadangnhap && 
+                thongtindonhangchuadangnhap.length > 0
+              ) {  
+                await Promise.all(
+                  thongtindonhangchuadangnhap.map(async (item) => {
+                    await capNhatDonHangChuaDNKhiDN(item, nguoidung.id);
+                  })
+                );
+              }
+            // }
+          
+          } else { 
             datanguoidung.maCode = 3;
             datanguoidung.thongDiep = "Vui lòng nhập đúng password";
           }
