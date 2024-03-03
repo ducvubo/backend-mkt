@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
         otherKey: 'idhoa',
         as: 'hoas'
       });
+      Giohang.hasMany(models.Giohanghoa, {foreignKey: 'idgiohang', as: 'giohang'})
     }
   }
   Giohang.init(

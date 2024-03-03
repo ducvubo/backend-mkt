@@ -7,8 +7,6 @@ const checkChuCuaHang = (req, res, next) => {
       thongDiep: "Bạn không phải admin vui lòng quay ra",
     });
   }
-    
-
   next();
 };
 

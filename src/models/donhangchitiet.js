@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Donhangchitiet.init(
     {
-      iddonhang:DataTypes.INTEGER,
+      // iddonhang:DataTypes.INTEGER,
       madonhang123: DataTypes.STRING,
       idhoa: DataTypes.INTEGER,
       soluongmua: DataTypes.INTEGER,

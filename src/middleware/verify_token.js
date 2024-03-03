@@ -25,9 +25,7 @@ const verifiToken = (req, res, next) => {
     } 
     }
     else {
-
       req.nguoidung = nguoidung;
-
       next();
     }
   });

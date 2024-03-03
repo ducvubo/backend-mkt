@@ -15,7 +15,7 @@ let layTatCaPhuongThucVanChuyen = () => {
 };
 
 let capNhatGioHangKhiDatHang = (id) => {
-  console.log(id);
+  // console.log(id);
   return new Promise(async (resolve, reject) => {
     let timgiohangchitiet = await db.Giohanghoa.findOne({
       where: { id: id },
