@@ -46,7 +46,7 @@ let datHang = (data) => {
         data.donhangchitiet &&
         data.donhangchitiet.length > 0 &&
         data.donhangchitiet.map((item) => {
-          return { ...item, madonhang123: madonhang };
+          return { ...item };
         });
 
       await db.Donhang.create({
@@ -57,7 +57,7 @@ let datHang = (data) => {
         sodienthoai: data.sodienthoai,
         diachi: data.diachi,
         ghichu: data.ghichu,
-        trangthaidonhangid: "H1",
+        trangthaidonhangid: 18,
         phuongthucvanchuyenid: data.phuongthucvanchuyenid,
         tongtien: data.tongtien,
         ngonngu: data.ngonngu,
@@ -101,7 +101,7 @@ let datHangChuaDangNhap = (data) => {
         data.donhangchitiet &&
         data.donhangchitiet.length > 0 &&
         data.donhangchitiet.map((item) => {
-          return { ...item, madonhang123: madonhang };
+          return { ...item };
         });
 
       await db.Donhang.create({
@@ -112,7 +112,7 @@ let datHangChuaDangNhap = (data) => {
         sodienthoai: data.sodienthoai,
         diachi: data.diachi,
         ghichu: data.ghichu,
-        trangthaidonhangid: "H1",
+        trangthaidonhangid: 18,
         phuongthucvanchuyenid: data.phuongthucvanchuyenid,
         tongtien: data.tongtien,
         ngonngu: data.ngonngu,
@@ -155,7 +155,7 @@ let datHangTrangChu = (data) => {
         sodienthoai: data.sodienthoai,
         diachi: data.diachi,
         ghichu: data.ghichu,
-        trangthaidonhangid: "H1",
+        trangthaidonhangid: 18,
         phuongthucvanchuyenid: data.phuongthucvanchuyenid,
         tongtien: data.tongtien,
         ngonngu: data.ngonngu,
@@ -167,14 +167,13 @@ let datHangTrangChu = (data) => {
 
       await db.Donhangchitiet.create({
         iddonhang: donhang.id,
-        madonhang123: madonhang,
         idhoa: data.idhoa,
         soluongmua: data.soluongmua,
         tongtien: data.tongtienhang,
       });
 
       resolve({
-        madonhang:madonhang,
+        madonhang: madonhang,
         maCode: 0,
         thongDiep: "OK",
       });
@@ -196,7 +195,7 @@ let tatCaDonHangTheoTrangThai = (trangthaidonhang) => {
             model: db.hoa,
             as: "hoas",
             through: {
-              attributes: ["idhoa", "soluongmua", "tongtien", "madonhang123"],
+              attributes: ["idhoa", "soluongmua", "tongtien"],
             },
             attributes: {
               exclude: [
@@ -266,7 +265,7 @@ let xacNhanDonHang = (data) => {
         raw: false,
       });
       if (donhang) {
-        donhang.trangthaidonhangid = "H2";
+        donhang.trangthaidonhangid = 19;
         donhang.phanhoicuahang = data.phanhoicuahang;
         await donhang.save();
 
@@ -301,7 +300,7 @@ let huyDonHang = (data) => {
         raw: false,
       });
       if (donhang) {
-        donhang.trangthaidonhangid = "H6";
+        donhang.trangthaidonhangid = 23;
         donhang.phanhoicuahang = data.phanhoicuahang
           ? data.phanhoicuahang
           : null;
@@ -331,7 +330,7 @@ let xacNhanDonHangGiaoDonViVanChuyen = (data) => {
         raw: false,
       });
       if (donhang) {
-        donhang.trangthaidonhangid = "H3";
+        donhang.trangthaidonhangid = 20;
         await donhang.save();
 
         resolve({
@@ -358,7 +357,7 @@ let xacNhanDonHangDaGiaoChoKhachHang = (data) => {
         raw: false,
       });
       if (donhang) {
-        donhang.trangthaidonhangid = "H4";
+        donhang.trangthaidonhangid = 21;
         await donhang.save();
 
         resolve({
@@ -389,7 +388,7 @@ let layDonHangNguoiDung = (id) => {
             model: db.hoa,
             as: "hoas",
             through: {
-              attributes: ["idhoa", "soluongmua", "tongtien", "madonhang123"],
+              attributes: ["idhoa", "soluongmua", "tongtien"],
             },
             attributes: {
               exclude: [
@@ -440,7 +439,7 @@ let xacNhanDaNhanDuocHang = (data) => {
         raw: false,
       });
       if (donhang) {
-        donhang.trangthaidonhangid = "H5";
+        donhang.trangthaidonhangid = 22;
         await donhang.save();
 
         resolve({
@@ -467,7 +466,7 @@ let huyDonHangNguoiDung = (data) => {
         raw: false,
       });
       if (donhang) {
-        donhang.trangthaidonhangid = "H6";
+        donhang.trangthaidonhangid = 23;
         donhang.phanhoikhachhang = data.phanhoikhachhang
           ? data.phanhoikhachhang
           : null;
@@ -497,7 +496,7 @@ let yeuCauHoanHangHoanTien = (data) => {
         raw: false,
       });
       if (donhang) {
-        donhang.trangthaidonhangid = "H7";
+        donhang.trangthaidonhangid = 24;
         donhang.phanhoikhachhang = data.phanhoikhachhang
           ? data.phanhoikhachhang
           : null;
@@ -527,7 +526,7 @@ let xacNhanDaXuLyYeuCauHoanHangHoanTien = (data) => {
         raw: false,
       });
       if (donhang) {
-        donhang.trangthaidonhangid = "H8";
+        donhang.trangthaidonhangid = 26;
         await donhang.save();
 
         resolve({
@@ -660,7 +659,7 @@ let layDonHangTheoMaDonHang = (madonhang) => {
             model: db.hoa,
             as: "hoas",
             through: {
-              attributes: ["idhoa", "soluongmua", "tongtien", "madonhang123"],
+              attributes: ["idhoa", "soluongmua", "tongtien"],
             },
             attributes: {
               exclude: [
@@ -714,12 +713,12 @@ let layDonHangChuaDN = (data) => {
       } else {
         let donhangchuaDN = [];
         if (data && data.length > 0) {
-         donhangchuaDN = await Promise.all(
+          donhangchuaDN = await Promise.all(
             data.map(async (item) => {
-              let obj = {}
+              let obj = {};
               let arr = await layDonHangTheoMaDonHang(item);
               obj = arr[0];
-              return obj
+              return obj;
             })
           );
         }
@@ -748,5 +747,5 @@ module.exports = {
   tatCaDonHang,
   datHangTrangChu,
   datHangChuaDangNhap,
-  layDonHangChuaDN
+  layDonHangChuaDN,
 };

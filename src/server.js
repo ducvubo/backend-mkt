@@ -9,17 +9,23 @@ import cookieParser from "cookie-parser";
 import ws from "ws";
 import jwt from "jsonwebtoken";
 import db from "./models/index";
-var fs = require("fs");
-var morgan = require("morgan");
-var path = require("path");
+import compression from "compression";
+import fs from "fs";
+import morgan from "morgan";
+import path from "path";
 dotenv.config();
- 
-let app = express();
 
-let accessLogStream = fs.createWriteStream(path.join(__dirname, "lichsu.log"), {
-  flags: "a",
-});
-app.use(morgan("combined", { stream: accessLogStream }));
+let app = express();
+// let accessLogStream = fs.createWriteStream(path.join(__dirname, "lichsu.log"), {
+//   flags: "a",
+// });
+// app.use(morgan("combined", { stream: accessLogStream }));
+app.use(
+  compression({
+    level: 6,
+    threshold: 100 * 1000,
+  })
+);
 
 app.use(function (req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", process.env.URL_REACT);
@@ -134,11 +140,10 @@ wss.on("connection", (connection, req) => {
         online: [...wss.clients].map((item) => ({
           id: item.id,
           ten: item.ten,
-          ho:item.ho,
+          ho: item.ho,
           idchat: item.idchat,
         })),
       })
     );
   });
 });
- 

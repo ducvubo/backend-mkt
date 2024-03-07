@@ -10,9 +10,17 @@ module.exports = {
       },
       idbinhluan: {
         type: Sequelize.INTEGER,
+        references: {
+          model: "binhluans",
+          key: "id"
+        }
       },
       idnguoidung: {
         type: Sequelize.INTEGER,
+        references: {
+          model: "Users",
+          key: "id"
+        }
       },
       noidung: {
         type: Sequelize.STRING,
@@ -27,7 +35,11 @@ module.exports = {
         type: Sequelize.DATE,
       },
       trangthaitraloidanhgiaid: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
+        references: {
+          model: "allcodes",
+          key: "id"
+        }
       },
       createdAt: {
         allowNull: false,

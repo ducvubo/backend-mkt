@@ -4,8 +4,8 @@ module.exports = (sequelize, DataTypes) => {
   class Donhangchitiet extends Model {
     static associate(models) {
         Donhangchitiet.belongsTo(models.Donhang, {
-            foreignKey: "madonhang123",
-            targetKey: "madonhang",
+            foreignKey: "iddonhang",
+            targetKey: "id",
             as: "donhang123",
           });
           Donhangchitiet.belongsTo(models.hoa, {
@@ -17,8 +17,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Donhangchitiet.init(
     {
-      // iddonhang:DataTypes.INTEGER,
-      madonhang123: DataTypes.STRING,
+      iddonhang:DataTypes.INTEGER,
       idhoa: DataTypes.INTEGER,
       soluongmua: DataTypes.INTEGER,
       tongtien: DataTypes.INTEGER,

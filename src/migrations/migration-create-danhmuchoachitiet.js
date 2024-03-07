@@ -10,6 +10,10 @@ module.exports = {
       },
       iddanhmuchoa: {
         type: Sequelize.INTEGER,
+        references: {
+          model: "danhmuchoa",
+          key: "id"
+        }
       },
       tendanhmucchitietVi: {
         type: Sequelize.STRING,

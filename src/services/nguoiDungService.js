@@ -59,7 +59,7 @@ let ktTrangThaiTaiKhoan = (emailNguoiDung) => {
         //tim nguoidung
         where: {
           email: emailNguoiDung,
-          trangthaiId: "S2",
+          trangthaiId: 17,
         },
       });
       if (nguoidung) {
@@ -137,7 +137,7 @@ let capNhatGioHangChuaDNKhiDN = (idgiohang, idhoa, soluong) => {
     }
   });
 };
- 
+
 let dangNhap = (
   email,
   password,
@@ -163,7 +163,7 @@ let dangNhap = (
         //neu tra ve true
         let nguoidung = await db.User.findOne({
           attributes: [
-            "email", 
+            "email",
             "quyenId",
             "password",
             "ho",
@@ -189,19 +189,21 @@ let dangNhap = (
             let payload_refresh_token = {
               id: nguoidung.id,
               ten: nguoidung.ten,
-              ho:nguoidung.ho,
+              ho: nguoidung.ho,
               idchat: nguoidung.idchat,
             };
 
             let access_token = createJWT(
               payload_access_token,
               process.env.JWT_KEY,
-              "5s"
+              process.env.JWT_TIME_ACCESS_TOKEN
+              // "5s"
             );
             let refresh_token = createJWT(
               payload_refresh_token,
               process.env.JWT_KEY_REFRESH_TOKEN,
-              "5d"
+              process.env.JWT_TIME_REFRESH_TOKEN
+              // "5d"
             );
 
             if (refresh_token) {
@@ -222,47 +224,46 @@ let dangNhap = (
             delete nguoidung.password; //xoa cot password truoc khi gan
             datanguoidung.nguoidung = nguoidung;
 
-            // if(nguoidung.quyenId === "R4"){
-              
-              let giohang = await db.Giohang.findOne({
-                where: { idnguoidung: nguoidung.id },
-              });
-              thongtingiohangchuadangnhap &&
-                thongtingiohangchuadangnhap.length >
+            // if(nguoidung.quyenId === 12){
+
+            let giohang = await db.Giohang.findOne({
+              where: { idnguoidung: nguoidung.id },
+            });
+            thongtingiohangchuadangnhap &&
+              thongtingiohangchuadangnhap.length >
                 thongtingiohangchuadangnhap.map((item) => {
                   item.idgiohang = giohang.id;
                 });
-  
-              if (
-                thongtingiohangchuadangnhap &&
-                thongtingiohangchuadangnhap.length > 0
-              ) {
-                await Promise.all(
-                  thongtingiohangchuadangnhap.map(async (item) => {
-                    await capNhatGioHangChuaDNKhiDN(
-                      item.idgiohang,
-                      item.idhoa,
-                      item.soluong
-                    );
-                  })
-                );
-              }
+
+            if (
+              thongtingiohangchuadangnhap &&
+              thongtingiohangchuadangnhap.length > 0
+            ) {
+              await Promise.all(
+                thongtingiohangchuadangnhap.map(async (item) => {
+                  await capNhatGioHangChuaDNKhiDN(
+                    item.idgiohang,
+                    item.idhoa,
+                    item.soluong
+                  );
+                })
+              );
+            }
             // }
-          
-            // if(nguoidung.quyenId === "R4"){
-              if (
-                thongtindonhangchuadangnhap && 
-                thongtindonhangchuadangnhap.length > 0
-              ) {  
-                await Promise.all(
-                  thongtindonhangchuadangnhap.map(async (item) => {
-                    await capNhatDonHangChuaDNKhiDN(item, nguoidung.id);
-                  })
-                );
-              }
+
+            // if(nguoidung.quyenId === 12){
+            if (
+              thongtindonhangchuadangnhap &&
+              thongtindonhangchuadangnhap.length > 0
+            ) {
+              await Promise.all(
+                thongtindonhangchuadangnhap.map(async (item) => {
+                  await capNhatDonHangChuaDNKhiDN(item, nguoidung.id);
+                })
+              );
+            }
             // }
-          
-          } else { 
+          } else {
             datanguoidung.maCode = 3;
             datanguoidung.thongDiep = "Vui lòng nhập đúng password";
           }
@@ -305,7 +306,8 @@ let reFresh_token = (refresh_token) => {
             let access_token = createJWT(
               payload_access_token,
               process.env.JWT_KEY,
-              "5s"
+              process.env.JWT_TIME_ACCESS_TOKEN
+              // "5s"
             );
             resolve({
               maCode: 0,
@@ -348,6 +350,7 @@ let getAllCodeServiec = (kieu) => {
 };
 
 let themNguoiDung = (data) => {
+  console.log(data.quyen);
   return new Promise(async (resolve, reject) => {
     try {
       let idchat = uuidv4();
@@ -368,10 +371,10 @@ let themNguoiDung = (data) => {
           ten: data.ten,
           sdt: data.sodienthoai,
           diachinha: data.diachinha,
-          quyenId: data.quyen,
-          gioitinhId: data.gioitinh,
-          trangthaiId: "S2",
-          idchat: data.quyen === "R4" ? idchat : "nhanvien",
+          quyenId: +data.quyen,
+          gioitinhId: +data.gioitinh,
+          trangthaiId: 17,
+          idchat: +data.quyen === 12 ? idchat : "nhanvien",
         });
 
         let timnguoidungmoi = await db.User.findOne({
@@ -382,7 +385,8 @@ let themNguoiDung = (data) => {
           idnguoidung: timnguoidungmoi.id,
         });
 
-        if (data.quyen === "R4") {
+        if (+data.quyen === 12) {
+          console.log("cde");
           await db.Chat.create({
             tennguoigui: "Bo",
             tennguoinhan: data.ten,
@@ -395,7 +399,8 @@ let themNguoiDung = (data) => {
             anh: null,
             thoigian: Date.now(),
           });
-        }
+          console.log("abc");
+        } 
 
         resolve({
           maCode: 0,
@@ -486,9 +491,6 @@ let xoaNguoiDung = (id) => {
         thongDiep: "Người dùng không tồn tại",
       });
     }
-    await db.User.destroy({
-      where: { id: id },
-    });
 
     if (nguoidung.idchat !== "nhanvien") {
       await db.Chat.destroy({
@@ -499,12 +501,12 @@ let xoaNguoiDung = (id) => {
           ],
         },
       });
-      await db.Binhluan.destroy({
+      await db.Traloibinhluan.destroy({
         where: {
           idnguoidung: id,
         },
       });
-      await db.Traloibinhluan.destroy({
+      await db.Binhluan.destroy({
         where: {
           idnguoidung: id,
         },
@@ -517,6 +519,14 @@ let xoaNguoiDung = (id) => {
         where: { idnguoidung: id },
       }
     );
+
+    let idgiohang = await db.Giohang.findOne({
+      where: { idnguoidung: id },
+    });
+
+    await db.Giohanghoa.destroy({
+      where: { idgiohang: idgiohang.id },
+    });
 
     await db.Giohang.destroy({
       where: { idnguoidung: id },
@@ -541,6 +551,10 @@ let xoaNguoiDung = (id) => {
       }
     );
 
+    await db.User.destroy({
+      where: { id: id },
+    });
+
     resolve({
       maCode: 0,
       thongDiep: "Xóa người dùng thành công",
@@ -559,14 +573,14 @@ let suaNguoiDung = (data) => {
       });
       if (nguoidung) {
         if (
-          nguoidung.quyenId === "R4" &&
-          (data.quyenId === "R3" || data.quyenId === "R1")
+          nguoidung.quyenId === 12 &&
+          (+data.quyenId === 11 || +data.quyenId === 9)
         ) {
           nguoidung.idchat = "nhanvien";
         }
         if (
-          data.quyenId === "R4" &&
-          (nguoidung.quyenId === "R1" || nguoidung.quyenId === "R3")
+          +data.quyenId === 12 &&
+          (nguoidung.quyenId === 9 || nguoidung.quyenId === 11)
         ) {
           nguoidung.idchat = idchatmoi;
 
@@ -639,9 +653,9 @@ let dangKy = (data) => {
           ten: data.ten,
           sdt: data.sodienthoai,
           diachinha: data.diachinha,
-          quyenId: "R4",
+          quyenId: 12,
           gioitinhId: data.gioitinh,
-          trangthaiId: "S1",
+          trangthaiId: 16,
           linkxacnhan: linkxacnhan,
           idchat: idchat,
         });
@@ -690,12 +704,12 @@ let xacNhanDangKy = (data) => {
           where: {
             email: data.email,
             linkxacnhan: data.linkxacnhan,
-            trangthaiId: "S1",
+            trangthaiId: 16,
           },
           raw: false,
         });
         if (kt) {
-          kt.trangthaiId = "S2";
+          kt.trangthaiId = 17;
           await kt.save();
           resolve({
             maCode: 0,
@@ -804,7 +818,7 @@ let layTatCaNhanVien = () => {
     try {
       let all = "";
       all = await db.User.findAll({
-        where: { quyenId: "R3" },
+        where: { quyenId: 11 },
         attributes: {
           exclude: ["password", "linkxacnhan", "refresh_token"], //khong lay ra password
         },

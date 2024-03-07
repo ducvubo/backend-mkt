@@ -10,6 +10,10 @@ module.exports = {
       },
       idnguoidung: {
         type: Sequelize.INTEGER,
+        references: {
+          model: "Users",
+          key: "id"
+        }
       },
       madonhang: {
         type: Sequelize.STRING,
@@ -30,10 +34,18 @@ module.exports = {
         type: Sequelize.STRING,
       },
       trangthaidonhangid: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
+        references: {
+          model: "allcodes",
+          key: "id"
+        }
       },
       phuongthucvanchuyenid: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
+        references: {
+          model: "phuongthucvanchuyens",
+          key: "id"
+        }
       },
       tongtien: {
         type: Sequelize.INTEGER,

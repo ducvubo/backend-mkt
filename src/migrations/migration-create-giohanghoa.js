@@ -10,9 +10,17 @@ module.exports = {
       },
       idgiohang: {
         type: Sequelize.INTEGER,
+        references: {
+          model: "giohangs",
+          key: "id",
+        },
       },
       idhoa: {
         type: Sequelize.INTEGER,
+        references: {
+          model: "hoas",
+          key: "id",
+        },
       },
       soluong: {
         type: Sequelize.INTEGER,

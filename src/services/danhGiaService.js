@@ -12,7 +12,7 @@ let themDanhGia = (data) => {
         hinhanh: data.hinhanh ? data.hinhanh : null,
         video: data.video ? data.video : null,
         thoigian: data.thoigian,
-        trangthaidanhgiaid: "BL1",
+        trangthaidanhgiaid: 27,
       });
       resolve({
         maCode: 0,
@@ -34,7 +34,7 @@ let themTraLoiBinhLuan = (data) => {
         hinhanh: data.hinhanh ? data.hinhanh : null,
         video: data.video ? data.video : null,
         thoigian: data.thoigian,
-        trangthaitraloidanhgiaid: "BL1",
+        trangthaitraloidanhgiaid: 27,
       });
       resolve({
         maCode: 0,
@@ -51,11 +51,11 @@ let binhLuanTheoHoa = (idhoa) => {
     try {
       let data = "";
       data = await db.Binhluan.findAll({
-        where: { idhoa: idhoa, trangthaidanhgiaid: "BL2" },
+        where: { idhoa: idhoa, trangthaidanhgiaid: 28 },
         include: [
           {
             model: db.Traloibinhluan,
-            where: { trangthaitraloidanhgiaid: "BL2" },
+            where: { trangthaitraloidanhgiaid: 28 },
             required: false,
             as: "traloibinhluan",
 
@@ -185,7 +185,7 @@ let duyetHuyDuyetDanhGia = (id, bang, trangthai) => {
     try {
       if (bang === "danhgia" && trangthai === "duyet") {
         await db.Binhluan.update(
-          { trangthaidanhgiaid: "BL2" },
+          { trangthaidanhgiaid: 28 },
           {
             where: { id: id },
           }
@@ -193,7 +193,7 @@ let duyetHuyDuyetDanhGia = (id, bang, trangthai) => {
       }
       if (bang === "danhgia" && trangthai === "huyduyet") {
         await db.Binhluan.update(
-          { trangthaidanhgiaid: "BL1" },
+          { trangthaidanhgiaid: 27 },
           {
             where: { id: id },
           }
@@ -201,7 +201,7 @@ let duyetHuyDuyetDanhGia = (id, bang, trangthai) => {
       }
       if (bang === "traloi" && trangthai === "duyet") {
         await db.Traloibinhluan.update(
-          { trangthaitraloidanhgiaid: "BL2" },
+          { trangthaitraloidanhgiaid: 28 },
           {
             where: { id: id },
           }
@@ -209,7 +209,7 @@ let duyetHuyDuyetDanhGia = (id, bang, trangthai) => {
       }
       if (bang === "traloi" && trangthai === "huyduyet") {
         await db.Traloibinhluan.update(
-          { trangthaitraloidanhgiaid: "BL1" },
+          { trangthaitraloidanhgiaid: 27 },
           {
             where: { id: id },
           }
@@ -228,12 +228,13 @@ let duyetHuyDuyetDanhGia = (id, bang, trangthai) => {
 let xoaDanhGiaTraLoiDanhGiaKH = (id, bang) => {
   return new Promise(async (resolve, reject) => {
     if (bang === "danhgia") {
-      await db.Binhluan.destroy({
-        where: { id: id },
-      });
       await db.Traloibinhluan.destroy({
         where: { idbinhluan: id },
       });
+      await db.Binhluan.destroy({
+        where: { id: id },
+      });
+     
     }
 
     if (bang === "traloi") {

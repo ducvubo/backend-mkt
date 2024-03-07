@@ -21,7 +21,7 @@ let tatCaKhachHang = () => {
     try {
       let all = "";
       all = await db.User.findAll({
-        where: { quyenId: "R4" },
+        where: { quyenId: 12 },
         attributes: {
           exclude: [
             "email",
@@ -39,7 +39,7 @@ let tatCaKhachHang = () => {
             "updatedAt",
           ],
         },
-      }); 
+      });
       resolve(all);
     } catch (e) {
       reject(e);

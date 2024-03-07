@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       });
       Binhluan.belongsTo(models.Allcode, {
         foreignKey: "trangthaidanhgiaid",
-        targetKey: "idNoi",
+        targetKey: "id",
         as: "trangthaidanhgia",
       });
       Binhluan.hasMany(models.Traloibinhluan, {foreignKey: 'idbinhluan', as: 'traloibinhluan'})
@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
       hinhanh: DataTypes.BLOB("long"),
       video: DataTypes.BLOB("long"),
       thoigian: DataTypes.DATE,
-      trangthaidanhgiaid: DataTypes.STRING,
+      trangthaidanhgiaid: DataTypes.INTEGER,
     },
     {
       sequelize,

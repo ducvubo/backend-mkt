@@ -5,17 +5,17 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       User.belongsTo(models.Allcode, {
         foreignKey: "gioitinhId",
-        targetKey: "idNoi",
+        targetKey: "id",
         as: "gioitinh",
       });
       User.belongsTo(models.Allcode, {
         foreignKey: "quyenId",
-        targetKey: "idNoi",
+        targetKey: "id",
         as: "quyen",
       });
       User.belongsTo(models.Allcode, {
         foreignKey: "trangthaiId",
-        targetKey: "idNoi",
+        targetKey: "id",
         as: "trangthai",
       });
       User.hasOne(models.Giohang, { foreignKey: "idnguoidung", as: "giohang" });
@@ -33,12 +33,11 @@ module.exports = (sequelize, DataTypes) => {
       });
       User.hasMany(models.Traloibinhluan, {
         foreignKey: "idnguoidung",
-        as: "nguoidungtraloibinhluan", 
+        as: "nguoidungtraloibinhluan",
       });
 
       // User.hasMany(models.Chat, {foreignKey: 'nguoigui', as: 'nguoigui'})
       // User.hasMany(models.Chat, {foreignKey: 'nguoinhan', as: 'nguoinhan'})
-
     }
   }
   User.init(
@@ -49,9 +48,9 @@ module.exports = (sequelize, DataTypes) => {
       ten: DataTypes.STRING,
       sdt: DataTypes.STRING,
       diachinha: DataTypes.STRING,
-      gioitinhId: DataTypes.STRING,
-      quyenId: DataTypes.STRING,
-      trangthaiId: DataTypes.STRING,
+      gioitinhId: DataTypes.INTEGER,
+      quyenId: DataTypes.INTEGER,
+      trangthaiId: DataTypes.INTEGER,
       linkxacnhan: DataTypes.STRING,
       refresh_token: DataTypes.STRING,
       idchat: DataTypes.STRING,

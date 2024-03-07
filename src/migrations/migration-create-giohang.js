@@ -10,6 +10,11 @@ module.exports = {
       },
       idnguoidung: {
         type: Sequelize.INTEGER,
+        unique: true,
+        references: {
+          model: "Users",
+          key: "id"
+        }
       },
       createdAt: {
         allowNull: false,

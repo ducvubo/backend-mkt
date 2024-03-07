@@ -47,16 +47,16 @@ let xoaDanhMuc = (id) => {
       });
     }
 
-    await db.Danhmuchoa.destroy({
-      where: { id: id },
-    });
-
     await db.Danhmuchoachitiet.update(
       { iddanhmuchoa: 40 },
       {
         where: { iddanhmuchoa: id },
       }
     );
+
+    await db.Danhmuchoa.destroy({
+      where: { id: id },
+    });
 
     resolve({
       maCode: 0,

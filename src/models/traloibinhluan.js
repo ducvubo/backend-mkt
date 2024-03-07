@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       });
       Traloibinhluan.belongsTo(models.Allcode, {
         foreignKey: "trangthaitraloidanhgiaid",
-        targetKey: "idNoi",
+        targetKey: "id",
         as: "trangthaitraloidanhgia",
       });
     }
@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
     hinhanh:DataTypes.BLOB("long"),
     video:DataTypes.BLOB("long"),
     thoigian:DataTypes.DATE,
-    trangthaitraloidanhgiaid:DataTypes.STRING,
+    trangthaitraloidanhgiaid:DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'Traloibinhluan',

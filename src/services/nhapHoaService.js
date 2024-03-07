@@ -106,11 +106,12 @@ let xoaHoaDon = (id) => {
         thongDiep: "Hóa đơn không tồn tại",
       });
     } else {
-      await db.Nhaphoa.destroy({
-        where: { id: id },
-      });
+      
       await db.Nhaphoachitiet.destroy({
         where: { idnhaphoa: id },
+      });
+      await db.Nhaphoa.destroy({
+        where: { id: id },
       });
       resolve({
         maCode: 0,

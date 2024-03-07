@@ -16,9 +16,17 @@ module.exports = {
       },
       nguoigui: {
         type: Sequelize.STRING,
+        // references: {
+        //   model: "Users",
+        //   key: "id"
+        // }
       },
       nguoinhan: {
         type: Sequelize.STRING,
+        // references: {
+        //   model: "Users",
+        //   key: "id"
+        // }
       },
       noidung: {
         type: Sequelize.STRING,

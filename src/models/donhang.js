@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
   class Donhang extends Model {
     static associate(models) {
         Donhang.belongsTo(models.Phuongthucvanchuyen, {foreignKey: 'phuongthucvanchuyenid', targetKey:'id', as: 'vanchuyen'})
-        Donhang.belongsTo(models.Allcode, {foreignKey: 'trangthaidonhangid', targetKey:'idNoi', as: 'trangthaidonhang'})
+        Donhang.belongsTo(models.Allcode, {foreignKey: 'trangthaidonhangid', targetKey:'id', as: 'trangthaidonhang'})
         Donhang.belongsTo(models.User, {foreignKey: 'idnguoidung', targetKey:'id', as: 'khachhang'})
         Donhang.belongsToMany(models.hoa, {
             through: "Donhangchitiet",
@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
             as: "hoas",
           });
         Donhang.hasMany(models.Donhangchitiet, {
-            foreignKey: "madonhang123",
+            foreignKey: "iddonhang",
             as: "donhang123",
           });
     }
@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       sodienthoai: DataTypes.STRING,
       diachi: DataTypes.STRING,
       ghichu: DataTypes.STRING,
-      trangthaidonhangid:DataTypes.STRING,
+      trangthaidonhangid:DataTypes.INTEGER,
       phuongthucvanchuyenid:DataTypes.STRING,
       tongtien: DataTypes.INTEGER,
       phanhoikhachhang:DataTypes.STRING,

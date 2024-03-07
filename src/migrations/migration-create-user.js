@@ -27,13 +27,25 @@ module.exports = {
         type: Sequelize.STRING,
       },
       gioitinhId: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
+        references: {
+          model: "allcodes",
+          key: "id"
+        }
       },
       quyenId: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
+        references: {
+          model: "allcodes",
+          key: "id"
+        }
       },
       trangthaiId: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
+        references: {
+          model: "allcodes",
+          key: "id"
+        }
       },
       linkxacnhan: {
         type: Sequelize.STRING,
@@ -43,6 +55,11 @@ module.exports = {
       },
       idchat: {
         type: Sequelize.STRING,
+      },
+      anhdaidien:
+      {
+        type: Sequelize.BLOB("long"),
+        allowNull: true
       },
       createdAt: {
         allowNull: false,

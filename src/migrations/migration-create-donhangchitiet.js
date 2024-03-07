@@ -10,12 +10,17 @@ module.exports = {
       },
       iddonhang: {
         type: Sequelize.INTEGER,
-      },
-      madonhang123: {
-        type: Sequelize.STRING,
+        references: {
+          model: "donhangs",
+          key: "id"
+        }
       },
       idhoa: {
         type: Sequelize.INTEGER,
+        references: {
+          model: "hoas",
+          key: "id"
+        }
       },
       soluongmua: {
         type: Sequelize.INTEGER,

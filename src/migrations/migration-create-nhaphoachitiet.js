@@ -10,9 +10,17 @@ module.exports = {
       },
       idnhaphoa: {
         type: Sequelize.INTEGER,
+        references: {
+          model: "nhaphoas",
+          key: "id"
+        }
       },
       idhoa: {
         type: Sequelize.INTEGER,
+        references: {
+          model: "hoas",
+          key: "id"
+        }
       },
       donvitinh: {
         type: Sequelize.STRING,

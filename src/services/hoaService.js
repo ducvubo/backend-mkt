@@ -210,7 +210,7 @@ let hoaGiamGia = () => {
           {
             model: db.Binhluan,
             as: "hoabinhluan",
-            where: { trangthaidanhgiaid: "BL2" },
+            where: { trangthaidanhgiaid: 28 },
             required: false,
           },
         ],
@@ -240,7 +240,7 @@ let hoaBanNhieuNhat = () => {
           {
             model: db.Binhluan,
             as: "hoabinhluan",
-            where: { trangthaidanhgiaid: "BL2" },
+            where: { trangthaidanhgiaid: 28 },
             required: false,
           },
         ],
@@ -294,7 +294,7 @@ let sanPhamLienQuan = (iddanhmuchoachitiet, id) => {
         order: [["phantramgiam", "DESC"]],
         include: {
           model: db.Binhluan,
-          where: { trangthaidanhgiaid: "BL2" },
+          where: { trangthaidanhgiaid: 28 },
           required: false,
           as: "hoabinhluan",
         },
@@ -329,7 +329,7 @@ let hoaTheoDanhMucChiTiet = (iddanhmuchoachitiet) => {
           {
             model: db.Binhluan,
             as: "hoabinhluan",
-            where: { trangthaidanhgiaid: "BL2" },
+            where: { trangthaidanhgiaid: 28 },
             required: false,
           },
         ],
@@ -337,11 +337,11 @@ let hoaTheoDanhMucChiTiet = (iddanhmuchoachitiet) => {
         nest: true,
       });
       let datadanhmucchitiet = await db.Danhmuchoachitiet.findOne({
-        where: {id:iddanhmuchoachitiet}
-      })
+        where: { id: iddanhmuchoachitiet },
+      });
       resolve({
         data: data,
-        datadanhmucchitiet:datadanhmucchitiet,
+        datadanhmucchitiet: datadanhmucchitiet,
         maCode: 0,
         thongDiep: "ok ok ok",
       });
@@ -405,7 +405,7 @@ let hoaTheoDanhMuc = (id) => {
                   {
                     model: db.Binhluan,
                     as: "hoabinhluan",
-                    where: { trangthaidanhgiaid: "BL2" },
+                    where: { trangthaidanhgiaid: 28 },
                     required: false,
                   },
                 ],
@@ -530,7 +530,7 @@ let hoaTheoDanhMucNoiBat = () => {
                 ],
                 include: {
                   model: db.Binhluan,
-                  where: { trangthaidanhgiaid: "BL2" },
+                  where: { trangthaidanhgiaid: 28 },
                   required: false,
                   as: "hoabinhluan",
                 },
@@ -557,13 +557,13 @@ let tatCaHoaNguoiDung = () => {
         order: [[Sequelize.literal("donoibat"), "DESC"]],
         include: {
           model: db.Binhluan,
-          where: { trangthaidanhgiaid: "BL2" },
+          where: { trangthaidanhgiaid: 28 },
           required: false,
           as: "hoabinhluan",
         },
-        attributes: {
-          exclude: ["anhnoibat"], //khong lay ra password
-        },
+        // attributes: {
+        //   exclude: ["anhnoibat"], //khong lay ra password
+        // },
         raw: false,
         nest: true,
       });
